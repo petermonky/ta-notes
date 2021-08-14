@@ -1,4 +1,4 @@
-# Peter Jung
+# petermonky.github.io
 
 ### CS1101S Studio Slides
 
