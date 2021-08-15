@@ -366,40 +366,40 @@
 				<h1>Conditional Expressions and Predicates</h1>
 				<pre><code class="javascript" data-trim data-line-numbers="1-7|9-10|12-16|18-22|24-27|29-32|34-35">
 					// Function declared
-					function wordify(x) {
-						return x === 1 ? "one" :    // clause 1
-						       x === 2 ? "two" :    // clause 2
-							     x === 3 ? "three" :  // clause 3
-							     "invalid input";
+					function add_one(x) {
+						return x === 1 ? 2 :    // clause 1
+						       x === 2 ? 3 :    // clause 2
+							     x === 3 ? 4 :  // clause 3
+							     0;
 					}
 
 					// Function called
-					wordify(2);
+					add_one(2);
 
 					// Variable substituted
-					2 === 1 ? "one" :
-					2 === 2 ? "two" :
-					2 === 3 ? "three" :
-					"invalid input";
+					2 === 1 ? 2 :
+					2 === 2 ? 3 :
+					2 === 3 ? 4 :
+					0;
 
 					// Predicate expression evaluated
-					false ? "one" :
-					2 === 2 ? "two" :
-					2 === 3 ? "three" :
-					"invalid input";
+					false ? 2 :
+					2 === 2 ? 3 :
+					2 === 3 ? 4 :
+					0;
 
 					// Conditional expression evaluated to alternative expression
-					2 === 2 ? "two" :
-					2 === 3 ? "three" :
-					"invalid input";
+					2 === 2 ? 3 :
+					2 === 3 ? 4 :
+					0;
 
 					// Predicate expression evaluated
-					true ? "two" :
-					2 === 3 ? "three" :
-					"invalid input";
+					true ? 3 :
+					2 === 3 ? 4 :
+					0;
 
 					// Conditional expression evaluated to consequent expression
-					"two";
+					3;
 				</code></pre>
 			</section>
 
