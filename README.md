@@ -2,4 +2,4 @@
 
 ### CS1101S Studio Slides
 
-[S2: Studio Week 2]("https://petermonky.github.io/slides/cs1101s/s2/")
+<a href="https://petermonky.github.io/slides/cs1101s/s2/" onclick="window.open('https://petermonky.github.io/slides/cs1101s/s2/', '_self');">S2: Studio Week 2</a>
