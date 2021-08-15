@@ -1,0 +1,568 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>reveal.js</title>
+
+	<link rel="stylesheet" href="_dist/reset.css">
+	<link rel="stylesheet" href="_dist/reveal.css">
+	<link rel="stylesheet" href="_dist/theme/simple.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="_plugin/highlight/monokai.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/highlight.js/src/styles/github.css">
+
+	<style>
+		.slides section {
+			text-align: left;
+		}
+
+		.slides section h1,
+		.slides section h2,
+		.slides section h3 {
+			font-weight: bold;
+		}
+
+		.slides section h1 {
+			font-size: 2em;
+		}
+
+		.slides section h2 {
+			font-size: 1.5em;
+		}
+
+		.slides section .latex {
+			font-size: 0.8em;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section id="intro">
+				<h1>S2: Studio Week 2</h1>
+			</section>
+
+			<section id="welcome">
+				<h1>Welcome!</h1>
+				<p>Hyunseok <b>"Peter"</b> Jung</p>
+				<p><a href="mailto:h.jung@u.nus.edu">h.jung@u.nus.edu</a></p>
+				<p>@petermonky</p>
+			</section>
+
+			<section id="introduction">
+				<h1>Introduction</h1>
+				<ol>
+					<li>
+						<p>Full name and/or alias</p>
+					</li>
+					<li>
+						<p>Why computer science?</p>
+					</li>
+					<li>
+						<p>Current situation</p>
+					</li>
+				</ol>
+			</section>
+
+			<section id="communication-channels">
+				<h1>Communication Channels</h1>
+				<ul>
+					<li>
+						<p>Telegram</p>
+					</li>
+					<li>
+						<p>LumiNUS</p>
+					</li>
+					<li>
+						<p>Piazza</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="module-info">
+				<h1>What is CS1101S?</h1>
+				<p><b>NOT</b> a JavaScript course.</p>
+				<p>CS1101S uses Source, a subset of JavaScript. Get comfortable with the limitations of the language.
+				</p>
+				<p>Hopefully you learn to think more programatically and algorithmically.</p>
+			</section>
+
+			<section id="grading-scheme-1">
+				<h1>Grading Scheme</h1>
+				<p>Three main components: missions, quests, and paths. Paths are auto-graded but missions and quests are
+					manually graded.</p>
+				<ul>
+					<li>
+						<p>Does the programme work?</p>
+					</li>
+					<li>
+						<p>Are the names well chosen?</p>
+					</li>
+					<li>
+						<p>Is the programme succinct?</p>
+					</li>
+					<li>
+						<p>Are there necessary comments?</p>
+					</li>
+					<li>
+						<p>Does the programe follow the style guide?</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="grading-scheme-2">
+				<h1>Grading Scheme</h1>
+				<p>200 XP (attendance) + <br> 200 XP (contribution) + <br> 100 XP (my incompetence)</p>
+				<p>Prompt feedback after each studio session.</p>
+			</section>
+
+			<section id="recap">
+				<h1>Recap</h1>
+				<ol>
+					<li>
+						<p><a href="#/expressions">Expressions</a></p>
+					</li>
+					<li>
+						<p>Naming and the Environment</p>
+					</li>
+					<li>
+						<p>Evaluating Operator Combinations</p>
+					</li>
+					<li>
+						<p>Compound Functions</p>
+					</li>
+					<li>
+						<p>Conditional Expressions and Predicates</p>
+					</li>
+				</ol>
+			</section>
+
+			<section id="expressions-1">
+				<h1>Expressions</h1>
+				<p>An expression is any valid code that evaluates to something.</p>
+				<p>A statement is an assertion that performs an action.</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					// Expressions
+					2
+					true
+					2 * 2
+
+					// Statements
+					2;
+					true;
+					2 * 2;
+				</code></pre>
+			</section>
+
+			<section id="expressions-2" data-auto-animate>
+				<h1>Expressions</h1>
+				<p>Operations have precedence, abiding to given rules.</p>
+				<pre data-id="expressions"><code class="javascript" data-trim data-line-numbers="1-2|4-5">
+					// Start
+					1 - 5 / 2 * 4 + 3;
+
+					// Implicitly grouped and evaluated
+					(1 - ((5 / 2) * 4)) + 3;
+				</code></pre>
+			</section>
+
+			<section id="expressions-2" data-auto-animate>
+				<h1>Expressions</h1>
+				<p>Operations have precedence, abiding to given rules.</p>
+				<pre data-id="expressions"><code class="javascript" data-trim data-line-numbers="1-2|4-5|7-8|10-11|13-14">
+					// Step 1
+					(1 - ((5 / 2) * 4)) + 3;
+
+					// Step 2
+					(1 - (2.5 * 4)) + 3;
+
+					// Step 3
+					(1 - 10) + 3;
+
+					// Step 4
+					-9 + 3;
+
+					// Step 4
+					-6;
+				</code></pre>
+			</section>
+
+			<section id="expressions-3">
+				<h1>Expressions</h1>
+				<p>Expression evaluations are readily visualised with the Stepper tool.</p>
+				<div style="text-align: center;">
+					<img src="_images/stepper.png" alt="stepper" style="height: 250px;">
+				</div>
+			</section>
+
+			<section id="naming-and-the-environment-1">
+				<h1>Naming and the Environment</h1>
+				<p>Constant declarations create associations between names and values.</p>
+				<pre><code class="javascript" data-trim data-line-numbers="1-2|4-5|7-8|10-11">
+					// Constant declared
+					const x = 2;
+
+					// Name referenced
+					x * x;
+
+					// Value retrieved
+					2 * 2;
+
+					// Evaluated
+					4;
+				</code></pre>
+			</section>
+
+			<section id="naming-and-the-environment-2">
+				<h1>Naming and the Environment</h1>
+				<p>Names can be referred to from within constant declarations.</p>
+				<pre><code class="javascript" data-trim data-line-numbers="1-3|5-6|8-9|11-12">
+					// Constants declared
+					const pi = 3.14;
+					const radius = 2;
+
+					// Names referenced
+					const area = pi * radius * radius;
+
+					// Values retrieved
+					const area = 3.14 * 2 * 2;
+
+					// Evaluated
+					const area = 12.56;
+				</code></pre>
+			</section>
+
+			<section id="evaluating-operator-combinations-1">
+				<h1>Evaluating Operator Combinations</h1>
+				<p>The evaluation rule is recursive in nature.</p>
+				<ol>
+					<li>
+						<p>Evaluate the operands</p>
+					</li>
+					<li>
+						<p>Apply the operator action to the operands</p>
+					</li>
+				</ol>
+				<p>To evaluate the whole, first evaluate its parts.</p>
+			</section>
+
+			<section id="evaluating-operator-combinations-2">
+				<h1>Evaluating Operator Combinations</h1>
+				<pre><code class="javascript" data-trim data-line-numbers="1-2|4-9|11-12">
+					// To evaluate the whole...
+					1 / 2 + 3 * 4;
+
+					// ...first evaluate its parts.
+					// Step 1
+					0.5 + 3 * 4;
+
+					// Step 2
+					0.5 + 12;
+
+					// Evaluated
+					12.5;
+				</code></pre>
+			</section>
+
+			<section id="evaluating-operator-combinations-3">
+				<h1>Evaluating Operator Combinations</h1>
+				<p>Evaluation process can be represented with a tree accumulation diagram.</p>
+				<div style="text-align: center;">
+					<img src="_images/tree-accumulation-1.svg" alt="tree-accumulation" style="height: 260px;">
+				</div>
+			</section>
+
+			<section id="compound-functions-1">
+				<h1>Compound Functions</h1>
+				<p>Function declarations are powerful in that they abstract away an operation to a name.</p>
+				<div class="latex">\[\texttt{function } name\texttt{(}parameters\texttt{)} \texttt{ \{ return } expression\texttt{; \}}\]</div>
+				<p>Like a constant, the function name may be referenced to call its operation.</p>
+			</section>
+
+			<section id="compound-functions-2">
+				<h1>Compound Functions</h1>
+				<p>During function application, a declared function is called with necessary arguments, from which evaluation takes place.</p>
+				<div class="latex">\[function\texttt{-}expression\texttt{(}argument\texttt{-}expressions\texttt{)}\]</div>
+				Yet another demonstration of the recursive nature of the evaluation rule.
+			</section>
+
+			<section id="compound-functions-3">
+				<h1>Compound Functions</h1>
+				<pre><code class="javascript" data-trim data-line-numbers="1-4|6-7|9-10|12-13|15-16">
+					// Function declared
+					function square(x) {
+						return x * x;
+					}
+
+					// Function called
+					square(1 + 1);
+
+					// Argument evaluated
+					square(2);
+
+					// Variable subsituted
+					2 * 2;
+
+					// Evaluated
+					4;
+				</code></pre>
+			</section>
+
+			<section id="conditional-expressions-and-predicates-1">
+				<h1>Conditional Expressions and Predicates</h1>
+				<p>Conditional expressions provide a means of changing control flow.</p>
+				<div class="latex">\[predicate\texttt{ ? }consequent\texttt{-}expression\texttt{ : }alternative\texttt{-}expression\]</div>
+				<p>The outcome expressions are evaluated conditionally after the conditional expression is evaluated.</p>
+			</section>
+
+			<section id="conditional-expressions-and-predicates-2">
+				<h1>Conditional Expressions and Predicates</h1>
+				<pre><code class="javascript" data-trim data-line-numbers="1-2|4-5|7-8|10-11">
+					// Start
+					0 === 0 ? 1 + 2 : 3 + 4;
+
+					// Predicate expression evaluated
+					true ? 1 + 2 : 3 + 4;
+
+					// Conditional expression evaluated to consequent expression
+					1 + 2;
+
+					// Evaluated
+					3;
+				</code></pre>
+				<p>The alternative expression is never evaluated.</p>
+			</section>
+
+			<section id="conditional-expressions-and-predicates-3">
+				<h1>Conditional Expressions and Predicates</h1>
+				<div style="text-align: center;">
+					<img src="_images/tree-accumulation-2.svg" alt="tree-accumulation" style="height: 260px;">
+				</div>
+				<p>Each operator combination has its own evaluation rule.</p>
+			</section>
+
+			<section id="conditional-expressions-and-predicates-4">
+				<h1>Conditional Expressions and Predicates</h1>
+				<p>Multiple conditional expressions can be chained to check for multiple conditions.</p>
+				<div class="latex">
+					\[
+						\begin{align*}
+						&p_1\texttt{ ? }e_1\texttt{ : } \\
+						&p_2\texttt{ ? }e_2\texttt{ : } \\
+						&\vdots \\
+						&p_n\texttt{ ? }e_n\texttt{ : } \\
+						&final\texttt{-}alternative\texttt{-}expression
+						\end{align*}
+					\]
+				</div>
+			</section>
+
+			<section id="conditional-expressions-and-predicates-5">
+				<h1>Conditional Expressions and Predicates</h1>
+				<pre><code class="javascript" data-trim data-line-numbers="1-7|9-10|12-16|18-22|24-27|29-32|34-35">
+					// Function declared
+					function wordify(x) {
+						return x === 1 ? "one" :    // clause 1
+						       x === 2 ? "two" :    // clause 2
+							     x === 3 ? "three" :  // clause 3
+							     "invalid input";
+					}
+
+					// Function called
+					wordify(2);
+
+					// Variable substituted
+					2 === 1 ? "one" :
+					2 === 2 ? "two" :
+					2 === 3 ? "three" :
+					"invalid input";
+
+					// Predicate expression evaluated
+					false ? "one" :
+					2 === 2 ? "two" :
+					2 === 3 ? "three" :
+					"invalid input";
+
+					// Conditional expression evaluated to alternative expression
+					2 === 2 ? "two" :
+					2 === 3 ? "three" :
+					"invalid input";
+
+					// Predicate expression evaluated
+					true ? "two" :
+					2 === 3 ? "three" :
+					"invalid input";
+
+					// Conditional expression evaluated to consequent expression
+					"two";
+				</code></pre>
+			</section>
+
+			<section id="conditional-expressions-and-predicates-6">
+				<h1>Conditional Expressions and Predicates</h1>
+				<ul>
+					<li>
+						<p>
+							<span class="latex">\(expression_1\texttt{ && }expression_2\)</span> <br>
+							Syntactic sugar for <span class="latex">\(expression_1\texttt{ ? }expression_2\texttt{ : }false\)</span>
+						</p>
+					</li>
+					<li>
+						<p>
+							<span class="latex">\(expression_1\texttt{ || }expression_2\)</span> <br>
+							Syntactic sugar for <span class="latex">\(expression_1\texttt{ ? }true\texttt{ : }expression_2\)</span>
+						</p>
+					</li>
+					<li>
+						<p>
+							<span class="latex">\(\texttt{!}expression\)</span> <br>
+							Negates the expression
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-worksheet-intro">
+				<h1>Studio Worksheet</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							<span class="latex">\(\texttt{%}\)</span> operator <br>
+							Used to retrieve the remainder after division
+							<pre><code class="javascript" data-trim data-line-numbers>
+								// Dividing 8 by 3...
+								8 % 3;
+
+								// ...gives remainder 2.
+								2;
+							</code></pre>
+						</p>
+					</li>
+					<li>
+						<p>
+							A <em>regular combo</em> refers to a valid input
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-worksheet-1">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function biggie_size(meal) {
+						return meal + 4;
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-2">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function unbiggie_size(meal) {
+						return meal - 4;
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-3">
+				<h1>Studio Worksheet</h1>
+				<h2>3</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function is_biggie_size(meal) {
+						return meal > 4;
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-4">
+				<h1>Studio Worksheet</h1>
+				<h2>4</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function combo_price(meal) {
+						return is_biggie_size(meal)
+							     ? 0.50 + (1.17 * unbiggie_size(meal))
+							     : 1.17 * meal;
+						}
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-5">
+				<h1>Studio Worksheet</h1>
+				<h2>5</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function empty_order() {
+						return 0;
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-6">
+				<h1>Studio Worksheet</h1>
+				<h2>6</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function add_to_order(order, combo) {
+						return order * 10 + combo;
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-7">
+				<h1>Studio Worksheet</h1>
+				<h2>7</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function last_combo(order) {
+						return order % 10;
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-8">
+				<h1>Studio Worksheet</h1>
+				<h2>8</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function other_combos(order) {
+						return math_floor(order / 10);
+					}
+				</code></pre>
+			</section>
+
+			<section id="end">
+				<h1>That's All!</h1>
+			</section>
+		</div>
+	</div>
+
+	<script src="_dist/reveal.js"></script>
+	<script src="_plugin/math/math.js"></script>
+	<script src="_plugin/notes/notes.js"></script>
+	<script src="_plugin/markdown/markdown.js"></script>
+	<script src="_plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			math: {
+				mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+				config: 'TeX-AMS_HTML-full',
+				// pass other options into `MathJax.Hub.Config()`
+				TeX: { Macros: { RR: "{\\bf R}" } }
+			},
+			hash: true,
+			center: false,
+			transition: "none",
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath]
+		});
+	</script>
+</body>
+
+</html>
