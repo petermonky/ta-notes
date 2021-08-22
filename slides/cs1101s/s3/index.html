@@ -371,88 +371,6 @@
 				<p>The number of operations grows at an alarming rate.</p>
 			</section>
 
-			<section id="studio-in-class-intro">
-				<h1>Studio In-Class</h1>
-				<p>Some stuff to note:</p>
-				<ul>
-					<li>
-						<p>
-							Functions from previous questions may be reused.
-						</p>
-					</li>
-					<li>
-						<p>
-							Keep in mind the efficiency of your programmes.
-						</p>
-					</li>
-					<li>
-						<p>
-							Assume that all runes use constant space, and that all primitive
-							operations on runes take constant time.
-						</p>
-					</li>
-				</ul>
-			</section>
-
-			<section id="studio-in-class-1">
-				<h1>Studio In-Class</h1>
-				<h2>1</h2>
-				<pre><code class="javascript" data-trim data-line-numbers>
-					function moony_1(rune) {
-						return stack(beside(circle, blank),
-						             beside(square, rune));
-					}
-				</code></pre>
-			</section>
-
-			<section id="studio-in-class-2">
-				<h1>Studio In-Class</h1>
-				<h2>2</h2>
-				<pre><code class="javascript" data-trim data-line-numbers>
-					function moony_2(n) {
-						return n === 1
-						       ? circle
-						       : moony_1(moony_2(n - 1));
-					}
-				</code></pre>
-			</section>
-
-			<section id="studio-in-class-3">
-				<h1>Studio In-Class</h1>
-				<h2>3</h2>
-				<pre><code class="javascript" data-trim data-line-numbers>
-					function moony(n) {
-						return n === 1
-						       ? circle
-						       : stack_frac(1 / n,
-						             beside_frac(1 / n, circle, blank),
-						             beside_frac(1 / n, square, moony(n - 1)));
-					}
-				</code></pre>
-			</section>
-
-			<section id="studio-in-class-4">
-				<h1>Studio In-Class</h1>
-				<h2>4</h2>
-				<ul>
-					<li>
-						<p>
-							<code>moony_1</code>: \(\Theta(1), O(1), O(n), O(n^2), \Omega(1)\)
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>moony_2</code>: \(\Theta(n), O(n), O(n^2), \Omega(n), \Omega(1)\)
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>moony</code>: \(\Theta(n), O(n), O(n^2), \Omega(n), \Omega(1)\)
-						</p>
-					</li>
-				</ul>
-			</section>
-
 			<section id="studio-worksheet-1">
 				<h1>Studio Worksheet</h1>
 				<h2>1</h2>
@@ -729,6 +647,88 @@
 				<div style="text-align: center;">
 					<img src="images/combo-12.svg" alt="combo-12" style="height: 400px;">
 				</div>
+			</section>
+
+			<section id="studio-in-class-intro">
+				<h1>Studio In-Class</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							Functions from previous questions may be reused.
+						</p>
+					</li>
+					<li>
+						<p>
+							Keep in mind the efficiency of your programmes.
+						</p>
+					</li>
+					<li>
+						<p>
+							Assume that all runes use constant space, and that all primitive
+							operations on runes take constant time.
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-in-class-1">
+				<h1>Studio In-Class</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function moony_1(rune) {
+						return stack(beside(circle, blank),
+						             beside(square, rune));
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-2">
+				<h1>Studio In-Class</h1>
+				<h2>2</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function moony_2(n) {
+						return n === 1
+						       ? circle
+						       : moony_1(moony_2(n - 1));
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-3">
+				<h1>Studio In-Class</h1>
+				<h2>3</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function moony(n) {
+						return n === 1
+						       ? circle
+						       : stack_frac(1 / n,
+						             beside_frac(1 / n, circle, blank),
+						             beside_frac(1 / n, square, moony(n - 1)));
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-4">
+				<h1>Studio In-Class</h1>
+				<h2>4</h2>
+				<ul>
+					<li>
+						<p>
+							<code>moony_1</code>: \(\Theta(1), O(1), O(n), O(n^2), \Omega(1)\)
+						</p>
+					</li>
+					<li>
+						<p>
+							<code>moony_2</code>: \(\Theta(n), O(n), O(n^2), \Omega(n), \Omega(1)\)
+						</p>
+					</li>
+					<li>
+						<p>
+							<code>moony</code>: \(\Theta(n), O(n), O(n^2), \Omega(n), \Omega(1)\)
+						</p>
+					</li>
+				</ul>
 			</section>
 
 			<section id="studio-extra-1">
