@@ -1,0 +1,1026 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>S2: Studio Week 2</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/simple.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/highlight.js/src/styles/github.css">
+
+	<style>
+		.slides section {
+			text-align: left;
+		}
+
+		.slides section h1,
+		.slides section h2,
+		.slides section h3 {
+			font-weight: bold;
+		}
+
+		.slides section h1 {
+			font-size: 2em;
+		}
+
+		.slides section h2 {
+			font-size: 1.5em;
+		}
+
+		.slides section .latex {
+			font-size: 0.8em;
+		}
+
+		.slides section .rune {
+			position: relative;
+			top: 1.2em;
+			height: 80px;
+		}
+
+		.slides section .rune-code {
+			font-size: 0.5em;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section id="intro">
+				<h1>S3: Studio Week 3</h1>
+			</section>
+
+			<section id="updates">
+				<h1>Updates</h1>
+				<ul>
+					<li>
+						<p>Source style guide — styling will be graded. Guide can be found <a href="https://docs.sourceacademy.org/source_styleguide.pdf">here</a>.</p>
+					</li>
+					<li>
+						<p>Unsubmit policy — can unsubmit upon noticing overlooked errors. Unsubmit wisely!</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="recap">
+				<h1>Recap</h1>
+				<ol>
+					<li>
+						<p><a href="#/the-substitution-model-for-function-application-1">The Subsitution Model for Function Application</a></p>
+					</li>
+					<li>
+						<p><a href="#/naming-and-the-environment-1">Naming and the Environment</a></p>
+					</li>
+					<li>
+						<p><a href="#/evaluating-operator-combinations-1">Evaluating Operator Combinations</a></p>
+					</li>
+					<li>
+						<p><a href="#/compound-functions-1">Compound Functions</a></p>
+					</li>
+					<li>
+						<p><a href="#/conditional-expressions-and-predicates-1">Conditional Expressions and Predicates</a></p>
+					</li>
+				</ol>
+			</section>
+
+			<section id="the-substitution-model-for-function-application-1">
+				<h1>The Substitution Model for Function Application</h1>
+				<ul>
+					<li>
+						<p>
+							Applicative-order evaluation
+							<ul>
+								<li>
+									"Evaluate the arguments and then apply"
+								</li>
+							</ul>
+						</p>
+					</li>
+					<li>
+						<p>
+							Normal-order evaluation
+							<ul>
+								<li>
+									"Fully expand and then reduce"
+								</li>
+							</ul>
+						</p>
+					</li>
+				</ul>
+			</section>
+			
+			<section id="the-substitution-model-for-function-application-2">
+				<h1>The Substitution Model for Function Application</h1>
+				<p>Applicative-order evaluation</p>
+				<pre><code class="javascript" data-trim data-line-numbers="1-4|6-7|9-10|12-13|15-16">
+					// Define function
+					function square(x) {
+						return x * x;
+					}
+
+					// Start
+					square(2 * 2);
+
+					// Evaluate the arguments...
+					square(4);
+
+					// ...and then apply.
+					4 * 4;
+
+					// Evaluated
+					16;
+				</code></pre>
+			</section>
+
+			<section id="the-substitution-model-for-function-application-3">
+				<h1>The Substitution Model for Function Application</h1>
+				<p>Normal-order evaluation</p>
+				<pre><code class="javascript" data-trim data-line-numbers="1-4|6-7|9-10|12-13|15-16">
+					// Define function
+					function square(x) {
+						return x * x;
+					}
+
+					// Start
+					square(2 * 2);
+
+					// Fully expand...
+					(2 * 2) * (2 * 2);
+
+					// ...and then reduce.
+					4 * 4;
+
+					// Evaluated
+					16;
+				</code></pre>
+			</section>
+
+			<section id="the-substitution-model-for-function-application-4">
+				<h1>The Substitution Model for Function Application</h1>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					// Define functions
+					function p() {
+						return p();
+					}
+
+					function test(x, y) {
+						return x === 0 ? 0 : y;
+					}
+
+					test(0, p());
+				</code></pre>
+				<p>Applicative-order versus normal-order?</p>
+			</section>
+
+			<section id="the-substitution-model-for-function-application-5">
+				<h1>The Substitution Model for Function Application</h1>
+				<pre><code class="javascript" data-trim data-line-numbers="1-10|12-13|15-16|18-19|21-22">
+					// Define functions
+					function p() {
+						return p();
+					}
+
+					function test(x, y) {
+						return x === 0 ? 0 : y;
+					}
+
+					test(0, p());
+
+					// Evaluate the arguments...
+					test(0, p());
+
+					// ...and then evaluate the arguments...
+					test(0, p());
+
+					// ...and then evaluate the arguments...
+					test(0, p());
+
+					// ...and then evaluate the arguments?!
+					test(0, p());
+				</code></pre>
+				<p>Applicative-order evaluation fails!</p>
+			</section>
+
+			<section id="the-substitution-model-for-function-application-6">
+				<h1>The Substitution Model for Function Application</h1>
+				<pre><code class="javascript" data-trim data-line-numbers="1-10|12-13|15-16|18-19">
+					// Define functions
+					function p() {
+						return p();
+					}
+
+					function test(x, y) {
+						return x === 0 ? 0 : y;
+					}
+
+					test(0, p());
+
+					// Fully expand...
+					0 === 0 ? 0 : p();
+
+					// ...and then reduce.
+					true ? 0 : p();
+
+					// Evaluated
+					0;
+				</code></pre>
+				<p>Normal-order evaluation works!</p>
+			</section>
+
+			<section id="linear-recursion-and-iteration-1">
+				<h1>Linear Recursion and Iteration</h1>
+				<p>Recursive process</p>
+				<pre><code class="javascript" data-trim data-line-numbers="1-6|8-9|11-18|20-25">
+					// Declare function
+					function factorial(n) {
+						return n === 1
+						       ? 1
+						       : n * factorial(n - 1);
+					}
+
+					// Start
+					factorial(4);
+
+					// Expanded
+					4 * factorial(3);
+
+					4 * (3 * factorial(2));
+
+					4 * (3 * (2 * factorial(1)));
+
+					4 * (3 * (2 * 1));
+
+					// Collapsed
+					4 * (3 * 2);
+
+					4 * 6;
+
+					24;
+				</code></pre>
+			</section>
+
+			<section id="linear-recursion-and-iteration-2">
+				<h1>Linear Recursion and Iteration</h1>
+				<p>Recursive processes accumulate deferred operations.</p>
+				<div style="text-align: center;">
+					<img src="images/recursive-process.svg" alt="recursive-process" style="height: 420px;">
+				</div>
+			</section>
+
+			<section id="linear-recursion-and-iteration-3">
+				<h1>Linear Recursion and Iteration</h1>
+				<p>Iterative process</p>
+				<pre><code class="javascript" data-trim data-line-numbers="1-12|14-15|17-28">
+					// Declare functions
+					function factorial(n) {
+						return fact_iter(1, 1, n);
+					}
+
+					function fact_iter(product, counter, max_count) {
+						return counter > max_count
+						       ? product
+						       : fact_iter(counter * product,
+						                   counter + 1,
+						                   max_count);
+					}
+
+					// Start
+					factorial(4);
+
+					// Evaluated
+					fact_iter(1, 1, 4);
+
+					fact_iter(1, 2, 4);
+
+					fact_iter(2, 3, 4);
+
+					fact_iter(6, 4, 4);
+
+					fact_iter(24, 5, 4);
+
+					24;
+				</code></pre>
+			</section>
+
+			<section id="linear-recursion-and-iteration-4">
+				<h1>Linear Recursion and Iteration</h1>
+				<p>Iterative processes track the "metadata".</p>
+				<div style="text-align: center;">
+					<img src="images/iterative-process.svg" alt="iterative-process" style="height: 420px;">
+				</div>
+			</section>
+
+			<section id="linear-recursion-and-iteration-5">
+				<h1>Linear Recursion and Iteration</h1>
+				<p>Don't confuse functions with processes!</p>
+				<p>
+					Recursive functions can very well give rise to both
+					recursive and iterative processes.
+				</p>
+				<p>
+					Look for deferred operations!
+				</p>
+			</section>
+
+			<section id="tree-recursion-1">
+				<h1>Tree Recursion</h1>
+				<p>Non-linear recursive processes often give rise to tree recursion.</p>
+				<pre><code class="javascript" data-trim data-line-numbers="1-6|8-33">
+					// Declare function
+					function fib(n) {
+						return n === 0 ? 0 :
+						       n === 1 ? 1 :
+						       fib(n - 1) + fib(n - 2);
+					}
+
+					// Non-linear recursive process arisen
+					fib(4);
+
+					fib(3) + fib(2);
+
+					(fib(2) + fib(1)) + (fib(1) + fib(0));
+
+					((fib(1) + fib(0)) + fib(1)) + (fib(1) + fib(0));
+
+					((1 + fib(0)) + fib(1)) + (fib(1) + fib(0));
+
+					((1 + 0) + fib(1)) + (fib(1) + fib(0));
+
+					(1 + fib(1)) + (fib(1) + fib(0));
+
+					(1 + 1) + (fib(1) + fib(0));
+
+					2 + (fib(1) + fib(0));
+
+					2 + (1 + fib(0));
+
+					2 + (1 + 0);
+
+					2 + 1;
+
+					3;
+				</code></pre>
+			</section>
+
+			<section id="tree-recursion-2">
+				<h1>Tree Recursion</h1>
+				<div style="text-align: center;">
+					<img src="images/tree-recursion.svg" alt="tree-recursion" style="height: 420px;">
+				</div>
+				<p>The number of operations grows at an alarming rate.</p>
+			</section>
+
+			<section id="studio-in-class-intro">
+				<h1>Studio In-Class</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							Functions from previous questions may be reused.
+						</p>
+					</li>
+					<li>
+						<p>
+							Keep in mind the efficiency of your programmes.
+						</p>
+					</li>
+					<li>
+						<p>
+							Assume that all runes use constant space, and that all primitive
+							operations on runes take constant time.
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-in-class-1">
+				<h1>Studio In-Class</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function moony_1(rune) {
+						return stack(beside(circle, blank),
+						             beside(square, rune));
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-2">
+				<h1>Studio In-Class</h1>
+				<h2>2</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function moony_2(n) {
+						return n === 1
+						       ? circle
+						       : moony_1(moony_2(n - 1));
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-3">
+				<h1>Studio In-Class</h1>
+				<h2>3</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function moony(n) {
+						return n === 1
+						       ? circle
+						       : stack_frac(1 / n,
+						             beside_frac(1 / n, circle, blank),
+						             beside_frac(1 / n, square, moony(n - 1)));
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-4">
+				<h1>Studio In-Class</h1>
+				<h2>4</h2>
+				<ul>
+					<li>
+						<p>
+							<code>moony_1</code>: \(\Theta(1), O(1), O(n), O(n^2), \Omega(1)\)
+						</p>
+					</li>
+					<li>
+						<p>
+							<code>moony_2</code>: \(\Theta(n), O(n), O(n^2), \Omega(n), \Omega(1)\)
+						</p>
+					</li>
+					<li>
+						<p>
+							<code>moony</code>: \(\Theta(n), O(n), O(n^2), \Omega(n), \Omega(1)\)
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-worksheet-1">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function f1(rune_1, n, rune_2) {
+						return n === 0
+						       ? rune_2
+						       : f1(rune_1, n - 1,
+						             beside(rune_1, stack(blank, rune_2)));
+					}
+
+					show(f1(square, 3, heart));
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-2" data-background-color="#003b59" data-auto-animate>
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(square, 3, heart));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-3" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(<img src="images/square.svg" alt="square" class="rune">, 3, <img src="images/heart.svg" alt="heart" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-4" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(<img src="images/square.svg" alt="square" class="rune">, 3 - 1, beside(<img src="images/square.svg" alt="square" class="rune">, stack(<img src="images/blank.svg" alt="blank" class="rune">, <img src="images/heart.svg" alt="heart" class="rune">))));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-5" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(<img src="images/square.svg" alt="square" class="rune">, 2, beside(<img src="images/square.svg" alt="square" class="rune">, stack(<img src="images/blank.svg" alt="blank" class="rune">, <img src="images/heart.svg" alt="heart" class="rune">))));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-6" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(<img src="images/square.svg" alt="square" class="rune">, 2, beside(<img src="images/square.svg" alt="square" class="rune">, <img src="images/combo-1.svg" alt="combo-1" class="rune">)));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-7" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(<img src="images/square.svg" alt="square" class="rune">, 2, <img src="images/combo-2.svg" alt="combo-2" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-8" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(<img src="images/square.svg" alt="square" class="rune">, 2 - 1, beside(<img src="images/square.svg" alt="square" class="rune">, stack(<img src="images/blank.svg" alt="blank" class="rune">, <img src="images/combo-2.svg" alt="combo-2" class="rune">))));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-9" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(<img src="images/square.svg" alt="square" class="rune">, 1, beside(<img src="images/square.svg" alt="square" class="rune">, stack(<img src="images/blank.svg" alt="blank" class="rune">, <img src="images/combo-2.svg" alt="combo-2" class="rune">))));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-10" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(<img src="images/square.svg" alt="square" class="rune">, 1, beside(<img src="images/square.svg" alt="square" class="rune">, <img src="images/combo-3.svg" alt="combo-3" class="rune">)));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-11" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(<img src="images/square.svg" alt="square" class="rune">, 1, <img src="images/combo-4.svg" alt="combo-4" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-12" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(<img src="images/square.svg" alt="square" class="rune">, 1 - 1, beside(<img src="images/square.svg" alt="square" class="rune">, stack(<img src="images/blank.svg" alt="blank" class="rune">, <img src="images/combo-4.svg" alt="combo-4" class="rune">))));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-13" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(<img src="images/square.svg" alt="square" class="rune">, 0, beside(<img src="images/square.svg" alt="square" class="rune">, stack(<img src="images/blank.svg" alt="blank" class="rune">, <img src="images/combo-4.svg" alt="combo-4" class="rune">))));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-14" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(<img src="images/square.svg" alt="square" class="rune">, 0, beside(<img src="images/square.svg" alt="square" class="rune">, <img src="images/combo-5.svg" alt="combo-5" class="rune">)));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-15" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(f1(<img src="images/square.svg" alt="square" class="rune">, 0, <img src="images/combo-6.svg" alt="combo-6" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-16" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<code class="rune-code">
+					show(<img src="images/combo-6.svg" alt="combo-6" class="rune">);
+				</code>
+			</section>
+
+			<section id="studio-worksheet-17" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="text-align: center;">
+					<img src="images/combo-6.svg" alt="combo-6" style="height: 400px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-18">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function f2(rune, n) {
+						return n === 0
+						       ? rune
+						       : stack(beside(blank, f2(rune, n - 1)),
+						               square);
+					}
+
+					show(f2(heart, 3));
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-19" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(f2(heart, 3));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-20" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(f2(<img src="images/heart.svg" alt="heart" class="rune">, 3));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-21" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, f2(<img src="images/heart.svg" alt="heart" class="rune">, 3 - 1)), <img src="images/square.svg" alt="square" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-22" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, f2(<img src="images/heart.svg" alt="heart" class="rune">, 2)), <img src="images/square.svg" alt="square" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-23" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, f2(<img src="images/heart.svg" alt="heart" class="rune">, 2 - 1)), <img src="images/square.svg" alt="square" class="rune">)), <img src="images/square.svg" alt="square" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-24" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, f2(<img src="images/heart.svg" alt="heart" class="rune">, 1)), <img src="images/square.svg" alt="square" class="rune">)), <img src="images/square.svg" alt="square" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-25" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, f2(<img src="images/heart.svg" alt="heart" class="rune">, 1 - 1)), <img src="images/square.svg" alt="square" class="rune">)), <img src="images/square.svg" alt="square" class="rune">)), <img src="images/square.svg" alt="square" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-26" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, f2(<img src="images/heart.svg" alt="heart" class="rune">, 0)), <img src="images/square.svg" alt="square" class="rune">)), <img src="images/square.svg" alt="square" class="rune">)), <img src="images/square.svg" alt="square" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-27" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, stack(<img src="images/combo-7.svg" alt="combo-7" class="rune">, <img src="images/square.svg" alt="square" class="rune">)), <img src="images/square.svg" alt="square" class="rune">)), <img src="images/square.svg" alt="square" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-28" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, <img src="images/combo-8.svg" alt="combo-8" class="rune">), <img src="images/square.svg" alt="square" class="rune">)), <img src="images/square.svg" alt="square" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-29" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, stack(<img src="images/combo-9.svg" alt="combo-9" class="rune">, <img src="images/square.svg" alt="square" class="rune">)), <img src="images/square.svg" alt="square" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-30" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(stack(beside(<img src="images/blank.svg" alt="blank" class="rune">, <img src="images/combo-10.svg" alt="combo-10" class="rune">), <img src="images/square.svg" alt="square" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-31" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(stack(<img src="images/combo-11.svg" alt="combo-11" class="rune">, <img src="images/square.svg" alt="square" class="rune">));
+				</code>
+			</section>
+
+			<section id="studio-worksheet-32" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<code class="rune-code">
+					show(<img src="images/combo-12.svg" alt="combo-12" class="rune">);
+				</code>
+			</section>
+
+			<section id="studio-worksheet-33" data-background-color="#003b59">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<div style="text-align: center;">
+					<img src="images/combo-12.svg" alt="combo-12" style="height: 400px;">
+				</div>
+			</section>
+
+			<section id="studio-extra-1">
+				<h1>Studio Extra</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function expt(b, n) {
+						return n === 0 ? 1 : b * expt(b, n - 1);
+					}
+				</code></pre>
+				<p>Recursive process or iterative process?</p>
+				<p>Time and space complexities:</p>
+				<ul>
+					<li>
+							for static <code>b</code> and dynamic <code>n</code>?
+					</li>
+					<li>
+							for static <code>n</code> and dynamic <code>b</code>?
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-extra-2">
+				<h1>Studio Extra</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers="1-4|6-7|9-14|16-23">
+					// Declare function
+					function expt(b, n) {
+						return n === 0 ? 1 : b * expt(b, n - 1);
+					}
+
+					// Start
+					expt(2, 3);
+
+					// Expanded
+					2 * expt(2, 2);
+
+					2 * (2 * expt(2, 1));
+					
+					2 * (2 * (2 * expt(2, 0)));
+
+					// Collapsed
+					2 * (2 * (2 * 1));
+
+					2 * (2 * 2);
+
+					2 * 4;
+
+					8;
+				</code></pre>
+				<p><code>expt</code> incurs a recursive process.</p>
+			</section>
+
+			<section id="studio-extra-3">
+				<h1>Studio Extra</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function expt(b, n) {
+						return n === 0 ? 1 : b * expt(b, n - 1);
+					}
+				</code></pre>
+				<p>Let \(t_1(n)\) and \(s_1(n)\) be the time and space that it takes <code>expt</code> to compute \(b^n\) for a fixed \(b\), respectively.</p>
+				<ul>
+					<li>
+						<p>
+							\(t_1\) has order of growth \(\Theta(n)\)
+						</p>
+					</li>
+					<li>
+						<p>
+							\(s_1\) has order of growth \(\Theta(n)\)
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-extra-4">
+				<h1>Studio Extra</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function expt(b, n) {
+						return n === 0 ? 1 : b * expt(b, n - 1);
+					}
+				</code></pre>
+				<p>Let \(t_2(n)\) and \(s_2(n)\) be the time and space that it takes <code>expt</code> to compute \(b^n\) for a fixed \(n\), respectively.</p>
+				<ul>
+					<li>
+						<p>
+							\(t_2\) has order of growth \(\Theta(1)\)
+						</p>
+					</li>
+					<li>
+						<p>
+							\(s_2\) has order of growth \(\Theta(1)\)
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-extra-5">
+				<h1>Studio Extra</h1>
+				<h2>2</h2>
+				\[
+				b^n = 
+				\begin{cases} 
+					\left(b^{\frac{n}{2}}\right)^2 & \text{if }n\text{ is even} \\
+					b \times b^{n - 1} & \text{if }n\text{ is odd}
+				\end{cases}
+				\]
+			</section>
+
+			<section id="studio-extra-6">
+				<h1>Studio Extra</h1>
+				<h2>2</h2>
+				<pre><code class="javascript" data-trim data-line-numbers="1-8|10-17|19-20|22-29|31-40">
+					// Helper functions declared
+					function square(x) {
+						return x * x;
+					}
+
+					function is_even(n) {
+						return n % 2 === 0;
+					}
+
+					// fast_expt declared
+					function fast_expt(b, n) {
+						return n === 0
+						       ? 1
+						       : is_even(n)
+						         ? square(fast_expt(b, n / 2))
+						         : b * fast_expt(b, n - 1);
+					}
+
+					// Start
+					fast_expt(2, 8);
+
+					// Expanded
+					square(fast_expt(2, 4));
+
+					square(square(fast_expt(2, 2)));
+
+					square(square(square(fast_expt(2, 1))));
+
+					square(square(square(2 * fast_expt(2, 0))));
+
+					// Collapsed
+					square(square(square(2 * 1)));
+
+					square(square(square(2)));
+
+					square(square(4));
+
+					square(16);
+
+					256;
+				</code></pre>
+				<p><code>fast_expt</code> computes in \(\Theta(\log(n))\) time.</p>
+			</section>
+
+			<section id="studio-extra-7">
+				<h1>Studio Extra</h1>
+				<h2>2</h2>
+				<pre><code class="javascript" data-trim data-line-numbers="1-8|10-19|21-22|24-33|35-46">
+					// Helper functions declared
+					function square(x) {
+						return x * x;
+					}
+
+					function is_even(n) {
+						return n % 2 === 0;
+					}
+
+					// fast_expt_int declared
+					function fast_expt_int(b, n) {
+						return n < 0
+						       ? 1 / fast_expt_int(b, -n)
+						       : n === 0
+						         ? 1
+						         : is_even(n)
+						           ? square(fast_expt_int(b, n / 2))
+								   : b * fast_expt_int(b, n - 1);
+					}
+
+					// Start
+					fast_expt_int(2, -8);
+
+					// Expanded
+					1 / fast_expt_int(2, 8);
+
+					1 / square(fast_expt_int(2, 4));
+
+					1 / square(square(fast_expt_int(2, 2)));
+
+					1 / square(square(square(fast_expt_int(2, 1))));
+
+					1 / square(square(square(2 * fast_expt_int(2, 0))));
+
+					// Collapsed
+					1 / square(square(square(2 * 1)));
+
+					1 / square(square(square(2)));
+
+					1 / square(square(4));
+
+					1 / square(16);
+
+					1 / 256;
+
+					0.00390625;
+				</code></pre>
+				<p><code>fast_expt_int</code> accounts for integer powers.</p>
+			</section>
+
+			<section id="studio-extra-8">
+				<h1>Studio Extra</h1>
+				<h2>2</h2>
+				<div style="text-align: center;">
+					<img src="images/expt-recursive.svg" alt="expt-recursive" style="height: 360px;">
+				</div>
+				<p>Operations are deferred; incurs recursive process.</p>
+			</section>
+
+			<section id="studio-extra-9">
+				<h1>Studio Extra</h1>
+				<h2>2</h2>
+				<pre><code class="javascript" data-trim data-line-numbers="1-12|14-15|17-28">
+					// Declare functions
+					function iter(exp, base, product) {
+						return exp === 0
+						       ? product
+						       : exp % 2 === 0
+						         ? iter(exp / 2, base * base, product)
+						         : iter(exp - 1, base, base * product);
+					}
+
+					function fast_expt_iter(b, e) {
+						return iter(e, b, 1);
+					}
+
+					// Start
+					fast_expt_iter(2, 8);
+
+					// Evaluated
+					iter(8, 2, 1);
+
+					iter(4, 4, 1);
+
+					iter(2, 16, 1);
+
+					iter(1, 256, 1);
+
+					iter(0, 256, 256);
+
+					256;
+				</code></pre>
+				<p>No deferred operations; incurs iterative process.</p>
+			</section>
+
+			<section id="end">
+				<h1>That's All!</h1>
+			</section>
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/math/math.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			math: {
+				mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+				config: 'TeX-AMS_HTML-full',
+				// pass other options into `MathJax.Hub.Config()`
+				TeX: { Macros: { RR: "{\\bf R}" } }
+			},
+			hash: true,
+			center: false,
+			transition: "none",
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath]
+		});
+	</script>
+</body>
+
+</html>
