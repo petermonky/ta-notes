@@ -1,0 +1,419 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>S4: Studio Week 4</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/simple.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/highlight.js/src/styles/github.css">
+
+	<style>
+		.slides section {
+			text-align: left;
+		}
+
+		.slides section h1,
+		.slides section h2,
+		.slides section h3 {
+			font-weight: bold;
+		}
+
+		.slides section h1 {
+			font-size: 2em;
+		}
+
+		.slides section h2 {
+			font-size: 1.5em;
+		}
+
+		.slides section .latex {
+			font-size: 0.8em;
+		}
+
+		.slides section .rune {
+			position: relative;
+			top: 1.2em;
+			height: 80px;
+		}
+
+		.slides section .rune-code {
+			font-size: 0.5em;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section id="intro">
+				<h1>S4: Studio Week 4</h1>
+			</section>
+
+			<section id="updates">
+				<h1>Updates</h1>
+				<ul>
+					<li>
+						<p>Reading assessment this friday — DM for clarification on topics.</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="recap">
+				<h1>Recap</h1>
+				<ol>
+					<li>
+						<p><a href="#/functions-as-arguments-1">Functions as Arguments</a></p>
+					</li>
+					<li>
+						<p><a href="#/constructing-functions-using-lambda-expressions-1">Constructing Functions using Lambda Expressions</a></p>
+					</li>
+				</ol>
+			</section>
+
+			<section id="functions-as-arguments-1">
+				<h1>Functions as Arguments</h1>
+				<p>Function declarations become more <em>declarative</em>.</p>
+				<p>Functions not as a factory, but a machine; operations become <em>portable</em>.</p>
+			</section>
+
+			<section id="functions-as-arguments-2">
+				<h1>Functions as Arguments</h1>
+				<p>Function object can be passed around; non-primitive argument values.</p>
+				<pre><code class="javascript" data-trim data-line-numbers="1-9|10-11|13-22">
+					// Functions declared
+					function square(x) {
+						return x * x;
+					}
+
+					function doubler(f, x) {
+						return f(f(x));
+					}
+
+					// square passed as argument
+					doubler(square, 2);
+
+					// Evaluated
+					square(square(2));
+
+					square(2 * 2);
+
+					square(4);
+
+					4 * 4;
+
+					16;
+				</code></pre>
+			</section>
+
+			<section id="functions-as-arguments-3">
+				<h1>Functions as Arguments</h1>
+				<p>A more practical example.</p>
+				\[\sum_{n = a}^b f(n) = f(a) + \cdots + f(b)\]
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function sum(f, a, b) {
+					    return a > b
+					           ? 0
+					           : f(a) + sum(f, a + 1, b);
+					}
+				</code></pre>
+			</section>
+			
+			<section id="constructing-functions-using-lambda-expressions-1">
+				<h1>Constructing Functions using Lambda Expressions</h1>
+				<p>Lambda expression — a new syntactic form for representing operations.</p>
+				\[(parameters) => expression\]
+				<p>Declarations of operations grow even <em>more</em> declarative.</p>
+			</section>
+			
+			<section id="constructing-functions-using-lambda-expressions-2">
+				<h1>Constructing Functions using Lambda Expressions</h1>
+				<p>Lambda expressions give rise to anonymous functions; functions that are not bound to any names.</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					// No need to define auxilliary function
+					(x => y => x * y)(2)(3);
+
+					(y => 2 * y)(3);
+
+					2 * 3;
+
+					6;
+				</code></pre>
+			</section>
+			
+			<section id="constructing-functions-using-lambda-expressions-3">
+				<h1>Constructing Functions using Lambda Expressions</h1>
+				<pre><code class="javascript" data-trim data-line-numbers="1-4|6-17">
+					// Function declared
+					function doubler(f, x) {
+					    return f(f(x));
+					}
+
+					// Called and evaluated without auxilliary function
+					doubler(x => x * x, 2);
+
+					(x => x * x)((x => x * x)(2));
+
+					(x => x * x)(2 * 2);
+
+					(x => x * x)(4);
+
+					4 * 4;
+
+					16;
+				</code></pre>
+			</section>
+			
+			<section id="constructing-functions-using-lambda-expressions-4">
+				<h1>Constructing Functions using Lambda Expressions</h1>
+				<p>Lambda expressions can be bound to names.</p>
+				<p>An analogous view of a function declaration and a lambda expression.</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function f(x) {
+						return x * 2;
+					}
+
+					// is equivalent to
+
+					const f = x => x * 2;
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-1">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<p><code>pascal</code> either returns 1 if on edge, or sum of two upper values if inside.</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function pascal(row, pos) {
+					    return (pos === 1 || pos === row)
+					        ? 1
+					        : pascal(row - 1, pos - 1) + pascal(row - 1, pos);
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-2">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<div style="text-align: center;">
+					<img src="images/tree-diagram.svg" alt="tree-diagram" style="height: 340px;">
+				</div>
+				<p>Gives rise to deferred operations; recursive process.</p>
+			</section>
+
+			<section id="studio-in-class-1">
+				<h1>Studio In-Class</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							<code>math_E</code> represents \(e\), Euler's number.
+						</p>
+						<p>
+							<code>math_log</code> is equivalent to \(\ln\) — that is, \(\log_e\) — not \(\log_{10}\).
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-in-class-2">
+				<h1>Studio In-Class</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers="1-4|6-7|9-10|12-13|15-16|18-21">
+					// Function declared
+					function compose(f, g) {
+						return x => f(g(x));
+					}
+
+					// Start
+					compose(math_sqrt, math_log)(math_E);
+
+					// math_E substituted
+					compose(math_sqrt, math_log)(2.718281828459045);
+
+					// Arguments substituted into compose
+					(x => math_sqrt(math_log(x)))(2.718281828459045);
+
+					// Argument substituted into lambda expression
+					math_sqrt(math_log(2.718281828459045));
+
+					// Evaluated
+					math_sqrt(1);
+
+					1;
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-3">
+				<h1>Studio In-Class</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers="1-4|6-7|9-10|12-13|15-16|18-19|21-24">
+					// Function declared
+					function compose(f, g) {
+						return x => f(g(x));
+					}
+
+					// Start
+					compose(math_log, math_sqrt)(math_E * math_E);
+
+					// math_E substituted
+					compose(math_log, math_sqrt)(2.718281828459045 * 2.718281828459045);
+
+					// Arguments substituted into compose
+					(x => math_log(math_sqrt(x)))(2.718281828459045 * 2.718281828459045);
+
+					// Argument evaluated
+					(x => math_log(math_sqrt(x)))(7.3890560989306495);
+
+					// Argument substituted into lambda expression
+					math_log(math_sqrt(7.3890560989306495));
+
+					// Evaluated
+					math_log(2.718281828459045);
+
+					1;
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-4">
+				<h1>Studio In-Class</h1>
+				<h2>2</h2>
+				<pre><code class="javascript" data-trim data-line-numbers="1-8|10-11|13-14|16-17|19-20|22-23|25-26|28-29|31-34">
+					// Functions declared
+					function compose(f, g) {
+						return x => f(g(x));
+					}
+
+					function thrice(f) {
+						return compose(compose(f, f), f);
+					}
+
+					// Start
+					thrice(math_sqrt)(256);
+
+					// Argument substituted into thrice
+					compose(compose(math_sqrt, math_sqrt), math_sqrt)(256);
+
+					// Inner compose expanded
+					compose((x => math_sqrt(math_sqrt(x))), math_sqrt)(256);
+
+					// Outer compose expanded
+					(x => (x => math_sqrt(math_sqrt(x)))(math_sqrt(x)))(256);
+
+					// Argument substituted into outer lamdba expression
+					(x => math_sqrt(math_sqrt(x)))(math_sqrt(256));
+
+					// Argument evaluated
+					(x => math_sqrt(math_sqrt(x)))(16);
+
+					// Argument substituted into inner lambda expression
+					math_sqrt(math_sqrt(16));
+
+					// Evaluated
+					math_sqrt(4);
+
+					2;
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-5">
+				<h1>Studio In-Class</h1>
+				<h2>3</h2>
+				<pre><code class="javascript" data-trim data-line-numbers="1-10|12-16">
+					// Functions declared
+					function compose(f, g) {
+					    return x => f(g(x));
+					}
+
+					function repeated(f, n) {
+					    return n === 0
+					        ? x => x
+					        : compose(f, repeated(f, n - 1));
+					}
+
+					// thrice declared
+					const thrice = f => repeated(f, 3);
+
+					// even four times!
+					const four_times = f => repeated(f, 4);
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-6">
+				<h1>Studio In-Class</h1>
+				<h2>3</h2>
+				<p>A conceptual explanation:</p>
+				<p><code>thrice(thrice)(f)</code> is equivalent to <code>thrice(thrice(thrice(f)))</code>.</p>
+				<p><code>f</code> is performed \(3 \times 3 \times 3 = 27\) times; that is, <code>thrice(thrice)(x => x + 1)(0)</code> evaluates to \(27\).</p>
+			</section>
+
+			<section id="studio-in-class-7">
+				<h1>Studio In-Class</h1>
+				<h2>4a</h2>
+				<p><code>((thrice(thrice))(add1))(6);</code></p>
+				<p>Add \(1\), \(27\) times, to \(6\).</p>
+				<p>Result: \(33\)</p>
+			</section>
+
+			<section id="studio-in-class-8">
+				<h1>Studio In-Class</h1>
+				<h2>4b</h2>
+				<p><code>((thrice(thrice))(x => x))(compose);</code></p>
+				<p>Return the same value (<code>compose</code>), \(27\) times.</p>
+				<p>Result: <code>compose</code></p>
+			</section>
+
+			<section id="studio-in-class-9">
+				<h1>Studio In-Class</h1>
+				<h2>4c</h2>
+				<p><code>((thrice(thrice))(square))(1);</code></p>
+				<p>Square \(1\), \(27\) times.</p>
+				<p>Result: \(1\)</p>
+			</section>
+
+			<section id="studio-in-class-10">
+				<h1>Studio In-Class</h1>
+				<h2>4d</h2>
+				<p><code>((thrice(thrice))(square))(2);</code></p>
+				<p>Square \(2\), \(27\) times.</p>
+				<p>Result: \(2^{2^{27}}\)</p>
+			</section>
+
+			<section id="end">
+				<h1>That's All!</h1>
+			</section>
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/math/math.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			math: {
+				mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+				config: 'TeX-AMS_HTML-full',
+				// pass other options into `MathJax.Hub.Config()`
+				TeX: { Macros: { RR: "{\\bf R}" } }
+			},
+			hash: true,
+			center: false,
+			transition: "none",
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath]
+		});
+	</script>
+</body>
+
+</html>
