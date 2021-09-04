@@ -192,7 +192,7 @@
 				<p><code>pascal</code> either returns 1 if on edge, or sum of two upper values if inside.</p>
 				<pre><code class="javascript" data-trim data-line-numbers>
 					function pascal(row, pos) {
-					    return (pos === 1 || pos === row)
+					    return (pos === 0 || pos === row)
 					        ? 1
 					        : pascal(row - 1, pos - 1) + pascal(row - 1, pos);
 					}

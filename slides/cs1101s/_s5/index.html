@@ -1,0 +1,603 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>S5: Studio Week 5</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/simple.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/highlight.js/src/styles/github.css">
+
+	<style>
+		.slides section {
+			text-align: left;
+		}
+
+		.slides section h1,
+		.slides section h2,
+		.slides section h3 {
+			font-weight: bold;
+		}
+
+		.slides section h1 {
+			font-size: 2em;
+		}
+
+		.slides section h2 {
+			font-size: 1.5em;
+		}
+
+		.slides section .latex {
+			font-size: 0.8em;
+		}
+
+		.slides section .rune {
+			position: relative;
+			top: 1.2em;
+			height: 80px;
+		}
+
+		.slides section .list-code {
+			font-size: 0.6em;
+		}
+
+		mark {
+			background-color: lightskyblue;
+			color: black;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section id="intro">
+				<h1>S5: Studio Week 5</h1>
+			</section>
+
+			<section id="updates">
+				<h1>Updates</h1>
+				<ul>
+					<li>
+						<p>Reading Assessment is over — don't worry, there's no bell curve.</p>
+					</li>
+					<li>
+						<p>It's meant to be challenging — solid preparation for practical assessments and exams.</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="recap">
+				<h1>Recap</h1>
+				<ol>
+					<li>
+						<p><a href="#/data-abstraction-1">Data Abstraction</a></p>
+					</li>
+					<li>
+						<p><a href="#/representing-sequences-1">Representing Sequences</a></p>
+					</li>
+				</ol>
+			</section>
+
+			<section id="data-abstraction-1">
+				<h1>Data Abstraction</h1>
+				<p>Clear separation between the interface and the innards of data.</p>
+				<p><em>Abstracting</em> away the details; we don't need to know about them.</p>
+			</section>
+
+			<section id="data-abstraction-2">
+				<h1>Data Abstraction</h1>
+				<p>The concept of <em>wishful thinking</em> — assume the lower level details are already implemented.</p>
+				<p>Adopt a top-down approach, working from highest to lowest level.</p>
+			</section>
+
+			<section id="data-abstraction-3">
+				<h1>Data Abstraction</h1>
+				<p>Possible operations for rational numbers.</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function add_rat(x, y) {
+					    return make_rat(numer(x) * denom(y)
+					                        + numer(y) * denom(x),
+					                    denom(x) * denom(y));
+					}
+
+					function sub_rat(x, y) {
+					    return make_rat(numer(x) * denom(y)
+					                        - numer(y) * denom(x),
+					                    denom(x) * denom(y));
+					}
+
+					function mul_rat(x, y) {
+					    return make_rat(numer(x) * numer(y),
+					                    denom(x) * denom(y));
+					}
+
+					function div_rat(x, y) {
+					    return make_rat(numer(x) * denom(y),
+					                    denom(x) * numer(y));
+					}
+
+					function equal_rat(x, y) {
+					    return numer(x) * denom(y) === numer(y) * denom(x);
+					}
+				</code></pre>
+				<p>What about <code>make_rat</code>, <code>numer</code>, and <code>denom</code>?</p>
+			</section>
+
+			<section id="data-abstraction-4">
+				<h1>Data Abstraction</h1>
+				<p>Wishful thinking! Now we implement.</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function make_rat(n, d) { return pair(n, d); }
+
+					function numer(x) { return head(x); }
+
+					function denom(x) { return tail(x); }
+				</code></pre>
+				<p>Why not just use <code>pair</code>, <code>head</code>, and <code>tail</code> as they are?</p>
+			</section>
+
+			<section id="data-abstraction-5">
+				<h1>Data Abstraction</h1>
+				<p><em>Abstraction barriers</em> separate the user and the implementer.</p>
+				<p>More abstract below, less abstract above.</p>
+				<div style="text-align: center;">
+					<img src="images/abstraction-barrier.svg" alt="abstraction-barrier" style="height: 340px;">
+				</div>
+			</section>
+
+			<section id="representing-sequences-1">
+				<h1>Representing Sequences</h1>
+				<p>Introduction to <em>lists</em> — essentially nested <em>pairs</em>.</p>
+				<code>list(\(a_1\), \(\cdots\), \(a_n\))</code>
+				<p>is equivalent to</p>
+				<code>pair(\(a_1\), pair(\(\cdots\), pair(\(a_n\), null)\(\cdots\)))</code>
+			</section>
+
+			<section id="representing-sequences-2">
+				<h1>Representing Sequences</h1>
+				<p>Possible list operations.</p>
+				<pre><code class="javascript" data-trim data-line-numbers="1-3|5-10|12-21|23-28">
+					// List declared
+					// [0, [1, [2, [3, null]]]]
+					const ls = list(0, 1, 2, 3);
+
+					// Get 0th value
+					head(ls);
+
+					head([0, [1, [2, [3, null]]]]);
+
+					0;
+
+					// Get 2nd value
+					head(tail(tail(ls)));
+
+					head(tail(tail([0, [1, [2, [3, null]]]])));
+
+					head(tail([1, [2, [3, null]]]));
+
+					head([2, [3, null]]);
+
+					2;
+
+					// Insert value at head
+					pair(10, ls);
+
+					pair(10, [0, [1, [2, [3, null]]]]);
+
+					[10, [0, [1, [2, [3, null]]]]];
+				</code></pre>
+				<p><a href="https://docs.sourceacademy.org/LISTS/index.html">LISTS documentation</a> contains list operations.</p>
+			</section>
+
+			<section id="studio-worksheet-intro">
+				<h1>Studio Worksheet</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							<code>display_list</code>: readily visualise lists — box notation can get messy.
+						</p>
+					</li>
+					<li>
+						<p>
+							<code>draw_data</code>: readily visualise lists operations — replay calls like a movie, frame by frame.
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-worksheet-1">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<p><code class="list-code"><mark>list(list(1, 2, list(3)), list(4, 5), pair(6, 7))</mark>;</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-12.svg" alt="list-diagram" style="height: 340px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-2">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<p><code class="list-code">list(<mark>list(1, 2, list(3))</mark>, list(4, 5), pair(6, 7));</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-11.svg" alt="list-diagram" style="height: 340px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-3">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<p><code class="list-code">list(list(<mark>1</mark>, 2, list(3)), list(4, 5), pair(6, 7));</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-10.svg" alt="list-diagram" style="height: 340px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-4">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<p><code class="list-code">list(list(1, <mark>2</mark>, list(3)), list(4, 5), pair(6, 7));</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-9.svg" alt="list-diagram" style="height: 340px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-5">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<p><code class="list-code">list(list(1, 2, <mark>list(3)</mark>), list(4, 5), pair(6, 7));</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-8.svg" alt="list-diagram" style="height: 340px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-6">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<p><code class="list-code">list(list(1, 2, list(<mark>3</mark>)), list(4, 5), pair(6, 7));</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-7.svg" alt="list-diagram" style="height: 340px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-7">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<p><code class="list-code">list(list(1, 2, list(3)), <mark>list(4, 5)</mark>, pair(6, 7));</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-6.svg" alt="list-diagram" style="height: 340px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-8">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<p><code class="list-code">list(list(1, 2, list(3)), list(<mark>4</mark>, 5), pair(6, 7));</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-5.svg" alt="list-diagram" style="height: 340px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-9">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<p><code class="list-code">list(list(1, 2, list(3)), list(4, <mark>5</mark>), pair(6, 7));</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-4.svg" alt="list-diagram" style="height: 340px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-10">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<p><code class="list-code">list(list(1, 2, list(3)), list(4, 5), <mark>pair(6, 7)</mark>);</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-3.svg" alt="list-diagram" style="height: 340px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-11">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<p><code class="list-code">list(list(1, 2, list(3)), list(4, 5), pair(<mark>6</mark>, 7));</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-2.svg" alt="list-diagram" style="height: 340px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-12">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<p><code class="list-code">list(list(1, 2, list(3)), list(4, 5), pair(6, <mark>7</mark>));</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-1.svg" alt="list-diagram" style="height: 340px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-13">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<div style="text-align: center;">
+					<img src="images/ld-1.svg" alt="list-diagram" style="height: 400px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-14">
+				<h1>Studio Worksheet</h1>
+				<h2>1b</h2>
+				<div style="text-align: center;">
+					<img src="images/ld-13.svg" alt="list-diagram" style="height: 400px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-15">
+				<h1>Studio Worksheet</h1>
+				<h2>1c</h2>
+				<div style="text-align: center;">
+					<img src="images/ld-14.svg" alt="list-diagram" style="height: 400px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-16">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<pre><code class="javascript" data-trim data-line-numbers="1-9|11-22|24-33">
+					// Function and list declared
+					function reverse(lst) {
+					    return is_null(lst)
+					        null
+					        : pair(reverse(tail(lst)), head(lst));
+					}
+
+					// [1, [2, [3, [4, null]]]]
+					const ls = list(1, 2, 3, 4);
+
+					// Expanded
+					reverse(list(1, 2, 3, 4));
+
+					reverse([1, [2, [3, [4, null]]]]);
+
+					pair(reverse([2, [3, [4, null]]]), 1);
+
+					pair(pair(reverse([3, [4, null]]), 2), 1);
+
+					pair(pair(pair(reverse([4, null]), 3), 2), 1);
+
+					pair(pair(pair(pair(reverse(null), 4), 3), 2), 1);
+
+					// Collapsed
+					pair(pair(pair(pair(null, 4), 3), 2), 1);
+
+					pair(pair(pair([null, 4], 3), 2), 1);
+
+					pair(pair([[null, 4], 3], 2), 1);
+
+					pair([[[null, 4], 3], 2], 1);
+
+					[[[[null, 4], 3], 2], 1];
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-17">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<div style="text-align: center;">
+					<img src="images/ld-15.svg" alt="list-diagram" style="height: 320px;">
+				</div>
+				<p>Is this a list?</p>
+			</section>
+
+			<section id="studio-worksheet-18">
+				<h1>Studio Worksheet</h1>
+				<h2>3a</h2>
+				<p><code class="list-code">lst</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-16.svg" alt="list-diagram" style="height: 280px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-19">
+				<h1>Studio Worksheet</h1>
+				<h2>3a</h2>
+				<p><code class="list-code">tail(<mark>lst</mark>)</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-17.svg" alt="list-diagram" style="height: 280px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-20">
+				<h1>Studio Worksheet</h1>
+				<h2>3a</h2>
+				<p><code class="list-code">tail(<mark>tail(lst)</mark>)</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-18.svg" alt="list-diagram" style="height: 280px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-21">
+				<h1>Studio Worksheet</h1>
+				<h2>3a</h2>
+				<p><code class="list-code">tail(<mark>tail(tail(lst))</mark>)</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-19.svg" alt="list-diagram" style="height: 280px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-22">
+				<h1>Studio Worksheet</h1>
+				<h2>3a</h2>
+				<p><code class="list-code">head(<mark>tail(tail(tail(lst)))</mark>)</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-20.svg" alt="list-diagram" style="height: 280px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-23">
+				<h1>Studio Worksheet</h1>
+				<h2>3a</h2>
+				<p><code class="list-code">tail(<mark>head(tail(tail(tail(lst))))</mark>)</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-21.svg" alt="list-diagram" style="height: 280px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-24">
+				<h1>Studio Worksheet</h1>
+				<h2>3a</h2>
+				<p><code class="list-code">head(<mark>tail(head(tail(tail(tail(lst)))))</mark>)</code></p>
+				<div style="text-align: center;">
+					<img src="images/ld-22.svg" alt="list-diagram" style="height: 280px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-25">
+				<h1>Studio Worksheet</h1>
+				<h2>3a</h2>
+				<p><code>head(tail(head(tail(tail(tail(lst))))))</code></p>
+			</section>
+
+			<section id="studio-worksheet-26">
+				<h1>Studio Worksheet</h1>
+				<h2>3</h2>
+				<ol style="list-style-type: lower-alpha;">
+					<li>
+						<p>
+							<code class="list-code">head(tail(head(tail(tail(tail(lst))))))</code>
+						</p>
+					</li>
+					<li>
+						<p>
+							<code class="list-code">head(tail(tail(tail(lst))))</code>
+						</p>
+					</li>
+					<li>
+						<p>
+							<code class="list-code">head(head(tail(head(tail(head(tail(tail(tail(lst)))))))))</code>
+						</p>
+					</li>
+					<li>
+						<p>
+							<code class="list-code">head(head(head(tail(tail(lst)))))</code>
+						</p>
+					</li>
+				</ol>
+			</section>
+
+			<section id="studio-in-class-intro">
+				<h1>Studio In-Class</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							Use <em>wishful thinking</em> — Q1 may require checking more than one item for the base case.
+						</p>
+					</li>
+					<li>
+						<p>
+							Create both a recursive and iterative version of <code>sum</code> for Q2 first — iterative solution can be adopted for <code>sums</code>.
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-in-class-1">
+				<h1>Studio In-Class</h1>
+				<h2>1</h2>
+				<p>Check lists at every two intervals — if either the list or the tail of the list is <code>null</code>, return <code>null</code>.</p>
+				<p>Otherwise, return a list with every second item by using pair construction — wishful thinking in action.</p>
+				<p>Assume (wishfully think) that every second item is already obtained.</p>
+			</section>
+
+			<section id="studio-in-class-2">
+				<h1>Studio In-Class</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function every_second(items) {
+					    // If both items and the tail of items is null...
+					    return (is_null(items) || is_null(tail(items)))
+					        // ...return null. Otherwise...
+					        ? null
+					        // ...wishfully think that every second item of
+					        // the rest of items have already been obtained.
+					        : pair(head(tail(items)),
+					               every_second(tail(tail(items))));
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-3">
+				<h1>Studio In-Class</h1>
+				<h2>2</h2>
+				<pre><code class="javascript" data-trim data-line-numbers="1-6|8-16|18-30">
+					// sum — recursive process
+					function sum(xs) {
+					    return is_null(xs)
+					        ? 0
+					        : head(xs) + sum(tail(xs));
+					}
+
+					// sum — iterative process
+					function sum(xs) {
+					    function sum_helper(xs, acc) {
+					        return is_null(xs)
+					            ? acc
+					            : sum_helper(tail(xs), acc + head(xs));
+					    }
+					    return sum_helper(xs, 0);
+					}
+
+					// sums
+					function sums(xs) {
+					    function sum_helper(xs, even_mark, even_sum, odd_sum) {
+					        return is_null(xs)
+					            ? list(even_sum, odd_sum)
+					            : even_mark
+					                ? sum_helper(tail(xs), false,
+					                             even_sum + head(xs), odd_sum)
+					                : sum_helper(tail(xs), true,
+					                             even_sum, odd_sum + head(xs));
+					    }
+					    return sum_helper(xs, true, 0, 0);
+					}
+				</code></pre>
+			</section>
+
+			<section id="end">
+				<h1>That's All!</h1>
+			</section>
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/math/math.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			math: {
+				mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+				config: 'TeX-AMS_HTML-full',
+				// pass other options into `MathJax.Hub.Config()`
+				TeX: { Macros: { RR: "{\\bf R}" } }
+			},
+			hash: true,
+			center: false,
+			transition: "none",
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath]
+		});
+	</script>
+</body>
+
+</html>
