@@ -48,6 +48,10 @@
 			font-size: 0.6em;
 		}
 
+		.slides section .list-intro {
+			font-size: 0.8em;
+		}
+
 		mark {
 			background-color: lightskyblue;
 			color: black;
@@ -156,9 +160,13 @@
 			<section id="representing-sequences-1">
 				<h1>Representing Sequences</h1>
 				<p>Introduction to <em>lists</em> — essentially nested <em>pairs</em>.</p>
-				<code>list(\(a_1\), \(\cdots\), \(a_n\))</code>
+				<code class="list-intro">list(\(a_1\), \(a_2\), \(\cdots\), \(a_n\))</code>
 				<p>is equivalent to</p>
-				<code>pair(\(a_1\), pair(\(\cdots\), pair(\(a_n\), null)\(\cdots\)))</code>
+				<code class="list-intro">pair(\(a_1\), pair(\(a_2\), pair(\(\cdots\), pair(\(a_n\), null)\(\cdots\))))</code>
+				<p>and</p>
+				<div style="text-align: center;">
+					<img src="images/list-intro.svg" alt="list-diagram" style="height: 80px;">
+				</div>
 			</section>
 
 			<section id="representing-sequences-2">
@@ -556,18 +564,31 @@
 
 					// sums
 					function sums(xs) {
-					    function sum_helper(xs, even_mark, even_sum, odd_sum) {
+					    function sums_helper(xs, even_mark, even_sum, odd_sum) {
 					        return is_null(xs)
 					            ? list(even_sum, odd_sum)
 					            : even_mark
-					                ? sum_helper(tail(xs), false,
+					                ? sums_helper(tail(xs), false,
 					                             even_sum + head(xs), odd_sum)
-					                : sum_helper(tail(xs), true,
+					                : sums_helper(tail(xs), true,
 					                             even_sum, odd_sum + head(xs));
 					    }
-					    return sum_helper(xs, true, 0, 0);
+					    return sums_helper(xs, true, 0, 0);
 					}
 				</code></pre>
+			</section>
+
+			<section id="bonus">
+				<h1>Bonus Questions</h1>
+				<p>Define a function <code>map</code> that takes in a unary function and a list, and returns a list with each element being the result of the function application.</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					map(x => x * x, list(1, 2, 3));
+
+					// returns
+
+					list(1, 4, 9);
+				</code></pre>
+				<p>Can you give both an iterative and a recursive solution? What are the challenges?</p>
 			</section>
 
 			<section id="end">
