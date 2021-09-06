@@ -334,24 +334,27 @@
 				<h1>Studio Worksheet</h1>
 				<h2>1a</h2>
 				<div style="text-align: center;">
-					<img src="images/ld-1.svg" alt="list-diagram" style="height: 400px;">
+					<img src="images/ld-1.svg" alt="list-diagram" style="height: 360px;">
 				</div>
+				<code class="list-intro">list(list(1, 2, list(3)), list(4, 5), [6, 7])</code>
 			</section>
 
 			<section id="studio-worksheet-14">
 				<h1>Studio Worksheet</h1>
 				<h2>1b</h2>
 				<div style="text-align: center;">
-					<img src="images/ld-13.svg" alt="list-diagram" style="height: 400px;">
+					<img src="images/ld-13.svg" alt="list-diagram" style="height: 360px;">
 				</div>
+				<code class="list-intro">list(1, 2, 3, list(4))</code>
 			</section>
 
 			<section id="studio-worksheet-15">
 				<h1>Studio Worksheet</h1>
 				<h2>1c</h2>
 				<div style="text-align: center;">
-					<img src="images/ld-14.svg" alt="list-diagram" style="height: 400px;">
+					<img src="images/ld-14.svg" alt="list-diagram" style="height: 360px;">
 				</div>
+				<code class="list-intro">list(1, 2, 3, list(4, 5))</code>
 			</section>
 
 			<section id="studio-worksheet-16">
@@ -529,7 +532,7 @@
 				<h2>1</h2>
 				<pre><code class="javascript" data-trim data-line-numbers>
 					function every_second(items) {
-					    // If both items and the tail of items is null...
+					    // If both items or the tail of items is null...
 					    return (is_null(items) || is_null(tail(items)))
 					        // ...return null. Otherwise...
 					        ? null
@@ -578,8 +581,16 @@
 				</code></pre>
 			</section>
 
-			<section id="bonus">
+			<section id="bonus-1">
 				<h1>Bonus Questions</h1>
+				<h2>1</h2>
+				<p>Implement a recursive solution for <code>sums</code>.</p>
+				<p>Use helper functions if necessary.</p>
+			</section>
+
+			<section id="bonus-2">
+				<h1>Bonus Questions</h1>
+				<h2>2</h2>
 				<p>Define a function <code>map</code> that takes in a unary function and a list, and returns a list with each element being the result of the function application.</p>
 				<pre><code class="javascript" data-trim data-line-numbers>
 					map(x => x * x, list(1, 2, 3));
