@@ -1,0 +1,671 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>S6: Studio Week 6</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/simple.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/highlight.js/src/styles/github.css">
+
+	<style>
+		.slides section {
+			text-align: left;
+		}
+
+		.slides section h1,
+		.slides section h2,
+		.slides section h3 {
+			font-weight: bold;
+		}
+
+		.slides section h1 {
+			font-size: 2em;
+		}
+
+		.slides section h2 {
+			font-size: 1.5em;
+		}
+
+		.slides section .latex {
+			font-size: 0.8em;
+		}
+
+		.slides section .rune {
+			position: relative;
+			top: 1.2em;
+			height: 80px;
+		}
+
+		.slides section .list-code {
+			font-size: 0.6em;
+		}
+
+		.slides section .list-intro {
+			font-size: 0.8em;
+		}
+
+		mark {
+			background-color: lightskyblue;
+			color: black;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section id="intro">
+				<h1>S6: Studio Week 6</h1>
+			</section>
+
+			<section id="updates">
+				<h1>Updates</h1>
+				<ul>
+					<li>
+						<p>Mastery Check #1 — schedule conference at any time during the semester; highly recommended that it be completed before recess week.</p>
+					</li>
+					<li>
+						<p>Grading abstraction will be conducted more strictly moving forward.</p>
+					</li>
+					<li>
+						<p>Case of plagiarism has been reported recently — plagiarism checking software is in the works.</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="recap">
+				<h1>Recap</h1>
+				<ol>
+					<li>
+						<p><a href="#/list-processing-1">List Processing</a></p>
+					</li>
+					<li>
+						<p><a href="#/continuation-passing-style-1">Continuation-Passing Style</a></p>
+					</li>
+					<li>
+						<p><a href="#/tree-processing-1">Tree Processing</a></p>
+					</li>
+				</ol>
+			</section>
+
+			<section id="list-processing-1">
+				<h1>List Processing</h1>
+				<p>Introduction to new list processing functions!</p>
+				<ul>
+					<li>
+						Standard functions
+						<ul>
+							<li><code>length</code>, <code>append</code>, and <code>reverse</code></li>
+						</ul>
+					</li>
+					<li>
+						Higher-order functions
+						<ul>
+							<li><code>map</code>, <code>accumulate</code>, and <code>filter</code></li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+
+			<section id="list-processing-2">
+				<h1>List Processing</h1>
+				<h2><code>length</code></h2>
+				<pre><code class="javascript" data-trim>
+					function $length(xs, acc) {
+					    return is_null(xs) ? acc : $length(tail(xs), acc + 1);
+					}
+
+					function length(xs) {
+					    return $length(xs, 0);
+					}
+				</code></pre>
+			</section>
+
+			<section id="list-processing-3">
+				<h1>List Processing</h1>
+				<h2><code>append</code></h2>
+				<pre><code class="javascript" data-trim>
+					function $append(xs, ys, cont) {
+					    return is_null(xs)
+					        ? cont(ys)
+					        : $append(tail(xs), ys, zs => cont(pair(head(xs), zs)));
+					}
+					
+					function append(xs, ys) {
+					    return $append(xs, ys, xs => xs);
+					}
+				</code></pre>
+			</section>
+
+			<section id="list-processing-4">
+				<h1>List Processing</h1>
+				<h2><code>reverse</code></h2>
+				<pre><code class="javascript" data-trim>
+					function $reverse(original, reversed) {
+					    return is_null(original)
+					        ? reversed
+					        : $reverse(tail(original),
+					                   pair(head(original), reversed));
+					}
+					
+					function reverse(xs) {
+					    return $reverse(xs, null);
+					}
+				</code></pre>
+			</section>
+
+			<section id="list-processing-5">
+				<h1>List Processing</h1>
+				<h2><code>map</code></h2>
+				<pre><code class="javascript" data-trim>
+					function $map(f, xs, acc) {
+					    return is_null(xs)
+					        ? reverse(acc)
+					        : $map(f, tail(xs), pair(f(head(xs)), acc));
+					}
+
+					function map(f, xs) {
+					    return $map(f, xs, null);
+					}					
+				</code></pre>
+			</section>
+
+			<section id="list-processing-6">
+				<h1>List Processing</h1>
+				<h2><code>accumulate</code></h2>
+				<pre><code class="javascript" data-trim>
+					function $accumulate(f, initial, xs, cont) {
+					    return is_null(xs)
+					        ? cont(initial)
+					        : $accumulate(f, initial, tail(xs),
+					                      x => cont(f(head(xs), x)));
+					}
+					
+					function accumulate(f, initial, xs) {
+					    return $accumulate(f, initial, xs, x => x);
+					}				
+				</code></pre>
+			</section>
+
+			<section id="list-processing-7">
+				<h1>List Processing</h1>
+				<h2><code>filter</code></h2>
+				<pre><code class="javascript" data-trim>
+					function $filter(pred, xs, acc) {
+					    return is_null(xs)
+					        ? reverse(acc)
+					        : pred(head(xs))
+					        ? $filter(pred, tail(xs), pair(head(xs), acc))
+					        : $filter(pred, tail(xs), acc);
+					}
+					  
+					function filter(pred, xs) {
+					    return $filter(pred, xs, null);
+					}			
+				</code></pre>
+			</section>
+
+			<section id="list-processing-8">
+				<h1>List Processing</h1>
+				<p>All list processing functions give rise to iterative processes in Source!</p>
+				<p>Too much to pack into one studio, so refer here for explanations.</p>
+			</section>
+
+			<section id="continuation-passing-style-1">
+				<h1>Continuation-Passing Style</h1>
+				<p>Pass a deferred operation as a function in an extra argument.</p>
+				<p>Allocate operations from stack space to heap space!</p>
+			</section>
+
+			<section id="continuation-passing-style-2">
+				<h1>Continuation-Passing Style</h1>
+				<pre><code class="javascript" data-trim data-line-numbers="1-4|6-14|16-24">
+					// recursive process
+					function fact_recur(n) {
+					    return n === 0 ? 1 : n * f(n - 1);
+					}
+
+					// iterative process
+					function fact_iter(n) {
+					    function fact_helper(n, acc) {
+					        return n === 0
+					            ? acc
+					            : fact_helper(n - 1, n * acc);
+					    }
+					    return fact_helper(n, 1);
+					}
+
+					// continuation-passing style
+					function fact_cps(n) {
+					    function fact_helper(n, cont) {
+					        return n === 0
+					            ? cont(1)
+					            : fact_helper(n - 1, x => cont(n) * x);
+					    }
+					    return fact_helper(n, x => x);
+					}
+				</code></pre>
+			</section>
+
+			<section id="continuation-passing-style-3">
+				<h1>Continuation-Passing Style</h1>
+				<pre><code class="javascript" data-trim data-line-numbers="1-9|11-12|14-15|17-19|21-24|26-30|32-36|38-42|44-48|50-54|56-59|61|63">
+					// Function predeclared
+					function fact_cps(n) {
+					    function fact_helper(n, cont) {
+					        return n === 0
+					            ? cont(1)
+					            : fact_helper(n - 1, x => cont(n) * x);
+					    }
+					    return fact_helper(n, x => x);
+					}
+
+					// Start
+					fact_cps(3);
+
+					fact_helper(3, x =>
+					               x);
+
+					fact_helper(2, x => (x =>
+					               x)(3) *
+					                   x);
+
+					fact_helper(1, x => (x => (x =>
+					               x)(3) *
+					                   x)(2) *
+					                       x);
+					
+					fact_helper(0, x => (x => (x => (x =>
+					               x)(3) *
+					                   x)(2) *
+					                       x)(1) *
+					                           x);
+					
+					(x => (x => (x => (x =>
+					x)(3) *
+					    x)(2) *
+					        x)(1) *
+					            x)(1);
+					
+					(x => (x => (x =>
+					x)(3) *
+					    x)(2) *
+					        x)(1) *
+					            1;
+					
+					(x => (x =>
+					x)(3) *
+					    x)(2) *
+					        1 *
+					            1;
+					
+					(x =>
+					x)(3) *
+					    2 *
+					        1 *
+					            1;
+					
+					3 *
+					    2 *
+					        1 *
+					            1;
+					
+					3 * 2 * 1 * 1;
+					
+					6;
+				</code></pre>
+
+				<p>All recursive processes can be made iterative with CPS, and vice versa.</p>
+			</section>
+
+			<section id="tree-processing-1">
+				<h1>Tree Processing</h1>
+				<p>A <em>tree</em> of a certain type is a list whose elements are data items of said type, or trees of said type.</p>
+				<p>A recursive definition!</p>
+			</section>
+
+			<section id="tree-processing-2">
+				<h1>Tree Processing</h1>
+				<p>A <em>tree</em> of <b>integers</b> is a list whose elements are <b>integers</b>, or trees of <b>integers</b>.</p>
+				<div style="text-align: center;">
+					<code>list(1, list(2), list(3, list(4)))</code>
+				</div>
+				<div style="text-align: center; margin-top:20px;">
+					<img src="images/tree.svg" alt="tree" style="height: 320px;">
+				</div>
+			</section>
+
+			<section id="tree-processing-3">
+				<h1>Tree Processing</h1>
+				<p>Mapping over trees is possible!</p>
+				<pre><code class="javascript" data-trim>
+					function map_tree(f, tree) {
+					    return map(sub_tree =>
+					                   ! is_list(sub_tree)
+					                   ? f(sub_tree)
+					                   : map_tree(f, sub_tree),
+					               tree);
+					}
+				</code></pre>
+				<p>Recursively traverses through a tree to map its elements.</p>
+			</section>
+
+			<section id="studio-worksheet-intro">
+				<h1>Studio Worksheet</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>Will be expected to have completed the given studio worksheet moving forward.</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-worksheet-1">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<p>By modifying the identity function:</p>
+				<pre><code class="javascript" data-trim>
+					function identity(xs) {
+					    return accumulate(pair, null, xs);
+					}
+				</code></pre>
+				<p><code>map</code>, in effect, can be achieved.</p>
+				<pre><code class="javascript" data-trim>
+					function my_map(f, xs) {
+					    return accumulate((x, ys) => pair(f(x), ys), null, xs);
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-2">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p>Wishfully assume that <code>remove_duplicates</code> correctly removes duplicates from a list.</p>
+				<pre><code class="javascript" data-trim>
+					function remove_duplicates(xs) {
+					    return is_null(xs)
+					        ? null
+					        : pair(head(xs),
+					               remove_duplicates(filter(x => !equal(x, head(xs)),
+					                                        tail(xs))));
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-3">
+				<h1>Studio Worksheet</h1>
+				<h2>3</h2>
+				<p>Consider Pascal's rule:</p>
+				\[{n \choose k} = {n - 1 \choose k - 1} + {n - 1 \choose k}\]
+				<p>Either choose an element (\({n - 1 \choose k - 1}\)), or don't (\({n - 1 \choose k}\)).</p>
+			</section>
+
+			<section id="studio-worksheet-4">
+				<h1>Studio Worksheet</h1>
+				<h2>3</h2>
+				<pre><code class="javascript" data-trim>
+					function makeup_amount(x, coins) {
+					    if (x === 0) {
+					        return list(null);
+					    } else if (x < 0 || is_null(coins)) {
+					        return null;
+					    } else {
+					        // Combinations that do not use the head coin.
+					        const combi_A = makeup_amount(x, tail(coins));
+					
+					        // Combinations that do not use the head coin 
+					        // for the remaining amount.
+					        const combi_B = makeup_amount(x - head(coins), tail(coins));
+					
+					        // Combinations that use the head coin.
+					        const combi_C = map(c => pair(head(coins), c), combi_B);
+					
+					        return append(combi_A, combi_C);
+					    }
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-intro">
+				<h1>Studio In-Class</h1>
+				<p>Some stuff to note:</p>
+				<ol>
+					<li>
+						<p><code>accumulate</code> is right-to-left folding; evaluated from the tail upwards. <code>member</code> might come in handy.</p>
+					</li>
+					<li>
+						<p>The empty list <code>null</code> has one subset <code>null</code>. Try to divide and conquer — subset either contains an element, or it doesnt.</p>
+					</li>
+					<li>
+						<p>Peak of wishful thinking; take a set and map each element to a set of permutations.</p>
+					</li>
+				</ol>
+			</section>
+
+			<section id="studio-in-class-1">
+				<h1>Studio In-Class</h1>
+				<h2>1</h2>
+				<p><code>accumulate</code> tracks the accumulated return value; in this context, accumulated list.</p>
+				<p>For each element, check whether it is present in the accumulated list using <code>member</code>.</p>
+				<p>If it is not present, add it to the list using pair construction. Otherwise, don't add it to the list.</p>
+			</section>
+
+			<section id="studio-in-class-2">
+				<h1>Studio In-Class</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim>
+					function remove_duplicates(lst) {
+					    return accumulate(
+					        (x, xs) =>
+					            // if x is not a member of the accumulated list...
+					            is_null(member(x, xs))
+					                //...add it to the list. Otherwise...
+					                ? pair(x, xs)
+					                //...don't add it to the list.
+					                : xs,
+					        null,
+					        lst);
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-3">
+				<h1>Studio In-Class</h1>
+				<h2>2</h2>
+				<p>A set that contains all subsets of a set is known as a power set.</p>
+				<p>Power set of \(\{1, 2, 3\}\):</p>
+				<p>\(\{\{1, 2, 3\}, \{1, 2\}, \{1, 3\}, \{1\}, \{2, 3\}, \{2\}, \{3\}, \{\}\}\)</p>
+				<p>Notice a pattern?</p>
+			</section>
+
+			<section id="studio-in-class-4">
+				<h1>Studio In-Class</h1>
+				<h2>2</h2>
+				<p>Two main approaches:</p>
+				<ul>
+					<li>
+						<p>Divide and conquer: compute subsets that either have an element or don't (divide), then combine them using <code>append</code> (conquer).</p>
+					</li>
+					<li>
+						<p>Dynamic programming: use computed subsets to build new subsets.</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-in-class-5">
+				<h1>Studio In-Class</h1>
+				<h2>2</h2>
+				<p>Divide and conquer</p>
+				<pre><code class="javascript" data-trim>
+					function subsets(xs) {
+					    if (is_null(xs)) {
+					        return list(null);
+					    } else {
+					        const subsets_rest = subsets(tail(xs));
+					        const x = head(xs);
+					        const has_x = map(s => pair(x, s), subsets_rest);
+					        return append(subsets_rest, has_x);
+					    }
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-6">
+				<h1>Studio In-Class</h1>
+				<h2>2</h2>
+				<p>Dynamic programming</p>
+				<pre><code class="javascript" data-trim>
+					function subsets(xs) {
+					    return accumulate(
+					        (x, ss) => append(ss, map(s => pair(x, s), ss)),
+					        list(null),
+					        xs);
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-7">
+				<h1>Studio In-Class</h1>
+				<h2>3</h2>
+				<p>Each permutation will start with one of the elements in the list.</p>
+				<p>For each element, take the permutations of the rest of the list and put the element in front of each permutation.</p>
+			</section>
+
+			<section id="studio-in-class-8">
+				<h1>Studio In-Class</h1>
+				<h2>3</h2>
+				<pre><code class="javascript" data-trim>
+					function permutations(s) {
+					    return is_null(s)
+					        ? list(null)
+					        : accumulate(append, null,
+					            map(x => map(p => pair(x, p),
+					                    permutations(remove(x, s))),
+					                s));
+					}
+				</code></pre>
+				<p>Each element <code>x</code> in <code>s</code> is mapped to a list of permutations in which <code>x</code> is the first element in each permutation.</p>
+				<p><code>accumulate</code> joins all lists of permutations.</p>
+			</section>
+
+			<section id="bonus-1">
+				<h1>Bonus Questions</h1>
+				<h2>1</h2>
+				<p>A <em>cute pair</em> is defined as a pair in which one element divides the other (e.g. <code>[3, 6]</code> is a cute pair).</p>
+				<p>Define a function <code>cuties</code> that accepts a sorted list and returns the number of cute pairs that can be made from the elements in the list.</p>
+				<p>Can you implement a solution that doesn't explicitly use recursion?</p>
+			</section>
+
+			<section id="bonus-2">
+				<h1>Bonus Questions</h1>
+				<h2>1</h2>
+				<code class="list-intro">Input: list(2, 3, 4, 5, 7, 14, 15)</code><br>
+				<code class="list-intro">Output: 5</code>
+				<p>The cute pairs are <code>[2, 4]</code>, <code>[2, 14]</code>, <code>[3, 15]</code>, <code>[5, 15]</code>, and <code>[7, 14]</code>.</p>
+			</section>
+
+			<section id="bonus-3">
+				<h1>Bonus Questions</h1>
+				<h2>2</h2>
+				<p>In programming, concatenation is defined as the act of joining two or more strings together to form one whole string.</p>
+				<p>Define a function <code>concatenation</code> that accepts a list of strings and returns a string that is the result of having concatenated all strings in the list, in order.</p>
+				<p><code>concatenation</code> must make use of continuation-passing style.</p>
+			</section>
+
+			<section id="bonus-4">
+				<h1>Bonus Questions</h1>
+				<h2>2</h2>
+				<code class="list-intro">Input: list("I", " ", "am", " ", "whole", "!")</code><br>
+				<code class="list-intro">Output: "I am whole!"</code>
+			</section>
+
+			<section id="bonus-5">
+				<h1>Bonus Questions</h1>
+				<h2>3a</h2>
+				<p>Recall the definition of a tree.</p>
+				<p>Define a function <code>contains</code> that accepts a tree of integers and an integer, and returns a boolean of whether said integer exists in said tree.</p>
+			</section>
+
+			<section id="bonus-6">
+				<h1>Bonus Questions</h1>
+				<h2>3a</h2>
+				<p>
+					<code class="list-intro">Input: list(1, list(2), list(3, list(4))), 4</code><br>
+					<code class="list-intro">Output: true</code>
+				</p>
+				<p>
+					<code class="list-intro">Input: list(1, list(2), list(3, list(4))), 0</code><br>
+					<code class="list-intro">Output: false</code>
+				</p>
+			</section>
+
+			<section id="bonus-7">
+				<h1>Bonus Questions</h1>
+				<h2>3b</h2>
+				<p>
+					Using <code>contains</code> or otherwise, define a function <code>locate</code>
+					that accepts a tree of integers and an integer, and returns either
+				</p>
+				<ul>
+					<li>
+						a string representation of the chain of <code>head</code> and <code>tail</code> operations
+						that must be performed on said tree to retrieve the first instance of said integer, or
+					</li>
+					<li>
+						an appropriate error message if said integer could not be found.
+					</li>
+				</ul>
+			</section>
+
+			<section id="bonus-8">
+				<h1>Bonus Questions</h1>
+				<h2>3b</h2>
+				<p>
+					<code class="list-intro">Input: list(1, list(2), list(3, list(4))), 4</code><br>
+					<code class="list-intro">Output: "head(head(tail(head(tail(tail(lst))))))"</code>
+				</p>
+				<p>
+					<code class="list-intro">Input: list(1, list(2), list(3, list(4))), 0</code><br>
+					<code class="list-intro">Output: "error: 0 not found in list"</code>
+				</p>
+			</section>
+
+			<section id="end">
+				<h1>That's All!</h1>
+			</section>
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/math/math.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			math: {
+				mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+				config: 'TeX-AMS_HTML-full',
+				// pass other options into `MathJax.Hub.Config()`
+				TeX: { Macros: { RR: "{\\bf R}" } }
+			},
+			hash: true,
+			center: false,
+			transition: "none",
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath]
+		});
+	</script>
+</body>
+
+</html>
