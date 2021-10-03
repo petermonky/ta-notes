@@ -1,0 +1,427 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>S8: Studio Week 8</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/simple.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/highlight.js/src/styles/github.css">
+
+	<style>
+		.slides section {
+			text-align: left;
+		}
+
+		.slides section h1,
+		.slides section h2,
+		.slides section h3 {
+			font-weight: bold;
+		}
+
+		.slides section h1 {
+			font-size: 2em;
+		}
+
+		.slides section h2 {
+			font-size: 1.5em;
+		}
+
+		.slides section .latex {
+			font-size: 0.8em;
+		}
+
+		.slides section .rune {
+			position: relative;
+			top: 1.2em;
+			height: 80px;
+		}
+
+		.slides section .list-code {
+			font-size: 0.6em;
+		}
+
+		.slides section .list-intro {
+			font-size: 0.8em;
+		}
+
+		mark {
+			background-color: lightskyblue;
+			color: black;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section id="intro">
+				<h1>S8: Studio Week 8</h1>
+			</section>
+
+			<section id="updates">
+				<h1>Updates</h1>
+				<ul>
+					<li>
+						<p>Midterm is over! Now the real fun begins.</p>
+					</li>
+					<li>
+						<p>Robot missions and quest should be submitted collectively.</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="recap">
+				<h1>Recap</h1>
+				<ol>
+					<li>
+						<p><a href="#/state-1">State</a></p>
+					</li>
+					<li>
+						<p><a href="#/mutable-data-1">Mutable Data</a></p>
+					</li>
+				</ol>
+			</section>
+
+			<section id="state-1">
+				<h1>State</h1>
+				<p>Computation has been purely functional, that is, <em>memoryless</em> and <em>stateless</em>.</p>
+				<p>The substitution model has served us well; simply substitute and evaluate.</p>
+			</section>
+
+			<section id="state-2">
+				<h1>State</h1>
+				<p>What if we wanted our computation to be a bit more... <em>memoryful</em> and <em>stateful</em>?</p>
+				<p>What are the implications for the substitution model?</p>
+			</section>
+
+			<section id="state-3">
+				<h1>State</h1>
+				<p>Assume a simple bank account. How do we achieve withdraws and deposits?</p>
+				<pre><code class="javascript" data-trim>
+					deposit(100); // returns 100
+					withdraw(20); // returns 80
+					withdraw(40); // returns 40
+					deposit(50);  // returns 90
+				</code></pre>
+				<p>Constants are no good as they're immutable.</p>
+			</section>
+
+			<section id="state-4">
+				<h1>State</h1>
+				<p>What about a global <em>mutable</em> variable?</p>
+				<pre><code class="javascript" data-trim data-line-numbers="1-2|4-12|14-18">
+					// Initialise account
+					let account = 0;
+
+					function deposit(x) {
+					    account = account + x;
+					    return account;
+					}
+
+					function withdraw(x) {
+					    account = account - x;
+					    return account;
+					}
+
+					// Correct results returned
+					deposit(100); // returns 100
+					withdraw(20); // returns 80
+					withdraw(40); // returns 40
+					deposit(50);  // returns 90
+				</code></pre>
+			</section>
+
+			<section id="state-5">
+				<h1>State</h1>
+				<p>Remember the alien jukebox? Let's make the variable local.</p>
+				<pre><code class="javascript" data-trim data-line-numbers="1-15|17-22">
+					// Initialise account
+					function make_account() {
+					    let account = 0;
+					    function deposit(x) {
+					        account = account + x;
+					        return account;
+					    }
+					    function withdraw(x) {
+					        account = account - x;
+					        return account;
+					    }
+					    return x => x === "deposit"  ? y => deposit(y)
+					              : x === "withdraw" ? y => withdraw(y)
+					              : "wrong input";
+					}
+
+					// Correct results returned
+					const acc = make_account();
+					acc("deposit")(100); // returns 100
+					acc("withdraw")(20); // returns 80
+					acc("withdraw")(40); // returns 40
+					acc("deposit")(50);  // returns 90
+				</code></pre>
+			</section>
+
+			<section id="state-6">
+				<h1>State</h1>
+				<p>Introducing the variable declaration statement.</p>
+				<div style="text-align: center;">
+					<code><b>let</b> <em>name</em> = <em>expression</em>;</code>
+				</div>
+				<p><code>const</code>, but nonconstant.</p>
+				<p>From Source §3 onwards, function parameters are variables.</p>
+			</section>
+
+			<section id="state-7">
+				<h1>State</h1>
+				<p>Introducing the assignment statement.</p>
+				<div style="text-align: center;">
+					<code><em>name</em> = <em>expression</em>;</code>
+				</div>
+				<p><code><em>expression</em></code> is evaluated and assigned to the variable <code><em>name</em></code>.</p>
+				<p><code><em>name</em></code> must be <em>declared</em> and <em>variable</em>.</p>
+			</section>
+
+			<section id="mutable-data-1">
+				<h1>Mutable Data</h1>
+				<p>Assignment allows for the concept of <em>mutable data</em>.</p>
+				<p>We have had constructors and selectors. What about <em>mutators</em>?</p>
+			</section>
+
+			<section id="mutable-data-2">
+				<h1>Mutable Data</h1>
+				<p>Consider <code>set_head</code> and <code>set_tail</code> for pairs.</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					const p = pair(2, 2);
+					
+					set_head(p, 0);
+					set_tail(p, 1);
+
+					p; // returns pair(0, 1);
+				</code></pre>
+				<p>Data can now be mutated!</p>
+			</section>
+
+			<section id="mutable-data-3">
+				<h1>Mutable Data</h1>
+				<p>How would this be implemented? Does the following work?</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function set_head_pseudo(p, x) {
+						p = pair(x, tail(p));
+					}
+
+					function set_tail_pseudo(p, x) {
+						p = pair(head(p), x);
+					}
+					
+					const p = pair(2, 2);
+					
+					set_head_pseudo(p, 0);
+					set_tail_pseudo(p, 1);
+
+					p; // ?
+				</code></pre>
+			</section>
+
+			<section id="mutable-data-4">
+				<h1>Mutable Data</h1>
+				<p>Consider two lists.</p>
+				<div style="text-align: center;">
+					<code><b>const</b> x = list(0, 1);</code><br>
+					<code><b>const</b> y = list(2, 3);</code>
+				</div>
+				<div style="text-align: center; margin-top:60px;">
+					<img src="images/p-1.svg" alt="p-1" style="height: 200px;">
+				</div>
+			</section>
+
+			<section id="mutable-data-5">
+				<h1>Mutable Data</h1>
+				<p><code>set_head(x, y)</code></p>
+				<div style="text-align: center; margin-top:100px;">
+					<img src="images/p-2.svg" alt="p-2" style="height: 200px;">
+				</div>
+			</section>
+
+			<section id="mutable-data-6">
+				<h1>Mutable Data</h1>
+				<p><code>set_tail(y, tail(x))</code></p>
+				<div style="text-align: center; margin-top:100px;">
+					<img src="images/p-3.svg" alt="p-3" style="height: 200px;">
+				</div>
+			</section>
+
+			<section id="mutable-data-7">
+				<h1>Mutable Data</h1>
+				<p><code>set_head</code> and <code>set_tail</code> do not use pair construction, but directly manipulate the data at the specific memory address.</p>
+				<p>This is why we must be careful with mutation; unexpected phenomena may arise.</p>
+			</section>
+
+			<section id="mutable-data-8">
+				<h1>Mutable Data</h1>
+				<p>A fairly innocuous example.</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					const x = list(0, 1);
+					const y = list(2, 3);
+					const z = append(x, y);
+
+					set_head(y, 4);
+
+					z; // returns list(0, 1, 4, 3)?!
+				</code></pre>
+				<p><code>z</code> is not involved in <code>set_head</code>; what's going on?</p>
+			</section>
+
+			<section id="mutable-data-9">
+				<h1>Mutable Data</h1>
+				<p>Before <code>set_head</code>:</p>
+				<div style="text-align: center; margin-top:40px;">
+					<img src="images/p-4.svg" alt="p-4" style="height: 300px;">
+				</div>
+			</section>
+
+			<section id="mutable-data-10">
+				<h1>Mutable Data</h1>
+				<p>After <code>set_head</code>:</p>
+				<div style="text-align: center; margin-top:40px;">
+					<img src="images/p-5.svg" alt="p-5" style="height: 300px;">
+				</div>
+				<p>What would happen for <code>set_head(x, 4)</code>?</p>
+			</section>
+
+			<section id="mutable-data-11">
+				<h1>Mutable Data</h1>
+				<p>Mutation can be powerful; can we adapt mutation for <code>append</code> and <code>map</code>?</p>
+			</section>
+
+			<section id="mutable-data-12">
+				<h1>Mutable Data</h1>
+				<p>"Destructive" <code>append</code>:</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function d_append(xs, ys) {
+					    if (is_null(xs)) {
+					        return ys;
+					    } else {
+					        set_tail(xs, d_append(tail(xs), ys));
+					        return xs;
+					    }
+					}
+				</code></pre>
+			</section>
+
+			<section id="mutable-data-12">
+				<h1>Mutable Data</h1>
+				<p>"Destructive" <code>map</code>:</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function d_map(fun, xs) {
+					    if (!is_null(xs)) {
+					        set_head(xs, fun(head(xs)));
+					        d_map(fun, tail(xs));
+					    } else {}
+					}
+				</code></pre>
+			</section>
+
+			<section id="bonus-1">
+				<h1>Bonus Questions</h1>
+				<h2>1a</h2>
+				<p>Consider a circular list:</p>
+				<div style="text-align: center; margin-top:0px;">
+					<img src="images/b-1.svg" alt="b-1" style="height: 140px;">
+				</div>
+				<p>Define a function <code>circlify</code> that accepts a list and "circlifies" it.</p>
+				<p><code>circlify</code> should mutate the original list.</p>
+			</section>
+
+			<section id="bonus-2">
+				<h1>Bonus Questions</h1>
+				<h2>1a</h2>
+				<code class="list-intro">Input: list(0, 1, 2, 3, 4)</code><br>
+				<code class="list-intro">Output: list(0, 1, 2, 3, 4, ...&lt;circular&gt;)</code>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					const xs = list(0, 1, 2, 3, 4);
+
+					circlify(xs);    // returns list(0, 1, 2, 3, 4, ...&lt;circular&gt;)
+					xs;              // returns list(0, 1, 2, 3, 4, ...&lt;circular&gt;)
+				</code></pre>
+			</section>
+
+			<section id="bonus-3">
+				<h1>Bonus Questions</h1>
+				<h2>1b</h2>
+				<p>Circular lists are fun, but let's make them more fun.</p>
+				<p>Define a function <code>rotate</code> that accepts a circular list and an integer and returns a circular list that is the result of "rotating" the original list — from right to left — by a count of the input integer.</p>
+				<p><code>rotate</code> should mutate the original circular list.</p>
+			</section>
+
+			<section id="bonus-4">
+				<h1>Bonus Questions</h1>
+				<h2>1b</h2>
+				<code class="list-intro">Input: list(0, 1, 2, 3, 4, ...&lt;circular&gt;), 2</code><br>
+				<code class="list-intro">Output: list(2, 3, 4, 0, 1, ...&lt;circular&gt;)</code>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					const xs = list(0, 1, 2, 3, 4);
+					circlify(xs);
+
+					rotate(xs, 2);    // returns list(2, 3, 4, 0, 1, ...&lt;circular&gt;)
+					xs;               // returns list(2, 3, 4, 0, 1, ...&lt;circular&gt;)
+				</code></pre>
+			</section>
+
+			<section id="bonus-5">
+				<h1>Bonus Questions</h1>
+				<h2>2</h2>
+				<p>How destructive can we get?</p>
+				<p>Define a function <code>d_filter</code> that accepts a predicate and a list and destructively filters and returns said list.</p>
+			</section>
+
+			<section id="bonus-6">
+				<h1>Bonus Questions</h1>
+				<h2>2</h2>
+				<code class="list-intro">Input: x => x % 2 === 0, list(0, 1, 2, 3, 4)</code><br>
+				<code class="list-intro">Output: list(0, 2, 4)</code>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					const xs = list(0, 1, 2, 3, 4);
+
+					d_filter(x => x % 2 === 0, xs);    // returns list(0, 2, 4)
+					xs;                                // returns list(0, 2, 4)
+				</code></pre>
+			</section>
+
+			<section id="end">
+				<h1>That's All!</h1>
+			</section>
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/math/math.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			math: {
+				mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+				config: 'TeX-AMS_HTML-full',
+				// pass other options into `MathJax.Hub.Config()`
+				TeX: { Macros: { RR: "{\\bf R}" } }
+			},
+			hash: true,
+			center: false,
+			transition: "none",
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath]
+		});
+	</script>
+</body>
+
+</html>
