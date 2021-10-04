@@ -356,7 +356,7 @@
 				<h1>Bonus Questions</h1>
 				<h2>1b</h2>
 				<p>Circular lists are fun, but let's make them more fun.</p>
-				<p>Define a function <code>rotate</code> that accepts a circular list and an integer and returns a circular list that is the result of "rotating" the original list — from right to left — by a count of the input integer.</p>
+				<p>Define a function <code>rotate</code> that accepts a circular list and an integer rotation count and returns a circular list that is the result of "rotating" the original list — from right to left — by the rotation count.</p>
 				<p><code>rotate</code> should mutate the original circular list.</p>
 			</section>
 
@@ -376,23 +376,36 @@
 
 			<section id="bonus-5">
 				<h1>Bonus Questions</h1>
-				<h2>2</h2>
-				<p>How destructive can we get?</p>
-				<p>Define a function <code>d_filter</code> that accepts a predicate and a list and destructively filters and returns said list.</p>
+				<h2>1c</h2>
+				<p>Unidirectional rotation is boring, why not both directions?</p>
+				<p>Redefine the function <code>rotate</code> such that it accepts a circular list, an integer rotation count, and an integer direction indicator and returns a circular list that is the result of "rotating" the original list — from either right to left or vice versa — by the rotation count.</p>
 			</section>
 
 			<section id="bonus-6">
 				<h1>Bonus Questions</h1>
-				<h2>2</h2>
-				<code class="list-intro">Input: x => x % 2 === 0, list(0, 1, 2, 3, 4)</code><br>
-				<code class="list-intro">Output: list(0, 2, 4)</code>
+				<h2>1c</h2>
+				<p>A direction indicator of 0 and 1 stands for right to left and left to right, respectively.</p>
+				<p><code>rotate</code> should mutate the original circular list.</p>
+			</section>
+
+			<section id="bonus-7">
+				<h1>Bonus Questions</h1>
+				<h2>1c</h2>
+				<code class="list-intro">Input: list(0, 1, 2, 3, 4, ...&lt;circular&gt;), 2, 0</code><br>
+				<code class="list-intro">Output: list(2, 3, 4, 0, 1, ...&lt;circular&gt;)</code> <br>
+				<code class="list-intro">Input: list(0, 1, 2, 3, 4, ...&lt;circular&gt;), 2, 1</code><br>
+				<code class="list-intro">Output: list(3, 4, 0, 1, 2, ...&lt;circular&gt;)</code>
 				<pre><code class="javascript" data-trim data-line-numbers>
 					const xs = list(0, 1, 2, 3, 4);
+					circlify(xs);
 
-					d_filter(x => x % 2 === 0, xs);    // returns list(0, 2, 4)
-					xs;                                // returns list(0, 2, 4)
+					rotate(xs, 2, 0);    // returns list(2, 3, 4, 0, 1, ...&lt;circular&gt;)
+					xs;                  // returns list(2, 3, 4, 0, 1, ...&lt;circular&gt;)
+					rotate(xs, 2, 1);    // returns list(0, 1, 2, 3, 4, ...&lt;circular&gt;)
+					xs;                  // returns list(0, 1, 2, 3, 4, ...&lt;circular&gt;)
 				</code></pre>
 			</section>
+			
 
 			<section id="end">
 				<h1>That's All!</h1>
