@@ -1,0 +1,728 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>S9: Studio Week 9</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/simple.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/highlight.js/src/styles/github.css">
+
+	<style>
+		.slides section {
+			text-align: left;
+		}
+
+		.slides section h1,
+		.slides section h2,
+		.slides section h3 {
+			font-weight: bold;
+		}
+
+		.slides section h1 {
+			font-size: 2em;
+		}
+
+		.slides section h2 {
+			font-size: 1.5em;
+		}
+
+		.slides section .latex {
+			font-size: 0.8em;
+		}
+
+		.slides section .rune {
+			position: relative;
+			top: 1.2em;
+			height: 80px;
+		}
+
+		.slides section .list-code {
+			font-size: 0.6em;
+		}
+
+		.slides section .list-intro {
+			font-size: 0.8em;
+		}
+
+		mark {
+			background-color: lightskyblue;
+			color: black;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section id="intro">
+				<h1>S9: Studio Week 9</h1>
+			</section>
+
+			<section id="updates">
+				<h1>Updates</h1>
+				<ul>
+					<li>
+						<p>Robot missions and quests are coming to an end; don't forget to submit the videos too.</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="recap">
+				<h1>Recap</h1>
+				<ol>
+					<li>
+						<p><a href="#/environment-model-1">Environment Model</a></p>
+					</li>
+				</ol>
+			</section>
+
+			<section id="environment-model-1">
+				<h1>Environment Model</h1>
+				<p>State breaks the substitution model. A new model of evaluation is required.</p>
+				<p>Introducing the <em>environment model</em>!</p>
+			</section>
+
+			<section id="environment-model-2">
+				<h1>Environment Model</h1>
+				<p>Expressions are now evaluated with respect to a context created during runtime, a.k.a. an <em>environment</em>.</p>
+				<p>Accesses and mutations are more readily visualised with the environment model.</p>
+			</section>
+
+			<section id="environment-model-3">
+				<h1>Environment Model</h1>
+				<p>A comprehensive example:</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function zip(fun, xs, ys) {
+						if (!is_null(xs)) {
+							const xh = head(xs);
+							const yh = head(ys);
+							set_head(xs, fun(xh, yh));
+							zip(fun, tail(xs), tail(ys));
+						}
+					}
+					
+					const L = list(2);
+					const M = list(3);
+					
+					zip((x, y) => f => f(x, y), L, M);
+					
+					head(L)((x, y) => x * y);
+				</code></pre>
+			</section>
+
+			<section id="environment-model-4">
+				<h1>Environment Model</h1>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/10.svg" alt="e-1" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.65em; margin-top: 90px">
+						<pre><code class="javascript" data-trim data-line-numbers="1-11">
+							function zip(fun, xs, ys) {
+								if (!is_null(xs)) {
+									const xh = head(xs);
+									const yh = head(ys);
+									set_head(xs, fun(xh, yh));
+									zip(fun, tail(xs), tail(ys));
+								}
+							}
+							
+							const L = list(2);
+							const M = list(3);
+							
+							zip((x, y) => f => f(x, y), L, M);
+							
+							head(L)((x, y) => x * y);
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="environment-model-5">
+				<h1>Environment Model</h1>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/9.svg" alt="e-2" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.65em; margin-top: 90px">
+						<pre><code class="javascript" data-trim data-line-numbers="13">
+							function zip(fun, xs, ys) {
+								if (!is_null(xs)) {
+									const xh = head(xs);
+									const yh = head(ys);
+									set_head(xs, fun(xh, yh));
+									zip(fun, tail(xs), tail(ys));
+								}
+							}
+							
+							const L = list(2);
+							const M = list(3);
+							
+							zip((x, y) => f => f(x, y), L, M);
+							
+							head(L)((x, y) => x * y);
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="environment-model-6">
+				<h1>Environment Model</h1>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/8.svg" alt="e-3" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.65em; margin-top: 90px">
+						<pre><code class="javascript" data-trim data-line-numbers="13">
+							function zip(fun, xs, ys) {
+								if (!is_null(xs)) {
+									const xh = head(xs);
+									const yh = head(ys);
+									set_head(xs, fun(xh, yh));
+									zip(fun, tail(xs), tail(ys));
+								}
+							}
+							
+							const L = list(2);
+							const M = list(3);
+							
+							zip((x, y) => f => f(x, y), L, M);
+							
+							head(L)((x, y) => x * y);
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="environment-model-7">
+				<h1>Environment Model</h1>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/7.svg" alt="e-4" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.65em; margin-top: 90px">
+						<pre><code class="javascript" data-trim data-line-numbers="3-4,13">
+							function zip(fun, xs, ys) {
+								if (!is_null(xs)) {
+									const xh = head(xs);
+									const yh = head(ys);
+									set_head(xs, fun(xh, yh));
+									zip(fun, tail(xs), tail(ys));
+								}
+							}
+							
+							const L = list(2);
+							const M = list(3);
+							
+							zip((x, y) => f => f(x, y), L, M);
+							
+							head(L)((x, y) => x * y);
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="environment-model-8">
+				<h1>Environment Model</h1>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/6.svg" alt="e-5" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.65em; margin-top: 90px">
+						<pre><code class="javascript" data-trim data-line-numbers="5,13">
+							function zip(fun, xs, ys) {
+								if (!is_null(xs)) {
+									const xh = head(xs);
+									const yh = head(ys);
+									set_head(xs, fun(xh, yh));
+									zip(fun, tail(xs), tail(ys));
+								}
+							}
+							
+							const L = list(2);
+							const M = list(3);
+							
+							zip((x, y) => f => f(x, y), L, M);
+							
+							head(L)((x, y) => x * y);
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="environment-model-9">
+				<h1>Environment Model</h1>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/5.svg" alt="e-6" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.65em; margin-top: 90px">
+						<pre><code class="javascript" data-trim data-line-numbers="5,13">
+							function zip(fun, xs, ys) {
+								if (!is_null(xs)) {
+									const xh = head(xs);
+									const yh = head(ys);
+									set_head(xs, fun(xh, yh));
+									zip(fun, tail(xs), tail(ys));
+								}
+							}
+							
+							const L = list(2);
+							const M = list(3);
+							
+							zip((x, y) => f => f(x, y), L, M);
+							
+							head(L)((x, y) => x * y);
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="environment-model-10">
+				<h1>Environment Model</h1>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/4.svg" alt="e-7" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.65em; margin-top: 90px">
+						<pre><code class="javascript" data-trim data-line-numbers="6,13">
+							function zip(fun, xs, ys) {
+								if (!is_null(xs)) {
+									const xh = head(xs);
+									const yh = head(ys);
+									set_head(xs, fun(xh, yh));
+									zip(fun, tail(xs), tail(ys));
+								}
+							}
+							
+							const L = list(2);
+							const M = list(3);
+							
+							zip((x, y) => f => f(x, y), L, M);
+							
+							head(L)((x, y) => x * y);
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="environment-model-11">
+				<h1>Environment Model</h1>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/3.svg" alt="e-8" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.65em; margin-top: 90px">
+						<pre><code class="javascript" data-trim data-line-numbers="15">
+							function zip(fun, xs, ys) {
+								if (!is_null(xs)) {
+									const xh = head(xs);
+									const yh = head(ys);
+									set_head(xs, fun(xh, yh));
+									zip(fun, tail(xs), tail(ys));
+								}
+							}
+							
+							const L = list(2);
+							const M = list(3);
+							
+							zip((x, y) => f => f(x, y), L, M);
+							
+							head(L)((x, y) => x * y);
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="environment-model-12">
+				<h1>Environment Model</h1>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/2.svg" alt="e-9" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.65em; margin-top: 90px">
+						<pre><code class="javascript" data-trim data-line-numbers="15">
+							function zip(fun, xs, ys) {
+								if (!is_null(xs)) {
+									const xh = head(xs);
+									const yh = head(ys);
+									set_head(xs, fun(xh, yh));
+									zip(fun, tail(xs), tail(ys));
+								}
+							}
+							
+							const L = list(2);
+							const M = list(3);
+							
+							zip((x, y) => f => f(x, y), L, M);
+							
+							head(L)((x, y) => x * y);
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="environment-model-13">
+				<h1>Environment Model</h1>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/1.svg" alt="e-10" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.65em; margin-top: 90px">
+						<pre><code class="javascript" data-trim data-line-numbers="15">
+							function zip(fun, xs, ys) {
+								if (!is_null(xs)) {
+									const xh = head(xs);
+									const yh = head(ys);
+									set_head(xs, fun(xh, yh));
+									zip(fun, tail(xs), tail(ys));
+								}
+							}
+							
+							const L = list(2);
+							const M = list(3);
+							
+							zip((x, y) => f => f(x, y), L, M);
+							
+							head(L)((x, y) => x * y);
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="environment-model-14">
+				<h1>Environment Model</h1>
+				<div style="text-align: center;">
+					<img src="images/0.svg" alt="e-10" style="width: 650px;">
+				</div>
+			</section>
+
+			<section id="environment-model-15">
+				<h1>Environment Model</h1>
+				<p>The <em>environment model visualiser</em> may come in handy, but be aware of limitations!</p>
+				<p>The visualiser works with breakpoints, displaying all frames created until a specific moment throughout the course of evaluation.</p>
+				<p>Think of these moments as <em>snapshots</em> in time.</p>
+			</section>
+
+			<section id="studio-worksheet-intro">
+				<h1>Studio Worksheet</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							Drawing the environment model helps a lot.
+						</p>
+					</li>
+					<li>
+						<p>
+							Use the environment model visualiser sparingly!
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-worksheet-1">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<p><code>x</code> stays as <code>0</code>.</p>
+				<p>The parameter <code>x</code> and the variable <code>x</code> are different; that is, any assignment to the parameter <code>x</code> has no effect on the latter.</p>
+			</section>
+
+			<section id="studio-worksheet-2">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="text-align: center;">
+					<img src="images/q-1.svg" alt="q-1" style="height: 400px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-3">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p>Due to how functions work, it is not possible to re-associate a name with another list within a function.</p>
+				<p>What are the possible implications of this for a working <code>d_filter</code>?</p>
+			</section>
+
+			<section id="studio-worksheet-4">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function d_filter(pred, xs) {
+					    if (is_null(xs)) {
+					        return xs;
+					    } else if (pred(head(xs))) {
+					        set_tail(xs, d_filter(pred, tail(xs)));
+					        return xs;
+					    } else {
+					        return d_filter(pred, tail(xs));
+					    }
+					}
+
+					const L = list(1, 2, 3, 4);
+					d_filter(x => x % 2 === 0, L); // returns [2, [4, null]]
+					L; // What is L now?
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-5">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<div style="text-align: center;">
+					<img src="images/q-2.svg" alt="q-2" style="height: 400px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-6">
+				<h1>Studio Worksheet</h1>
+				<h2>3</h2>
+				<p>Let's role-play the environment model visualiser!</p>
+				<p>Pay close attention to the environment at hand.</p>
+			</section>
+
+			<section id="studio-worksheet-7">
+				<h1>Studio Worksheet</h1>
+				<h2>3</h2>
+				<div style="font-size: 0.5em; font-weight: bold;">Breakpoint #1:</div>
+				<div style="text-align: center;">
+					<img src="images/q-3-5.svg" alt="q-3-1" style="width: 600px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-8">
+				<h1>Studio Worksheet</h1>
+				<h2>3</h2>
+				<div style="font-size: 0.5em; font-weight: bold;">Breakpoint #2:</div>
+				<div style="text-align: center;">
+					<img src="images/q-3-4.svg" alt="q-3-2" style="width: 600px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-9">
+				<h1>Studio Worksheet</h1>
+				<h2>3</h2>
+				<div style="font-size: 0.5em; font-weight: bold;">Breakpoint #3:</div>
+				<div style="text-align: center;">
+					<img src="images/q-3-3.svg" alt="q-3-3" style="width: 600px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-10">
+				<h1>Studio Worksheet</h1>
+				<h2>3</h2>
+				<div style="font-size: 0.5em; font-weight: bold;">Breakpoint #4:</div>
+				<div style="text-align: center;">
+					<img src="images/q-3-2.svg" alt="q-3-4" style="width: 600px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-11">
+				<h1>Studio Worksheet</h1>
+				<h2>3</h2>
+				<div style="font-size: 0.5em; font-weight: bold;">Breakpoint #5:</div>
+				<div style="text-align: center;">
+					<img src="images/q-3-1.svg" alt="q-3-5" style="width: 600px;">
+				</div>
+			</section>
+
+			<section id="studio-in-class-intro">
+				<h1>Studio In-Class</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							Try constructing new pairs with existing pairs.
+						</p>
+					</li>
+					<li>
+						<p>
+							Is there a way to keep track of pairs that have been seen already? How can <code>member</code> come into play?
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-in-class-1">
+				<h1>Studio In-Class</h1>
+				<h2>Return 3:</h2>
+				<pre style="margin-top: 40px;"><code class="javascript" data-trim>
+					const three = list(1, 2, 3);
+					count_pairs(three);  // returns 3
+				</code></pre>
+				<div style="text-align: center; margin-top: 40px;">
+					<img src="images/three.svg" alt="three" style="width: 600px;">
+				</div>
+			</section>
+
+			<section id="studio-in-class-2">
+				<h1>Studio In-Class</h1>
+				<h2>Return 4:</h2>
+				<pre style="margin-top: 40px;"><code class="javascript" data-trim>
+					const four_a = pair(null, null);
+					const four_b = pair(four_a, four_a);
+					const four = pair(four_b, null);
+					count_pairs(four);  // returns 4
+				</code></pre>
+				<div style="text-align: center; margin-top: 40px;">
+					<img src="images/four.svg" alt="four" style="width: 300px;">
+				</div>
+			</section>
+
+			<section id="studio-in-class-3">
+				<h1>Studio In-Class</h1>
+				<h2>Return 7:</h2>
+				<pre style="margin-top: 40px;"><code class="javascript" data-trim>
+					const seven_a = pair(null, null);
+					const seven_b = pair(seven_a, seven_a);
+					const seven = pair(seven_b, seven_b);
+					count_pairs(seven);  // returns 7
+				</code></pre>
+				<div style="text-align: center; margin-top: 40px;">
+					<img src="images/seven.svg" alt="seven" style="width: 324px;">
+				</div>
+			</section>
+
+			<section id="studio-in-class-4">
+				<h1>Studio In-Class</h1>
+				<h2>Never return:</h2>
+				<pre style="margin-top: 40px;"><code class="javascript" data-trim>
+					const loop = list(1, 2, 3);
+					set_tail(tail(tail(loop)), loop);
+					count_pairs(loop);  // infinite loop
+				</code></pre>
+				<div style="text-align: center; margin-top: 40px;">
+					<img src="images/loop.svg" alt="loop" style="width: 640px;">
+				</div>
+			</section>
+
+			<section id="studio-in-class-5">
+				<h1>Studio In-Class</h1>
+				<h2>The correct version:</h2>
+				<pre style="margin-top: 20px;"><code class="javascript" data-trim>
+					function count_pairs(x) {
+					    let pairs = null;
+					    function check(y) {
+					        if (!is_pair(y) || !is_null(member(y, pairs))) {
+					            return undefined;
+					        } else {
+					            pairs = pair(y, pairs);
+					            check(head(y));
+					            check(tail(y));
+					        }
+					    }
+					    check(x);
+					    return length(pairs);
+					}
+				</code></pre>
+			</section>
+
+			<section id="bonus-1">
+				<h1>Bonus Questions</h1>
+				<h2>1a</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function id() {
+					    return x => x;
+					}
+					let i = 0;
+					while (i < 5) {
+					    id();
+					    const inc = i + 1;
+					    i = inc;
+					}
+				</code></pre>
+				<p>
+					Draw the diagram to show the environment during the evaluation of this programme.
+					Show all the frames that are created during the programme evaluation.
+					Show the final value of each binding.
+				</p>
+			</section>
+
+			<section id="bonus-2">
+				<h1>Bonus Questions</h1>
+				<h2>1b</h2>
+				<p>
+					Compare your diagram with that produced by the environment model visualiser.
+				</p>
+				<p>
+					What limitation of the visualiser can be observed, if any?
+				</p>
+			</section>
+
+			<section id="bonus-3">
+				<h1>Bonus Questions</h1>
+				<h2>2a</h2>
+				<p>How <em>destructive</em> can we get?</p>
+				<p>Recall the definition of a <em>tree</em> — a <em>tree</em> of a certain type is a list whose elements are data items or trees of said type.</p>
+				<p>Define a function <code>d_flatten</code> that accepts a tree and destructively flattens it.</p>
+			</section>
+
+			<section id="bonus-4">
+				<h1>Bonus Questions</h1>
+				<h2>2a</h2>
+				<code class="list-intro">Input: list(1, list(2, 3), list(4, list(5)))</code><br>
+				<code class="list-intro">Output: list(1, 2, 3, 4, 5)</code>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					const L = list(1, list(2, 3), list(4, list(5)));
+					d_flatten(L);
+
+					d_flatten(L);    // returns list(1, 2, 3, 4, 5)
+					L;               // returns list(1, 2, 3, 4, 5)
+				</code></pre>
+			</section>
+
+			<section id="bonus-5">
+				<h1>Bonus Questions</h1>
+				<h2>2b</h2>
+				<p>Assuming the implementation of <code>d_flatten</code>:</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function d_flatten(xs) {
+					    ...
+					}
+					const L = list(1, list(2));
+					d_flatten(L);
+				</code></pre>
+				<p>
+					Draw the diagram to show the environment during the evaluation of this programme.
+					Show all the frames that are created during the programme evaluation.
+					Show the final value of each binding.
+				</p>
+			</section>
+
+			<section id="end">
+				<h1>That's All!</h1>
+			</section>
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/math/math.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			math: {
+				mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+				config: 'TeX-AMS_HTML-full',
+				// pass other options into `MathJax.Hub.Config()`
+				TeX: { Macros: { RR: "{\\bf R}" } }
+			},
+			hash: true,
+			center: false,
+			transition: "none",
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath]
+		});
+	</script>
+</body>
+
+</html>
