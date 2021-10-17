@@ -1,0 +1,1068 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>S10: Studio Week 10</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/simple.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/highlight.js/src/styles/github.css">
+
+	<style>
+		.slides section {
+			text-align: left;
+		}
+
+		.slides section h1,
+		.slides section h2,
+		.slides section h3 {
+			font-weight: bold;
+		}
+
+		.slides section h1 {
+			font-size: 2em;
+		}
+
+		.slides section h2 {
+			font-size: 1.5em;
+		}
+
+		.slides section .latex {
+			font-size: 0.8em;
+		}
+
+		.slides section .rune {
+			position: relative;
+			top: 1.2em;
+			height: 80px;
+		}
+
+		.slides section .list-code {
+			font-size: 0.6em;
+		}
+
+		.slides section .list-intro {
+			font-size: 0.8em;
+		}
+
+		mark {
+			background-color: lightskyblue;
+			color: black;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section id="intro">
+				<h1>S10: Studio Week 10</h1>
+			</section>
+
+			<section id="updates">
+				<h1>Updates</h1>
+				<ul>
+					<li>
+						<p>Reading Assessment 2 is next week!</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="recap">
+				<h1>Recap</h1>
+				<ol>
+					<li>
+						<p><a href="#/memoization-1">Memoization</a></p>
+					</li>
+				</ol>
+			</section>
+
+			<section id="memoization-1">
+				<h1>Memoization</h1>
+				<p>Computations can grow exponentially in terms of time and space.</p>
+				<p>How can we do better, i.e. make computation more efficient?</p>
+			</section>
+
+			<section id="memoization-2">
+				<h1>Memoization</h1>
+				<div style="text-align: center;">
+					<img src="images/fib.svg" alt="fib" style="width: 600px;">
+				</div>
+				<p>How can we reduce repeated computations?</p>
+			</section>
+
+			<section id="memoization-3">
+				<h1>Memoization</h1>
+				<p>Remember the computed value!</p>
+				<p>The idea of <em>memoization</em> — record input-output pairs in a <em>local table</em>.</p>
+			</section>
+
+			<section id="memoization-4">
+				<h1>Memoization</h1>
+				<p>Remember the computed value!</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function mfib(n) {
+					    const mem = [];
+					    function fib(k) {
+					        if (mem[k] !== undefined) {
+					            return mem[k];
+					        } else {
+					            const result = k <= 1
+					                ? k
+					                : fib(k - 1) + fib(k - 2);
+					            mem[k] = result;
+					            return result;
+					        }
+					    }
+					    return fib(n);
+					}
+				</code></pre>
+				<p>Result is stored locally in <code>mem</code>.</p>
+			</section>
+
+			<section id="memoization-5">
+				<h1>Memoization</h1>
+				<div style="text-align: center;">
+					<img src="images/fib-mem.svg" alt="fib-mem" style="width: 600px;">
+				</div>
+				<p>$\Theta(n)$ order of growth in space and time.</p>
+			</section>
+
+			<section id="memoization-6">
+				<h1>Memoization</h1>
+				<p>Result can also be stored globally in <code>mem</code>.</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					const mem = [];
+
+					function mfib(n) {
+					    if (mem[n] !== undefined) {
+					        return mem[n];
+					    } else {
+					        const result = n <= 1
+					            ? n
+					            : mfib(n - 1) + mfib(n - 2);
+					        mem[n] = result;
+					        return result;
+					    }
+					}
+				</code></pre>
+				<p>Account for multiple iterations of <code>mfib</code>.</p>
+			</section>
+
+			<section id="memoization-7">
+				<h1>Memoization</h1>
+				<p>What about the $n$-choose-$k$ problem?</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function choose(n, k) {
+					    return k > n
+					           ? 0
+					           : k === 0 || k === n
+					           ? 1
+					           : choose(n - 1, k) + choose(n - 1, k - 1);
+					}
+				</code></pre>
+				<p>Is <code>choose</code> a good candidate for memoization?</p>
+			</section>
+
+			<section id="memoization-8">
+				<h1>Memoization</h1>
+				<div style="text-align: center;">
+					<img src="images/choose.svg" alt="choose" style="width: 800px;">
+				</div>
+				<p>Yes! A lot of repeated computations.</p>
+				<p>How can they be memoized?</p>
+			</section>
+
+			<section id="memoization-9">
+				<h1>Memoization</h1>
+				<p>Read from and write to a global 2-D array.</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					const mem = [];
+
+					function read(n, k) {
+					    return mem[n] === undefined
+					        ? undefined
+					        : mem[n][k];
+					}
+
+					function write(n, k, value) {
+					    if (mem[n] === undefined) {
+					        mem[n] = [];
+					    }
+					    mem[n][k] = value;
+					}
+				</code></pre>
+			</section>
+
+			<section id="memoization-10">
+				<h1>Memoization</h1>
+				<p>Read if defined, write if undefined.</p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function mchoose(n, k) {
+					    if (read(n, k) !== undefined) {
+					        return read(n, k);
+					    } else {
+					        const result = k > n
+					            ? 0
+					            : k === 0 || k === n
+					            ? 1
+					            : mchoose(n - 1, k) + mchoose(n - 1, k - 1);
+					        write(n, k, result);
+					        return result;
+					    }
+					}
+				</code></pre>
+			</section>
+
+			<section id="memoization-11">
+				<h1>Memoization</h1>
+				<div style="text-align: center;">
+					<img src="images/choose-mem.svg" alt="choose-mem" style="width: 800px;">
+				</div>
+				<p>How efficient is <code>mchoose</code>?</p>
+			</section>
+
+			<section id="memoization-12">
+				<h1>Memoization</h1>
+				<p>Number of calls to <code>mchoose</code> is $(n - k)(2k - 1) + 1$.</p>
+				<p>The order of growth in <b>time</b> is</p>
+				$$
+				\begin{align*}
+				&\Theta((n - k)(2k - 1) + 1) \\
+				=\, &\Theta((n - k)k) \\
+				=\, &\Theta(nk - k^2) \\
+				=\, &O(nk)
+				\end{align*}
+				$$
+			</section>
+
+			<section id="memoization-13">
+				<h1>Memoization</h1>
+				<p>Number of writes to <code>mem</code> is $n + (n - k)k $.</p>
+				<p>The order of growth in <b>space</b> is</p>
+				$$
+				\begin{align*}
+				&\Theta(n + (n - k)k) \\
+				=\, &\Theta(n + nk - k^2) \\
+				=\, &\Theta(n(1 + k) - k^2) \\
+				=\, &\Theta(nk - k^2) \\
+				=\, &O(nk)
+				\end{align*}
+				$$
+			</section>
+
+			<section id="studio-worksheet-intro">
+				<h1>Studio Worksheet</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							Big focus on the environment model and memoization.
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-worksheet-1">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function swap(A, i, j) {
+					    let temp = A[i];
+					    A[i] = A[j];
+					    A[j] = temp;
+					}
+					
+					function reverse_array(A) {
+					    const len = array_length(A);
+					    const half_len = math_floor(len / 2);
+					    let i = 0;
+					    while (i < half_len) {
+					        const j = len - 1 - i;
+					        swap(A, i, j);
+					        i = i + 1;
+					    }
+					}
+					
+					const arr = [1, 2, 3, 4, 5];
+					reverse_array(arr);
+					arr;
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-2">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-16.svg" alt="e-1" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers>
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-3">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-15.svg" alt="e-2" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="1-5">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-3">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-14.svg" alt="e-2" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="7-16">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-4">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-13.svg" alt="e-3" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="18">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-5">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-12.svg" alt="e-4" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="19">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-6">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-11.svg" alt="e-5" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="7-16,19">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-7">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-10.svg" alt="e-6" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="8,19">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-8">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-9.svg" alt="e-7" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="9,19">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-9">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-8.svg" alt="e-8" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="10,19">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-10">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-7.svg" alt="e-9" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="12,19">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-11">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-6.svg" alt="e-10" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="1-5,13,19">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-12">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-5.svg" alt="e-11" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="14,19">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-13">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-4.svg" alt="e-12" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="12,19">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-14">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-3.svg" alt="e-13" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="1-5,13,19">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-15">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-2.svg" alt="e-14" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="14,19">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-16">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center;">
+						<img src="images/e-1.svg" alt="e-15" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.55em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers="20">
+							function swap(A, i, j) {
+							    let temp = A[i];
+							    A[i] = A[j];
+							    A[j] = temp;
+							}
+							
+							function reverse_array(A) {
+							    const len = array_length(A);
+							    const half_len = math_floor(len / 2);
+							    let i = 0;
+							    while (i < half_len) {
+							        const j = len - 1 - i;
+							        swap(A, i, j);
+							        i = i + 1;
+							    }
+							}
+							
+							const arr = [1, 2, 3, 4, 5];
+							reverse_array(arr);
+							arr;
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-17">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<div style="text-align: center;">
+					<img src="images/e-1.svg" alt="e-final" style="width: 640px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-18">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<pre><code class="javascript" data-trim>
+					function bubblesort_array(A) {
+					    const len = array_length(A);
+					    for (let i = len - 1; i >= 1; i = i - 1) {
+					        for (let j = 0; j < i; j = j + 1) {
+					            if (A[j] > A[j + 1]) {
+					                const temp = A[j];
+					                A[j] = A[j + 1];
+					                A[j + 1] = temp;
+					            }
+					        }
+					    }
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-19">
+				<h1>Studio Worksheet</h1>
+				<h2>2a</h2>
+				<p>Two nested for-loops — order of growth in runtime is $\Theta(n^2)$.</p>
+			</section>
+
+			<section id="studio-worksheet-20">
+				<h1>Studio Worksheet</h1>
+				<h2>2b</h2>
+				<pre><code class="javascript" data-trim>
+					function bubblesort_list(L) {
+					    const len = length(L);
+					    for (let i = len - 1; i >= 1; i = i - 1) {
+					        let p = L;
+					        for (let j = 0; j < i; j = j + 1) {
+					            if (head(p) > head(tail(p))) {
+					                const temp = head(p);
+					                set_head(p, head(tail(p)));
+					                set_head(tail(p), temp);
+					            }
+					            p = tail(p);
+					        }
+					    }
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-21">
+				<h1>Studio Worksheet</h1>
+				<h2>3</h2>
+				<pre><code class="javascript" data-trim>
+					function cc(amount, kinds_of_coins) {
+					    return amount === 0
+					        ? 1
+					        : amount < 0 || kinds_of_coins === 0
+					        ? 0
+					        : cc(amount, kinds_of_coins - 1)
+					          +
+					          cc(amount - first_denomination(kinds_of_coins),
+					             kinds_of_coins);
+					}
+
+					function first_denomination(kinds_of_coins) {
+					    return kinds_of_coins === 1 ? 5 :
+					           kinds_of_coins === 2 ? 10 :
+					           kinds_of_coins === 3 ? 20 :
+					           kinds_of_coins === 4 ? 50 :
+					           kinds_of_coins === 5 ? 100 : 0;
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-22">
+				<h1>Studio Worksheet</h1>
+				<h2>3a</h2>
+				<div style="text-align: center;">
+					<img src="images/cc.svg" alt="cc" style="width: 360px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-23">
+				<h1>Studio Worksheet</h1>
+				<h2>3b</h2>
+				<pre><code class="javascript" data-trim data-line-numbers="1-15|17-24|26-40">
+					// Initialise read-write methods
+					const mem = [];
+
+					function read(n, k) {
+					    return mem[n] === undefined
+					        ? undefined
+					        : mem[n][k];
+					}
+
+					function write(n, k, value) {
+					    if (mem[n] === undefined) {
+					        mem[n] = [];
+					    }
+					    mem[n][k] = value;
+					}
+
+					// Initialise coins
+					function first_denomination(kinds_of_coins) {
+					    return kinds_of_coins === 1 ?   5 :
+					           kinds_of_coins === 2 ?  10 :
+					           kinds_of_coins === 3 ?  20 :
+					           kinds_of_coins === 4 ?  50 :
+					           kinds_of_coins === 5 ? 100 : 0;
+					}
+
+					// Initialise memoised counting change function
+					function mcc(n, k) {
+					    if (n >= 0 && k >=0 && read(n, k) !== undefined) {
+					        return read(n, k);
+					    } else {
+					        const result = n === 0 ? 1
+					                       : n < 0 || k === 0 ? 0
+					                       : mcc(n, k - 1) +
+					                         mcc(n - first_denomination(k), k);
+					        if (n >= 0 && k >= 0) {
+					            write(n, k, result);
+					        }
+					        return result;
+					    }
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-24">
+				<h1>Studio Worksheet</h1>
+				<h2>3c</h2>
+				<p>Order of growth in <b>time</b>: $\Theta(nk)$</p>
+				<p>Order of growth in <b>space</b>: $\Theta(nk)$</p>
+			</section>
+
+			<section id="studio-in-class-intro">
+				<h1>Studio In-Class</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							Assume a square ($n \times n$) matrix.
+						</p>
+					</li>
+					<li>
+						<p>
+							No additional array or list must be created.
+						</p>
+					</li>
+					<li>
+						<p>
+							Those who take MA2001, consider transposing the matrix.
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-in-class-1">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers="2|4-8|10-15|17-23">
+					function rotate_matrix(M) {
+					    const n = array_length(M); // M is assumed n x n.
+
+					    function swap(r1, c1, r2, c2) {
+					        const temp = M[r1][c1];
+					        M[r1][c1] = M[r2][c2];
+					        M[r2][c2] = temp;
+					    }
+
+					    // Do a matrix transpose first.
+					    for (let r = 0; r < n; r = r + 1) {
+					        for (let c = r + 1; c < n; c = c + 1) {
+					            swap(r, c, c, r);
+					        }
+					    }
+					
+					    // Then reverse each row.
+					    const half_n = math_floor(n / 2);
+					    for (let r = 0; r < n; r = r + 1) {
+					        for (let c = 0; c < half_n; c = c + 1) {
+					            swap(r, c, r, n - c - 1);
+					        }
+					    }
+					}
+				</code></pre>
+			</section>
+
+			<section id="end">
+				<h1>That's All!</h1>
+			</section>
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/math/math.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			math: {
+				mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+				config: 'TeX-AMS_HTML-full',
+				// pass other options into `MathJax.Hub.Config()`
+				TeX: { Macros: { RR: "{\\bf R}" } }
+			},
+			hash: true,
+			center: false,
+			transition: "none",
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath]
+		});
+	</script>
+</body>
+
+</html>
