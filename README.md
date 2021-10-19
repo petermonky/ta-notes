@@ -15,3 +15,5 @@
 <a href="https://petermonky.github.io/slides/cs1101s/s8/" onclick="window.open('https://petermonky.github.io/slides/cs1101s/s8/', '_self');">S8: Studio Week 8</a>
 
 <a href="https://petermonky.github.io/slides/cs1101s/s9/" onclick="window.open('https://petermonky.github.io/slides/cs1101s/s9/', '_self');">S9: Studio Week 9</a>
+
+<a href="https://petermonky.github.io/slides/cs1101s/s10/" onclick="window.open('https://petermonky.github.io/slides/cs1101s/s10/', '_self');">S10: Studio Week 10</a>
