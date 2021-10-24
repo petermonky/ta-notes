@@ -1,0 +1,803 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>S11: Studio Week 11</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/simple.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/highlight.js/src/styles/github.css">
+
+	<style>
+		.slides section {
+			text-align: left;
+		}
+
+		.slides section h1,
+		.slides section h2,
+		.slides section h3 {
+			font-weight: bold;
+		}
+
+		.slides section h1 {
+			font-size: 2em;
+		}
+
+		.slides section h2 {
+			font-size: 1.5em;
+		}
+
+		.slides section .latex {
+			font-size: 0.8em;
+		}
+
+		.slides section .rune {
+			position: relative;
+			top: 1.2em;
+			height: 80px;
+		}
+
+		.slides section .list-code {
+			font-size: 0.7em;
+		}
+
+		.slides section .list-intro {
+			font-size: 0.8em;
+		}
+
+		mark {
+			background-color: lightskyblue;
+			color: black;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section id="intro">
+				<h1>S11: Studio Week 11</h1>
+			</section>
+
+			<section id="updates">
+				<h1>Updates</h1>
+				<ul>
+					<li>
+						<p>Reading assessment is over — consult for advice.</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="recap">
+				<h1>Recap</h1>
+				<ol>
+					<li>
+						<p><a href="#/streams-1">Streams</a></p>
+					</li>
+				</ol>
+			</section>
+
+			<section id="streams-1">
+				<h1>Streams</h1>
+				<p>
+					<b>Informally:</b> A stream is a <em>delayed</em> list in which the tail is a computation that
+					yields a value.
+				</p>
+				<p>
+					<b>Formally:</b> A stream of a certain type is either <em>null</em>, or a <em>pair</em>
+					whose <em>head</em>
+					is of that type and whose <em>tail</em> is a <em>nullary</em> function that returns a stream of that
+					type.
+				</p>
+			</section>
+
+			<section id="streams-2">
+				<h1>Streams</h1>
+				<p>Why does this not work...</p>
+				<div class="list-code" style="text-align: center;">
+					<code><b>const</b> <em>twos</em> = pair(2, <em>twos</em>);</code>
+				</div>
+				<p>...but this does?</p>
+				<div class="list-code" style="text-align: center;">
+					<code><b>const</b> <em>twos</em> = pair(2, () => <em>twos</em>);</code>
+				</div>
+			</section>
+
+			<section id="streams-3">
+				<h1>Streams</h1>
+				<p>Streams are simply lists of <em>wishful thinking</em>.</p>
+				<p>Values are generated on demand.</p>
+			</section>
+
+			<section id="streams-4">
+				<h1>Streams</h1>
+				<p><b>Finite stream</b></p>
+				<div class="list-code" style="text-align: center;">
+					<code><b>const</b> <em>enum</em> = pair(1, () => pair(2, () => pair(3, () => null)));</code>
+				</div>
+				<p><b>Infinite stream</b></p>
+				<div class="list-code" style="text-align: center;">
+					<code><b>const</b> <em>zeros</em> = pair(0, () => <em>zeros</em>);</code>
+				</div>
+			</section>
+
+			<section id="streams-5">
+				<h1>Streams</h1>
+				<p>A new type of <code>tail</code> operation must be created.</p>
+				<div class="list-code" style="text-align: center;">
+					<code><b>const</b> <em>stream_tail</em> = (stream) => tail(stream)();</code>
+				</div>
+				<p>Simply retrieve the <em>stream generator</em> from the tail, then generate the stream!</p>
+			</section>
+
+			<section id="streams-6">
+				<h1>Streams</h1>
+				<p>Accordingly, new types of <code>map</code> and <code>filter</code> operations must be created.</p>
+				<p>Analagous to list operations, simply modified to account for streams.</p>
+			</section>
+
+			<section id="streams-7">
+				<h1>Streams</h1>
+				<p><b><code>map</code></b></p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function stream_map(f, s) {
+					    return is_null(s)
+					        ? null
+					        : pair(f(head(s)), () => stream_map(f, stream_tail(s)));
+					}
+				</code></pre>
+				<p><b><code>filter</code></b></p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function stream_filter(p, s) {
+					    return is_null(s)
+					        ? null
+					        : p(head(s))
+					            ? pair(head(s), () => stream_filter(p, stream_tail(s)))
+					            : stream_filter(p, stream_tail(s));
+					}
+				</code></pre>
+			</section>
+
+			<section id="streams-8">
+				<h1>Streams</h1>
+				<p>An advanced example: <em>a stream of prime numbers</em></p>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function is_divisible(x, y) {
+					    return x % y === 0;
+					}
+					
+					function sieve(s) {
+					    return pair(head(s),
+					        () => sieve(stream_filter(
+					                        x => !is_divisible(x, head(s)),
+					                        stream_tail(s))));
+					}
+					
+					const primes = sieve(integers_from(2));
+				</code></pre>
+			</section>
+
+			<section id="streams-9">
+				<h1>Streams</h1>
+				<p>An advanced example: <em>a stream of prime numbers</em></p>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center; margin-top: 60px">
+						<img src="images/1.svg" alt="1" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.45em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers>
+							function is_divisible(x, y) {
+							    return x % y === 0;
+							}
+							
+							function sieve(s) {
+							    return pair(head(s),
+							        () => sieve(stream_filter(
+							                        x => !is_divisible(x, head(s)),
+							                        stream_tail(s))));
+							}
+							
+							const primes = sieve(integers_from(2));
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="streams-10">
+				<h1>Streams</h1>
+				<p>An advanced example: <em>a stream of prime numbers</em></p>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center; margin-top: 60px">
+						<img src="images/2.svg" alt="2" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.45em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers>
+							function is_divisible(x, y) {
+							    return x % y === 0;
+							}
+							
+							function sieve(s) {
+							    return pair(head(s),
+							        () => sieve(stream_filter(
+							                        x => !is_divisible(x, head(s)),
+							                        stream_tail(s))));
+							}
+							
+							const primes = sieve(integers_from(2));
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="streams-11">
+				<h1>Streams</h1>
+				<p>An advanced example: <em>a stream of prime numbers</em></p>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center; margin-top: 60px">
+						<img src="images/3.svg" alt="3" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.45em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers>
+							function is_divisible(x, y) {
+							    return x % y === 0;
+							}
+							
+							function sieve(s) {
+							    return pair(head(s),
+							        () => sieve(stream_filter(
+							                        x => !is_divisible(x, head(s)),
+							                        stream_tail(s))));
+							}
+							
+							const primes = sieve(integers_from(2));
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="streams-12">
+				<h1>Streams</h1>
+				<p>An advanced example: <em>a stream of prime numbers</em></p>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center; margin-top: 60px">
+						<img src="images/4.svg" alt="4" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.45em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers>
+							function is_divisible(x, y) {
+							    return x % y === 0;
+							}
+							
+							function sieve(s) {
+							    return pair(head(s),
+							        () => sieve(stream_filter(
+							                        x => !is_divisible(x, head(s)),
+							                        stream_tail(s))));
+							}
+							
+							const primes = sieve(integers_from(2));
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="streams-13">
+				<h1>Streams</h1>
+				<p>An advanced example: <em>a stream of prime numbers</em></p>
+				<div style="display: flex;">
+					<div style="flex: 60%; text-align: center; margin-top: 60px">
+						<img src="images/5.svg" alt="5" style="width: 800px;">
+					</div>
+					<div style="flex: 40%; font-size: 0.45em; margin-top: 30px">
+						<pre><code class="javascript" data-trim data-line-numbers>
+							function is_divisible(x, y) {
+							    return x % y === 0;
+							}
+							
+							function sieve(s) {
+							    return pair(head(s),
+							        () => sieve(stream_filter(
+							                        x => !is_divisible(x, head(s)),
+							                        stream_tail(s))));
+							}
+							
+							const primes = sieve(integers_from(2));
+						</code></pre>
+					</div>
+				</div>
+			</section>
+
+			<section id="studio-worksheet-intro">
+				<h1>Studio Worksheet</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							Streams are a new (and possibly foreign) concept! Pay close attention.
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-worksheet-1">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function scale_stream(c, stream) {
+					    return stream_map(x => c * x, stream);
+					}
+					const A = pair(1, () => scale_stream(2, A));
+				</code></pre>
+				<div style="text-align: center;">
+					<img src="images/a-1.svg" alt="a-1" style="width: 800px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-2">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function scale_stream(c, stream) {
+					    return stream_map(x => c * x, stream);
+					}
+					const A = pair(1, () => scale_stream(2, A));
+				</code></pre>
+				<div style="text-align: center;">
+					<img src="images/a-2.svg" alt="a-2" style="width: 800px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-3">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function scale_stream(c, stream) {
+					    return stream_map(x => c * x, stream);
+					}
+					const A = pair(1, () => scale_stream(2, A));
+				</code></pre>
+				<div style="text-align: center;">
+					<img src="images/a-3.svg" alt="a-3" style="width: 800px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-4">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function scale_stream(c, stream) {
+					    return stream_map(x => c * x, stream);
+					}
+					const A = pair(1, () => scale_stream(2, A));
+				</code></pre>
+				<div style="text-align: center;">
+					<img src="images/a-4.svg" alt="a-4" style="width: 800px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-5">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function scale_stream(c, stream) {
+					    return stream_map(x => c * x, stream);
+					}
+					const A = pair(1, () => scale_stream(2, A));
+				</code></pre>
+				<div style="text-align: center;">
+					<img src="images/a-5.svg" alt="a-5" style="width: 800px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-6">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function mul_streams(a,b) {
+					    return pair(head(a) * head(b),
+					                () => mul_streams(stream_tail(a), stream_tail(b)));
+					}
+					const B = pair(1, () => mul_streams(B, integers));
+				</code></pre>
+				<div style="text-align: center;">
+					<img src="images/b-1.svg" alt="b-1" style="width: 800px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-7">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function mul_streams(a,b) {
+					    return pair(head(a) * head(b),
+					                () => mul_streams(stream_tail(a), stream_tail(b)));
+					}
+					const B = pair(1, () => mul_streams(B, integers));
+				</code></pre>
+				<div style="text-align: center;">
+					<img src="images/b-2.svg" alt="b-2" style="width: 800px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-8">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function mul_streams(a,b) {
+					    return pair(head(a) * head(b),
+					                () => mul_streams(stream_tail(a), stream_tail(b)));
+					}
+					const B = pair(1, () => mul_streams(B, integers));
+				</code></pre>
+				<div style="text-align: center;">
+					<img src="images/b-3.svg" alt="b-3" style="width: 800px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-9">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function mul_streams(a,b) {
+					    return pair(head(a) * head(b),
+					                () => mul_streams(stream_tail(a), stream_tail(b)));
+					}
+					const B = pair(1, () => mul_streams(B, integers));
+				</code></pre>
+				<div style="text-align: center;">
+					<img src="images/b-4.svg" alt="b-4" style="width: 800px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-10">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					function mul_streams(a,b) {
+					    return pair(head(a) * head(b),
+					                () => mul_streams(stream_tail(a), stream_tail(b)));
+					}
+					const B = pair(1, () => mul_streams(B, integers));
+				</code></pre>
+				<div style="text-align: center;">
+					<img src="images/b-5.svg" alt="b-5" style="width: 800px;">
+				</div>
+			</section>
+
+			<section id="studio-worksheet-11">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p><b><code>alt_ones</code></b></p>
+				<pre><code class="javascript" data-trim>
+					const alt_ones = pair(1, () => pair(-1, () => alt_ones));
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-12">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p><b><code>zeros</code></b></p>
+				<pre><code class="javascript" data-trim>
+					function add_streams(s1, s2) {
+					    return is_null(s1)
+					        ? s2
+					        : is_null(s2)
+					            ? s1
+					            : pair(head(s1) + head(s2),
+					                   () => add_streams(stream_tail(s1),
+					                                     stream_tail(s2)));
+					}
+					const alt_ones = pair(1, () => pair(-1, () => alt_ones));
+
+					const zeros = add_streams(alt_ones, stream_tail(alt_ones));
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-13">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p><b><code>s1</code></b></p>
+				<pre><code class="javascript" data-trim>
+					const s1 = pair(1, () => s1);
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-14">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p><b><code>s2</code></b></p>
+				<pre><code class="javascript" data-trim>
+					function add_streams(s1, s2) {
+					    return is_null(s1)
+					        ? s2
+					        : is_null(s2)
+					            ? s1
+					            : pair(head(s1) + head(s2),
+					                   () => add_streams(stream_tail(s1),
+					                                     stream_tail(s2)));
+					}
+
+					const s2 = pair(1, () => add_streams(ones, s2));
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-intro">
+				<h1>Studio In-Class</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							Incorporate the idea of wishful thinking in your solutions and explanation.
+						</p>
+					</li>
+					<li>
+						<p>
+							Recall that the expression that is returned by a nullary function is not evaluated until the
+							function is called.
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-in-class-1">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim>
+					function stream_pairs(s) {
+					    return is_null(s)
+					        ? null
+					        : stream_append(
+					            stream_map(
+					                sn => pair(head(s), sn),
+					                stream_tail(s)),
+					            stream_pairs(stream_tail(s)));
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-2">
+				<h1>Studio Worksheet</h1>
+				<h2>1a</h2>
+				<p><code>stream_pairs(ints)</code> will contain the pairs:</p>
+				<div class="list-code" style="text-align: left;">
+					<code>pair(1, 2), pair(1, 3), pair(1, 4), pair(1, 5),</code> <br>
+					<code>pair(2, 3), pair(2, 4), pair(2, 5),</code> <br>
+					<code>pair(3, 4), pair(3, 5),</code> <br>
+					<code>pair(4, 5)</code>
+				</div>
+			</section>
+
+			<section id="studio-in-class-3">
+				<h1>Studio Worksheet</h1>
+				<h2>1b</h2>
+				<p>
+					<code>stream_pairs</code> produces a stream containing all pairs \((p_1, p_2)\) where \(p_1\) occurs
+					before \(p_2\) in the given <em>finite</em> stream.
+				</p>
+				<p>
+					<code>stream_pairs</code> works by <em>wishful thinking</em>; it is assumed that
+					<code>stream_pairs</code> correctly returns a stream of pairs for the stream tail of the input
+					stream in the second argument of <code>stream_append</code>.
+				</p>
+			</section>
+
+			<section id="studio-in-class-4">
+				<h1>Studio Worksheet</h1>
+				<h2>1c</h2>
+				<p>
+					The programme never terminates.
+				</p>
+				<p>
+					<code>stream_pairs</code> calls itself recursively in the second argument of
+					<code>stream_append</code>; as per applicative order reduction, <code>stream_pairs</code> must be
+					called again.
+				</p>
+				<p>
+					For an infinite list like <code>integers</code>, this process never terminates and
+					thus, <code>stream_pairs</code> consequently never terminates.
+				</p>
+			</section>
+
+			<section id="studio-in-class-5">
+				<h1>Studio Worksheet</h1>
+				<h2>1d</h2>
+				<pre><code class="javascript" data-trim>
+					function stream_append_pickle(xs, ys) {
+					    return is_null(xs)
+					        ? ys()
+					        : pair(head(xs),
+					               () => stream_append_pickle(stream_tail(xs),
+					                                          ys));
+					}
+					
+					function stream_pairs2(s) {
+					    return is_null(s)
+					        ? null
+					        : stream_append_pickle(
+					            stream_map(
+					                sn => pair(head(s), sn),
+					                stream_tail(s)),
+					            () => stream_pairs2(stream_tail(s)));
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-6">
+				<h1>Studio Worksheet</h1>
+				<h2>1d</h2>
+				<p>
+					<code>stream_append_pickle</code> expects its second argument to be wrapped in a nullary function.
+				</p>
+				<p>
+					The caller function <code>stream_pairs2</code> passes the recursive call inside a nullary function
+					that is <em>activated</em> only when <code>stream_append_pickle</code> reaches the empty list at the
+					end of the first argument list.
+				</p>
+			</section>
+
+			<section id="studio-in-class-7">
+				<h1>Studio Worksheet</h1>
+				<h2>1e</h2>
+				<p>The first few elements of the result stream are:</p>
+				<div class="list-code" style="text-align: left;">
+					<code>pair(1, 2), pair(1, 3), pair(1, 4), ...</code>
+				</div>
+				<p>
+					The empty list at the end of the first argument list of <code>stream_append_pickle</code> is never
+					reached, as the stream is infinite.
+				</p>
+			</section>
+
+			<section id="studio-in-class-8">
+				<h1>Studio Worksheet</h1>
+				<h2>1e</h2>
+				<p>A possible remedy to more appropriately display values is to <em>interleave</em> the values.</p>
+				<pre><code class="javascript" data-trim>
+					function interleave_stream_append(s1, s2) {
+					    return is_null(s1) 
+					        ? s2
+					        : pair(head(s1), () => interleave_stream_append(s2,
+					                                   stream_tail(s1)));
+					}
+				</code></pre>
+				<p>
+					Order does not matter, and so we can afford to shuffle the values a little.
+				</p>
+			</section>
+
+			<section id="studio-in-class-9">
+				<h1>Studio Worksheet</h1>
+				<h2>1e</h2>
+				<p>What about <code>stream_pairs3</code>?</p>
+				<pre><code class="javascript" data-trim>
+					function stream_pairs3(s) {
+					    return (is_null(s) || is_null(stream_tail(s)))
+					        ? null
+					        : pair(pair(head(s), head(stream_tail(s))),
+					               () => interleave_stream_append(
+					                         stream_pairs3(stream_tail(s)),
+					                         stream_map(x => pair(head(s), x),
+					                                  stream_tail(stream_tail(s)))
+					                         ));
+					}
+				</code></pre>
+				<p>Nested interleaving!</p>
+			</section>
+
+			<section id="studio-in-class-10">
+				<h1>Studio Worksheet</h1>
+				<h2>1e</h2>
+				<p><code>stream_pairs3(integers)</code> will display pairs as:</p>
+				<div class="list-code" style="text-align: left;">
+					<code>pair(1, 2), pair(2, 3), pair(1, 3), pair(3, 4), ...</code> <br>
+					<code>pair(1, 4), pair(2, 4), pair(1, 5), pair(4, 5), ...</code> <br>
+					<code>pair(1, 6), pair(2, 5), pair(1, 7), pair(3, 5), ...</code> <br>
+					<code>pair(1, 8), pair(2, 6), pair(1, 9), pair(5, 6), ...</code>
+				</div>
+			</section>
+
+			<section id="studio-in-class-10">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p>Recall that a series can be represented as a stream of numbers.</p>
+				<p>Stream operations may therefore be simply abstracted as series operations.</p>
+			</section>
+
+			<section id="studio-in-class-11">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p><b><code>add_series</code></b></p>
+				<pre><code class="javascript" data-trim>
+					function add_streams(s1, s2) {
+					    return is_null(s1)
+					        ? s2
+					        : is_null(s2)
+					            ? s1
+					            : pair(head(s1) + head(s2),
+					                   () => add_streams(stream_tail(s1),
+					                                     stream_tail(s2)));
+					}
+
+					const add_series = add_streams;
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-12">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p><b><code>scale_series</code></b></p>
+				<pre><code class="javascript" data-trim>
+					function scale_stream(c, stream) {
+					    return stream_map(x => c * x, stream);
+					}
+
+					const scale_series = scale_stream;
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-13">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p><b><code>mul_series</code></b></p>
+				<pre><code class="javascript" data-trim>
+					function mul_series(s1, s2) {
+					    // Take the product of the first values of the series.
+					    return pair(head(s1) * head(s2),
+					                // Add the series that are...
+					                () => add_series(
+					                        // ...the scaled remaining series of s1 and...
+					                        stream_tail(scale_series(head(s2), s1)),
+					                        // ...the multiplied series of the original
+					                        // series of s1 and remaining series of s2.
+					                        mul_series(s1, stream_tail(s2))));
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-14">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p><b><code>mul_series</code></b></p>
+				<div style="text-align: center;">
+					<img src="images/mul.svg" alt="mul" style=" width: 500px;">
+				</div>
+			</section>
+
+			<section id="end">
+				<h1>That's All!</h1>
+			</section>
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/math/math.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			math: {
+				mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+				config: 'TeX-AMS_HTML-full',
+				// pass other options into `MathJax.Hub.Config()`
+				TeX: { Macros: { RR: "{\\bf R}" } }
+			},
+			hash: true,
+			center: false,
+			transition: "none",
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath]
+		});
+	</script>
+</body>
+
+</html>
