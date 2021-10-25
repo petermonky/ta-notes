@@ -18,4 +18,4 @@
 
 <a href="https://petermonky.github.io/slides/cs1101s/s10/" onclick="window.open('https://petermonky.github.io/slides/cs1101s/s10/', '_self');">S10: Studio Week 10</a>
 
-<a href="https://petermonky.github.io/slides/cs1101s/s11/" onclick="window.open('https://petermonky.github.io/slides/cs1101s/s11/', '_self');">S10: Studio Week 11</a>
+<a href="https://petermonky.github.io/slides/cs1101s/s11/" onclick="window.open('https://petermonky.github.io/slides/cs1101s/s11/', '_self');">S11: Studio Week 11</a>
