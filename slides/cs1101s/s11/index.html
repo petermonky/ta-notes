@@ -45,7 +45,7 @@
 		}
 
 		.slides section .list-code {
-			font-size: 0.7em;
+			font-size: 0.6em;
 		}
 
 		.slides section .list-intro {
@@ -524,7 +524,7 @@
 					                                     stream_tail(s2)));
 					}
 
-					const s2 = pair(1, () => add_streams(ones, s2));
+					const s2 = pair(1, () => add_streams(s1, s2));
 				</code></pre>
 			</section>
 
@@ -547,7 +547,7 @@
 			</section>
 
 			<section id="studio-in-class-1">
-				<h1>Studio Worksheet</h1>
+				<h1>Studio In-Class</h1>
 				<h2>1</h2>
 				<pre><code class="javascript" data-trim>
 					function stream_pairs(s) {
@@ -563,7 +563,7 @@
 			</section>
 
 			<section id="studio-in-class-2">
-				<h1>Studio Worksheet</h1>
+				<h1>Studio In-Class</h1>
 				<h2>1a</h2>
 				<p><code>stream_pairs(ints)</code> will contain the pairs:</p>
 				<div class="list-code" style="text-align: left;">
@@ -575,7 +575,7 @@
 			</section>
 
 			<section id="studio-in-class-3">
-				<h1>Studio Worksheet</h1>
+				<h1>Studio In-Class</h1>
 				<h2>1b</h2>
 				<p>
 					<code>stream_pairs</code> produces a stream containing all pairs \((p_1, p_2)\) where \(p_1\) occurs
@@ -589,7 +589,7 @@
 			</section>
 
 			<section id="studio-in-class-4">
-				<h1>Studio Worksheet</h1>
+				<h1>Studio In-Class</h1>
 				<h2>1c</h2>
 				<p>
 					The programme never terminates.
@@ -606,7 +606,7 @@
 			</section>
 
 			<section id="studio-in-class-5">
-				<h1>Studio Worksheet</h1>
+				<h1>Studio In-Class</h1>
 				<h2>1d</h2>
 				<pre><code class="javascript" data-trim>
 					function stream_append_pickle(xs, ys) {
@@ -630,7 +630,7 @@
 			</section>
 
 			<section id="studio-in-class-6">
-				<h1>Studio Worksheet</h1>
+				<h1>Studio In-Class</h1>
 				<h2>1d</h2>
 				<p>
 					<code>stream_append_pickle</code> expects its second argument to be wrapped in a nullary function.
@@ -643,7 +643,7 @@
 			</section>
 
 			<section id="studio-in-class-7">
-				<h1>Studio Worksheet</h1>
+				<h1>Studio In-Class</h1>
 				<h2>1e</h2>
 				<p>The first few elements of the result stream are:</p>
 				<div class="list-code" style="text-align: left;">
@@ -656,7 +656,7 @@
 			</section>
 
 			<section id="studio-in-class-8">
-				<h1>Studio Worksheet</h1>
+				<h1>Studio In-Class</h1>
 				<h2>1e</h2>
 				<p>A possible remedy to more appropriately display values is to <em>interleave</em> the values.</p>
 				<pre><code class="javascript" data-trim>
@@ -673,7 +673,7 @@
 			</section>
 
 			<section id="studio-in-class-9">
-				<h1>Studio Worksheet</h1>
+				<h1>Studio In-Class</h1>
 				<h2>1e</h2>
 				<p>What about <code>stream_pairs3</code>?</p>
 				<pre><code class="javascript" data-trim>
@@ -692,7 +692,7 @@
 			</section>
 
 			<section id="studio-in-class-10">
-				<h1>Studio Worksheet</h1>
+				<h1>Studio In-Class</h1>
 				<h2>1e</h2>
 				<p><code>stream_pairs3(integers)</code> will display pairs as:</p>
 				<div class="list-code" style="text-align: left;">
@@ -703,15 +703,15 @@
 				</div>
 			</section>
 
-			<section id="studio-in-class-10">
-				<h1>Studio Worksheet</h1>
+			<section id="studio-in-class-11">
+				<h1>Studio In-Class</h1>
 				<h2>2</h2>
 				<p>Recall that a series can be represented as a stream of numbers.</p>
 				<p>Stream operations may therefore be simply abstracted as series operations.</p>
 			</section>
 
-			<section id="studio-in-class-11">
-				<h1>Studio Worksheet</h1>
+			<section id="studio-in-class-12">
+				<h1>Studio In-Class</h1>
 				<h2>2</h2>
 				<p><b><code>add_series</code></b></p>
 				<pre><code class="javascript" data-trim>
@@ -729,8 +729,8 @@
 				</code></pre>
 			</section>
 
-			<section id="studio-in-class-12">
-				<h1>Studio Worksheet</h1>
+			<section id="studio-in-class-13">
+				<h1>Studio In-Class</h1>
 				<h2>2</h2>
 				<p><b><code>scale_series</code></b></p>
 				<pre><code class="javascript" data-trim>
@@ -742,8 +742,8 @@
 				</code></pre>
 			</section>
 
-			<section id="studio-in-class-13">
-				<h1>Studio Worksheet</h1>
+			<section id="studio-in-class-14">
+				<h1>Studio In-Class</h1>
 				<h2>2</h2>
 				<p><b><code>mul_series</code></b></p>
 				<pre><code class="javascript" data-trim>
@@ -761,8 +761,8 @@
 				</code></pre>
 			</section>
 
-			<section id="studio-in-class-14">
-				<h1>Studio Worksheet</h1>
+			<section id="studio-in-class-15">
+				<h1>Studio In-Class</h1>
 				<h2>2</h2>
 				<p><b><code>mul_series</code></b></p>
 				<div style="text-align: center;">
