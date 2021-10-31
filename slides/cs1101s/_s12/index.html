@@ -1,0 +1,463 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>S12: Studio Week 12</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/simple.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/highlight.js/src/styles/github.css">
+
+	<style>
+		.slides section {
+			text-align: left;
+		}
+
+		.slides section h1,
+		.slides section h2,
+		.slides section h3 {
+			font-weight: bold;
+		}
+
+		.slides section h1 {
+			font-size: 2em;
+		}
+
+		.slides section h2 {
+			font-size: 1.5em;
+		}
+
+		.slides section .latex {
+			font-size: 0.8em;
+		}
+
+		.slides section .rune {
+			position: relative;
+			top: 1.2em;
+			height: 80px;
+		}
+
+		.slides section .list-code {
+			font-size: 0.6em;
+		}
+
+		.slides section .list-intro {
+			font-size: 0.8em;
+		}
+
+		mark {
+			background-color: lightskyblue;
+			color: black;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section id="intro">
+				<h1>S12: Studio Week 12</h1>
+			</section>
+
+			<section id="updates">
+				<h1>Updates</h1>
+				<ul>
+					<li>
+						<p>Practical Assessment on Week 13 — planning on holding mock PA during studio.</p>
+					</li>
+					<li>
+						<p>Mastery Check #2 is open — arrange a time with me like before!</p>
+					</li>
+					<li>
+						<p>Join the Source Academy — Avenger recruitment and CP3108 project module.</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="recap">
+				<h1>Recap</h1>
+				<ol>
+					<li>
+						<p><a href="#/metalinguistic-abstraction-1">Metalinguistic Abstraction</a></p>
+					</li>
+				</ol>
+			</section>
+
+			<section id="metalinguistic-abstraction-1">
+				<h1>Metalinguistic Abstraction</h1>
+				<p>
+					Abstraction to the max; <em>self-abstraction</em>?
+				</p>
+				<p>
+					An evaluator that is written in the same language that it evaluates is said to be
+					<em>metacircular</em>.
+				<ul>
+					<li><b>meta:</b> self-referential</li>
+					<li><b>circular:</b> looping</li>
+				</ul>
+				</p>
+			</section>
+
+			<section id="metalinguistic-abstraction-2">
+				<h1>Metalinguistic Abstraction</h1>
+				<p>
+					But <em>why</em>?
+				</p>
+				<p>
+					<em>Practical</em>? Not really. <em>Insightful</em>? Definitely!
+				</p>
+				<p>
+					Communicate the <em>environment model</em>.
+				</p>
+			</section>
+
+			<section id="metalinguistic-abstraction-3">
+				<h1>Metalinguistic Abstraction</h1>
+				<p>
+					Key steps to the metacircular evaluator:
+				</p>
+				<div style="text-align: center;">
+					<img src="images/pea.svg" alt="pea" style="height: 240px;">
+				</div>
+				<p>
+					After parsing, enter an <em>evaluate-apply</em> loop.
+				</p>
+			</section>
+
+			<section id="metalinguistic-abstraction-4">
+				<h1>Metalinguistic Abstraction</h1>
+				<p>
+					<b><code>parse</code>:</b> literal comprehension of a programme.
+				</p>
+				<div style="text-align: center;">
+					<img src="images/st.svg" alt="st" style="height: 240px;">
+				</div>
+				<p>
+					<em>Tokenize</em> the input characters and determine validity of the programme.
+				</p>
+			</section>
+
+			<section id="metalinguistic-abstraction-5">
+				<h1>Metalinguistic Abstraction</h1>
+				<p>
+					<b><code>evaluate</code>:</b> classification of an expression or statement.
+				</p>
+				<div style="text-align: center;">
+					<img src="images/e.svg" alt="e" style="height: 240px;">
+				</div>
+				<p>
+					<em>Evaluate</em> until an applicable form is achieved.
+				</p>
+			</section>
+
+			<section id="metalinguistic-abstraction-6">
+				<h1>Metalinguistic Abstraction</h1>
+				<p>
+					<b><code>apply</code>:</b> application of an expression or statement.
+				</p>
+				<div style="text-align: center;">
+					<img src="images/a.svg" alt="a" style="height: 220px;">
+				</div>
+				<p>
+					<em>Apply</em> until either a literal value or an evaluable form is achieved.
+				</p>
+			</section>
+
+			<section id="studio-worksheet-intro">
+				<h1>Studio Worksheet</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							Try to take in the questions literally.
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-worksheet-1">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code class="javascript" data-trim data-line-numbers>
+					parse_and_evaluate(`
+					    const x = f(2);
+					    function f(y) {
+					        return y + 2;
+					    }
+					    x;
+					`);
+				</code></pre>
+				<p><code>f</code> is called before it is initialised; programme breaks!</p>
+				<p><b>Key idea:</b> reorder sequence of statements before evaluation.</p>
+			</section>
+
+			<section id="studio-worksheet-2">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code data-trim data-line-numbers="18-19">
+					function evaluate(component, env) {
+					    return is_literal(component)
+					           ? literal_value(component)
+					           : is_name(component)
+					           ? lookup_symbol_value(symbol_of_name(component), env)
+					           : is_application(component)
+					           ? apply(evaluate(function_expression(component), env),
+					                   list_of_values(arg_expressions(component), env))
+					           : is_operator_combination(component)
+					           ? evaluate(operator_combination_to_application(component),
+					                      env)
+					           : is_conditional(component)
+					           ? eval_conditional(component, env)
+					           : is_lambda_expression(component)
+					           ? make_function(lambda_parameter_symbols(component),
+					                           lambda_body(component), env)
+					           : is_sequence(component)
+					           ? eval_sequence(reorder_statements(
+					                           sequence_statements(component)), env)
+					           : is_block(component)
+					           ? eval_block(component, env)
+					           : is_return_statement(component)
+					           ? eval_return_statement(component, env)
+					           : is_function_declaration(component)
+					           ? evaluate(function_decl_to_constant_decl(component), env)
+					           : is_declaration(component)
+					           ? eval_declaration(component, env)
+					           : is_assignment(component)
+					           ? eval_assignment(component, env)
+					           : error(component, "unknown syntax -- evaluate");
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-3">
+				<h1>Studio Worksheet</h1>
+				<h2>1</h2>
+				<pre><code data-trim data-line-numbers="18-19">
+					function reorder_statements(stmts) {
+					    const split =
+					        accumulate((stmt, acc) => is_function_declaration(stmt)
+					                       ? pair(pair(stmt, head(acc)), tail(acc))
+					                       : pair(head(acc), pair(stmt, tail(acc))),
+					                   pair(null, null),
+					                   stmts);
+					    return append(head(split), tail(split));
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-worksheet-4">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p>Check names in every component of the syntax tree.</p>
+				<div style="text-align: center;">
+					<img src="images/lsv.svg" alt="lsv" style="height: 220px;">
+				</div>
+				<p><b>Key idea:</b> recursively traverse the syntax tree and <code>lookup_symbol_value</code> for all
+					name occurrences.</p>
+			</section>
+
+			<section id="studio-worksheet-5">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p>Follow the structure of <code>evaluate</code>.</p>
+				<pre style="max-height: 320px;"><code data-trim data-line-numbers style="max-height: 320px;">
+					function check_names(component, env) {
+					    is_literal(component)
+					    ? "ok"
+					    : is_name(component)
+					    ? lookup_symbol_value(symbol_of_name(component), env)
+					    : is_application(component)
+					    ? check_names(
+					              make_sequence(
+					              pair(function_expression(component), 
+					                   arg_expressions(component))),
+					              env)
+					    : is_operator_combination(component)
+					    ? check_names(operator_combination_to_application(component), env)
+					    : is_conditional(component)
+					    ? check_names(
+					          make_sequence(
+					              list(conditional_predicate(component),
+					                   conditional_consequent(component),
+					                   conditional_alternative(component))),
+					          env)
+					    : is_lambda_expression(component)
+					    ? check_names(lambda_body(component), 
+					                  extend_environment(
+					                      lambda_parameter_symbols(component),
+					                      list_of_unassigned(
+					                          lambda_parameter_symbols(component)),
+					                      env))
+					    : is_sequence(component)
+					    ? map(stmt => check_names(stmt, env),
+					          sequence_statements(component))
+					    : is_block(component)
+					    ? check_names(block_body(component), 
+					                  extend_environment(
+					                      scan_out_declarations(block_body(component)),
+					                      list_of_unassigned(
+					                          scan_out_declarations(block_body(component))),
+					                      env))
+					    : is_return_statement(component)
+					    ? check_names(return_expression(component), env)
+					    : is_assignment(component)
+					    ? check_names(make_sequence(
+					                      list(make_name(assignment_symbol(component)),
+					                           assignment_value_expression(component))),
+					                  env)
+					    : is_function_declaration(component)        
+					    ? check_names(function_decl_to_constant_decl(component), env)
+					    : is_declaration(component)
+					    ? check_names(make_sequence(
+					                      list(make_name(declaration_symbol(component)), 
+					                           declaration_value_expression(component))),
+					                  env)
+					          : error(component, "Unknown syntax -- check_names");
+					}
+				</code></pre>
+				<p><code>lookup_symbol_value</code> if component <code>is_name</code>.</p>
+			</section>
+
+			<section id="studio-worksheet-6">
+				<h1>Studio Worksheet</h1>
+				<h2>2</h2>
+				<p>Follow the structure of <code>evaluate</code>.</p>
+				<pre><code data-trim data-line-numbers>
+						function parse_and_check_names_and_evaluate(input) {
+						    const program = parse(input);
+						    const implicit_top_level_block = make_block(program);
+						    check_names(implicit_top_level_block, the_global_environment);
+						    return evaluate(implicit_top_level_block,
+						                    the_global_environment);
+						}
+				</code></pre>
+				<p>Global declarations are handled after <code>is_block</code>.</p>
+			</section>
+
+			<section id="studio-in-class-intro">
+				<h1>Studio In-Class</h1>
+				<p>Some stuff to note:</p>
+				<ul>
+					<li>
+						<p>
+							A naive solution and a better solution.
+						</p>
+					</li>
+					<li>
+						<p>
+							Exploit the concept of <em>objects</em>.
+						</p>
+					</li>
+				</ul>
+			</section>
+
+			<section id="studio-in-class-1">
+				<h1>Studio In-Class</h1>
+				<h2>1</h2>
+				<pre><code data-trim data-line-numbers>
+					const x = y;
+					const y = 42;
+					const z = "***" + x + "***";
+					z;
+				</code></pre>
+				<p>Returns <code>"****unassigned****"</code>.</p>
+			</section>
+
+			<section id="studio-in-class-2">
+				<h1>Studio In-Class</h1>
+				<h2>1</h2>
+				<p><b>Naive solution:</b> if symbol value is <code>"*unassigned*"</code>, throw error.</p>
+				<pre><code data-trim data-line-numbers="8-12" style="max-height: 300px;">
+					function lookup_symbol_value(symbol, env) {
+					    function env_loop(env) {
+					        function scan(symbols, vals) {
+					            return is_null(symbols)
+					                   ? env_loop(
+					                       enclosing_environment(env))
+					                   : symbol === head(symbols)
+					                      ? (head(vals) === "*unassigned*"
+					                         ? error(symbol, 
+					                                 "Cannot access name before initialization:")
+					                         : head(vals))
+					                      : scan(tail(symbols), tail(vals));
+					        }
+					        if (env === the_empty_environment) {
+					            error(symbol, "Unbound name");
+					        } else {
+					            const frame = first_frame(env);
+					            return scan(frame_symbols(frame),
+					                        frame_values(frame));
+					        }
+					    }
+					    return env_loop(env);
+					}
+				</code></pre>
+			</section>
+
+			<section id="studio-in-class-3">
+				<h1>Studio In-Class</h1>
+				<h2>1</h2>
+				<p>What makes the naive solution, naive?</p>
+				<pre><code data-trim data-line-numbers>
+					const x = "*unassigned*";
+					const y = 42;
+					const z = "***" + x + "***";
+					z;
+				</code></pre>
+				<p>Throws error!</p>
+			</section>
+
+			<section id="studio-in-class-4">
+				<h1>Studio In-Class</h1>
+				<h2>1</h2>
+				<p><b>Better solution:</b> represent the dummy value to one that is <em>unique</em>
+					and
+					<em>inaccessible</em> by user programmes.
+				</p>
+				<pre><code data-trim>
+					const unassigned = () => NaN;
+				</code></pre>
+				<p>Instead of a primitive string comparison, perform an object comparison.</p>
+				<p>Full modified MCE <a
+						href="https://sourceacademy.nus.edu.sg/playground#chap=4&exec=1000&ext=NONE&prgrm=PTAEGUEkGEAVQFLlAFgHQEY0oFA5KAGYCuAdgMYAuAlgPakDORATrQLYQzxKqaZ4kKNeqACmANwCGAG2KTKogBTl2AB3qjSlADRjS4gJSgA3jlDnQzUZWLNSoagwD606guYzlajVoNmLARYA-KCu7jJOUrJKKmzqpJqUfoEpAFwOzqSSbDHeCb7%2BKcGhtLQA1sSqTgwAnmwARrTSkTLESrUNTU60hE5ZOV5xPkm6moaFRaDpjk6Sqqqu5PJ0pIPxicmT5iFzCzWKEq3ySoJUK06iAB6qVgwMK2vDBqP6zxNbKa4MlN29UW0MRSSZgAcwu11u93ogNi618L0Mmy202ctFUog8lFozCcsXq1CywlWsKe7xSIUOsmOijRGPk2Nx7HxhPOWNm80Wy3oj3yIzJHxSYyRkxRjNIABM3CtPCTecKihSomLJUSZXlEgj5WkMi5svVxZJwTdRHcHrKNvyAiE2JIyqInKciYppHqDU5VMDstYMdU6o1pDD1fDLQLJi6Gm7GuL9ub4XpxgLRQxRABHNoUXJDOUh7ZiJXJtOacjtVPp4vVSjHHJaQNZjaanNTHX1aS0chlHkWgWKiIttsd2M6eNawKiqw2OwVquJTsFbt5iLj2ykKcKauUWdDoWN0WO87i0TkF2Ys1BpKNntUhSKPf0JwHo9ONkqRiVrT3w-STfPYc7nUP48uWJM8RytBdmgAz0nUHBtEx1SRTRBUh12-C9wNmRDkJnGDfzgjFWGYTddAAIjIMpSFoAB3exai0SRLlAABaRjwLkBRiIMABuHAAF8BDIM4RF2aR9kEXRgRBBgjFMAJqEIUBFBmG5qDYKVxHtW9VkEAxpMtJc7FAYSandZgVLUjSBKdMTDNBKTuICHixADUQHHkxTnBJMhxQdSyHm03TJhfb5LBNYhpEoUAAF5WOpTSnCjUSyDeUMUqKK4FAlC59GoVgsK0RRG1SgU4o9DwcncQFtO0Qqiq2CSGGq2qmosOKxhy%2BgUP8ri9OsZcdX0ld-iUW4wvPIqQgGlpojFDKNxG8LQKKdIvNEQgCVEcV7IsRzRGckxLXw7EbzIEiyIo6iiF8kRKBqdEmJYoyOK28w%2BL4nBNNCRwfh6KaAQOa4GuHfaAgG0AbVUIFQSigA%2BGLrwkzVRgB7q3o%2ByllSleg1TrLRNWBixQZmShmGISgAAt9kpNjcglTGsmaY1JSWa9Bx-IVFtzKnqRfFVpWaILS2wkDYI%2BdIuZZ%2Bheax5oZHcFl1O-TVuNRq77HRgsy3aSg2EoQGhXx8w5IUmZRDiG7qkFjNFG%2BHWpICopQZWtaEk2iYdr2o33N1b5V1Nmcbd1nSDcCUHxZOHKfe%2Bad8oDqSlbdpzk2DgIgoitbmEj7WfiGqLQEKsObwjn4o7Xf2s7j4dnsCT2ZkmobC4z4us9%2B0Qg5kgVQfTzOdZbquHMTlz24%2BUP80t4tFFuJvo9163y7Z14%2B%2B2t3eP4oQVlABglhXWhSY-I8oJWWs4SSYPCecDWi0zY%2BOdAHZyHIYg2DC6ldk0cVGuawJSDC6QP8-ixwbWy3t0XekETzQj-v-QIF8My%2B3XEfJ4Ok-wzDAUBVC84vgblQUSX0nQvysxvukb%2B0hpDK1XoJNWSo%2BztiIkDIeoBU6gASrnahZR4q0GjN%2BKujDWxLADLnTekht6gM-AfaEigErdRTtCCKZAEL3CQhtJg0VMG-CcHIzCG1nRthkHZCYI8jjXgSkjDK3k2q5RQrw3RkCoH-w0Qol2gMaq2I%2BOzMh%2BAwDQAABIAEEAByABxAAogAEVAF4oJAAlIJqQPGgHsdQRR4oQqEAxEwLEhkIA72YMWUAQ04nk3kBkUAII5AeC0KIDaoAMn1BcnI%2B%2BJp7gtlEHE%2BoNQHAVOYMaBQySbi0BBGVBgaBQA%2BNIO0qwqSrAZjiZRHe0hkniloNUsmLkABWtB6jpEkKAD0OVxLMA8O07EcSPobNWYeSgOBGEJKSbnRQRhIqwz8ZIPx3F3qq0%2Bj7H6NyXbWz9E0KSp9eoGUAR0f0MN4lZE0e-De-yAwo3IUSdCk0S5%2B3yjhfW9DQY2jtE4OurQlAF0mlcY0ppuSsxsS41xrwEXvLXiIdG8jEl5Q3Bi14wdGE52igXJlSF1wtyNJCU8OM%2BRUosEKKuvKVxgq6PXKV-KZX4OFnkgl8cQbAvsENdxaMlTYOFcfPG9CpW4P9C3Aqkw9V3kVYrPOkwC6WsGgSwVjT9VPERgdBe-hHYSlWutV2b0CCaSYIQVgHAoBwEQMgdAWAABMiL15E0kCCEEG0XBfVoeTe0lYQT23MGfd0kgcrflAAAMhLaAFZkhxTFsirW5ZWak3ao%2BTMMIdIlUitzSFCc9hE3JtTZg2hxFW0eGkE9FeH1h0RHrqzEwAR9EaoraIKtihKzUHbdfWlH0cX2knV%2BIanbQYDqHW4NtxFdD7qbfSntmQvTFqxQu3tKbvIDpwsRfoogx0qyvWDW09p31-LwQehdR731nthYBy9FDwOmp%2Bv%2Bmd97u2LuXau9diDINIpmPKoWHagWIcff29Nr6sNaE-XSqDxHi5wrvfOxDlbq0ocUHRldhbUNyh0gij6FGBUkqFeSkCuG%2BpMYYwxghm7m3OAddR9VeHnDZqfWm74g7U5CJ%2BA6jioAAA%2BGnGz4efYRs8JEpCmUkM0vegEiTqa0zp2TSb5MvoM6AYicU1Nie-Q6k1TQpMEwXYqtR-6hMse-DpMhH13NDWdWS4COGEOCaXfRwLImQLBZXmRpF26xRR3fJJ9956nU8ZdfQIDiGj3Kay6I8BpAwM5ZVdNfLkXXNQZba6Q0dWoRRevgJgyumFOsoc0O5rEW2ukYnQN0qXp3AeYDF5vNC7QVwr816XQAW11BY4x88M%2BpDQJWm122LyGEuBdE%2Bh9e6WNtulaw8Mb5U0m6EkZ1%2BwR6zstYhAVyrugrvegzrdjhNQGsYecM58raD4MAEg53Sb6t1%2BzIqSKA-3hV4bHy4fmfOHB-jMWDKqImbQjAa3v3I7ESuD7FUduHq%2Bni1atCY146gwTir7DOHwZo31LHlOcIAGYadIuR0%2BWgGW3yqc-KT2bv7%2BcqbM4T81qU6dAT6Leilzif24qe4Nh4iuAgy5wcTtJit1ctVVhL%2Bn22jspY%2BrXDVcDsMdaHvmuTBHFOvpRZWUuJGufr2JS9yL03QbLdYxsP7CaPKSzptja3zOus2b7Xph3fWeYh%2BaBd%2BglntMCih-pmHjm4%2BqmaKi9ciPv1Z75iZDa1BmZXyeAbMnPtsc4VxyFj5hfpYZctr16LhQq8-Brw56n9eC-B%2Bz7McKGJ5bl7lJX4D5Ou8Z858dkQMwYHjwDrm23tn7cbgDiRBfH63ciC35bmss8dbSQsO3hdvvD9JB3-YLuU8Xfr7nuP2jcWL96L4h9Se%2B%2BZ6x2Xwuhj3-e%2BNbOCmyqDmxb4v4-4yZ9A-zgEAH-bey35or362wQGQ6ZDQF-5zwB5z7OCsLC6QF27R6t4GqOasL55QasIM4xjo7h72Dn4EKwEnai64G54bD3afIbjESkG6AsG%2BCz7XrdDoiYgMh4gEjA7o5g4n4Q4R7qJZDMDGS0hCE4giEsh8Y4ZWap44GiFyECF0hYhKFMiiHQQgQMHYEyHAjyGCH0j6ENCGGupj7GASHmA0E6gEE9aDpyLaEKFWGMg2EqGVZX7NhaEWG6HCEGF%2BF3qOG2reb4Gr6EGDrMjmE6GKE%2BEJEWYBFeF6GTZ4Es6T5s4OZ17jpI5FxJFCLVpM5SEPa5GEBU4BHJg8wlESjZGY5VG0Iz6m4fLpbCSl5oKtSe5tb7KlL8qJ6MBFY5GKbERdHMwrBnrq69Gkr9E2SDGJCq7QhYH2AZGhG%2BGy5siTFiFt7SKvigAbHMC5zHFZGsxVz5oeHBHJHKF7HXxoSdEcjdFOjpb-rHHJRioBADo34NFlFJaEJK72i7GvGi7vGWF6GfFfHmA-HFFeGNEK7QmTB1GSx-GrZ8HwTPFTGqFh7RGoFPixFuFEZYlARkHc4G7DHe5n7P6JYdoBESQrGMBUlP77Yra0kbq0qBqqzBqhqcARo8DRpoDs7xqmHEykwUyKCXCjHSGNBNBLqrBSlRFbAhCXB-iHSESXAkSynSDyliDXAXIbS6BWDFjUDqTihkmB4Oi6L7CKnGC7YGQACELhJM5MNpXEoAX6UG6Wmkig2uX2TCP2hqzhJW3gXkPkV6YGfpgMxilchR36MwnkmUPphA0p-BrhPxJEiZ3kmkFpIgJUno12GcN4x%2BHeFO1RhAugdeHpIp1%2BBu22KZs6pZ2OFZoAPe1ZqW68rU2UFiM4DZdpTZlOLZM%2B7ZW6ou%2BK0QXgFSvgbBR645bQYGL4s0AR5u3aZq%2B6bBaeimQ0JEc52%2BJh9gu5M0M465GOtBNJgW%2B6axegR4tA9wpAYI5iHUM4mK9p9gDGEqI5RRjcDoZUhK7K-Z1Jy6H5b0jCmaFwZsxkj5LKucxCpCNZQJP5t6iqgMQ0gKAFiGuyhEyFuW0Qdkn5%2BOv5k2lUv5JZgF1aIaXo7pnp3OhFqFN4JFjZv%2BgWFFOQVF8F6Ub8WU4g7ULKAG-oKF1iTCCE9omKwZmgII5MfFAKDydaOp95klUQUkaEmFig3pv5UlAYOFFc9QwlXFgJclElZMGlgKAAPKEOJQpbojfBSAckdMRFiEsjaGMosY-IkEwAwJUAsNQBtOkMRKAAANRKm1TfCmT3lyT7DIVGCBVgZ%2BWBV67mAhUEggjhWKCKVIJ4S2WET2WlBECiCUQuXwIbyeWuA%2BWOYBVBVFSJVhWEARVwqArRUkTlXxUbzExJUpVpVXmtjlCVCTZmqKpBka4fJjAuClAQyiWTAfSCKrDYU1ZoWFT5qwXGU3yTAUj6AjVohS5QJFith3kPndlPn5TszNXpCKpRR1pMaRXNXmAEDeL%2BLBJhIRLRKxJQIhCKBIbVppVnXRQ-IbRXWBA2UEQaW6B-WhjETQBCIUQRSSANJ3CgDvpMKrTYguQEhSgyDUAABeQEqQHEINFg6QTGaVuNy1yIG8W8zGK2kVugDGHVi8L0lonsYwX19a4FIBkF%2B1LKnadqmVQNjmAAqqQI0F5HDV6GOpMO7EnPQoFDIiwF6LnL8SxX%2BYYLTSHD5mTQrURfRZRZSs1OrXRQrclmLcvBUfGOtWNZ6tRevMar5vXP1TVgNfrt%2BsNV1WbYYMnA7VBlNcZVpZzQ7A%2BmgSQktc1ateIKbQcBQDtUlVxTxShEdZ-CdXCkzRdXVcTeSBvNYE4ATYJVECnaOKTUIuTV%2BJTdUheVZVIkUI5PTW5IzbWtFGBcAebFBeuD7YKNzbbaRALTvBKMLTkPdIZJhHnmXSkOLYPIVIwgrXLcUQrWHUrfNarfnerchZraxboLrQSsRZRYPYEHxA5M4U7aNdPZyWAEGiwOwHydwFGnwLgB2aYcpKpDQOpOGRQsdKQKmS4YST8SdI5rfeZKRtffYN-fffaCpAsIgT0UlIxSyfFitv5JxO2YwgA6aRZFesouwZtd8emsRHRmBhYHRilFCeg%2BMShtg%2BYChng9rUephcQzsoWicaGPgxYI9l9FQ5gmQ-yEejMLBWBhwz-B8PQzCRg5KAwAsJIDUGBoI8I%2B0lsHw6g8ROqcQ%2BqXQ%2BQxgzaOTLMPUAwGeio2TGo0wJMNI0ev5VQxYJKboL9hCgxIFZI-oxg4xEY%2BYCY6AGY48qAAxCxFY0o%2BMYxNccQwxAEM4%2BYCxL49Y%2BMQAFR2MKSamOMPKwwMQhOOPmDBMcHADhMONOMxOgBgDuNsMYMACkKTkTaTLjoAOT8ToAiTigxENdRjqT0TRTNdUTHjHBDpta1TBTtTDEzT0Uv2jTFTJl%2BTpj7ToAZl5g3T2T4xJlkUdjNT5jQz0UDTYzHB0M-TUTMzsMIz5TxE0MkzuggQ0zzjDEWz6zPTxEDp4TRTfjazoATp5gUp-I3U8Dpkd9iDj9OCyFUUEwgCdG72jz5kLzh89z0tCDD9cUZyFyyiHzcwz9EKFDPzgDYG5%2BXU2tOysLzzQa3UVygLKLD9pWusucA6R6TsfqYGhLLs0jXxR6kApAzsbgojOzlL1LN0ZLYqR6WjTgsAkAxDrL7LTLVKLL8g2jQSVDrLQSPLLiR6zyfi4TErOdTUALhxQL9oOLRF7zAQgC5AEKTG5AP4CrYuNYcrwUOrSrqFKrACkL6rzjdBOk3zZkgDurgcbynGHIxkOryZn9EkmCr9RkTgBIMhB4zAIkkdqykgUgm8pkIBaDAoOrwDOp64YDL9AxHrGJyYNgVQjdM4r9HFmUab%2BUr8jRLrBu2FuNqUhrMi4ulNRbKQub1a%2BbV63Q9Q5yVATiSJWwJbr44uqForn8ddEFUdPZvBKWoFKyTgIIrYOlCe7N64AivUqbE76bbyBAL46kpA3lWgl036GSB4MgoAlEbgZM9a1SaIcSOp6k0g6QcScTpUScBIqgpM5727HgqgyL-SZUHSmSrCd7YcTCvCZQr7I7GyW72blyH0l7wJWb-w1I17pMnaDzz72QucIHikpAN7SQ3C0t0bpebgvOVQx7u08U37uc6WuBfSAy2Qm9BiV4Sg6H5AmHWI2HEguHrCSLoYYFf7Y7vbB1KHKWBACgwUSwyYDAeAIHswYHhiSgAABkVBi4cQxNFMRCEz9eKGE9xIwu0tFCgDGsp9LejbnHJyE2E%2BVRY45np0p3nOjZxGJ%2Bi3gDgEAA&variant=default">here</a>.
+				</p>
+			</section>
+
+			<section id="end">
+				<h1>That's All!</h1>
+			</section>
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/math/math.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			math: {
+				mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+				config: 'TeX-AMS_HTML-full',
+				// pass other options into `MathJax.Hub.Config()`
+				TeX: { Macros: { RR: "{\\bf R}" } }
+			},
+			hash: true,
+			center: false,
+			transition: "none",
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath]
+		});
+	</script>
+</body>
+
+</html>
