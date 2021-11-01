@@ -21,3 +21,5 @@
 <a href="https://petermonky.github.io/slides/cs1101s/s11/" onclick="window.open('https://petermonky.github.io/slides/cs1101s/s11/', '_self');">S11: Studio Week 11</a>
 
 <a href="https://petermonky.github.io/slides/cs1101s/kye/" onclick="window.open('https://petermonky.github.io/slides/cs1101s/kye/', '_self');">Know Your Environment</a>
+
+<a href="https://petermonky.github.io/slides/cs1101s/s12/" onclick="window.open('https://petermonky.github.io/slides/cs1101s/s12/', '_self');">S12: Studio Week 12</a>
