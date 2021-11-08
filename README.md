@@ -31,4 +31,4 @@
 
 <a href="https://hackmd.io/@petermonky/pseudora" onclick="window.open('https://hackmd.io/@petermonky/pseudora', '_self');">Pseudo Reading Assessment</a>
 
-<a href="https://hackmd.io/@petermonky/pseudora" onclick="window.open('https://hackmd.io/@petermonky/pseudopa', '_self');">Pseudo Practical Assessment</a>
+<a href="https://hackmd.io/@petermonky/pseudopa" onclick="window.open('https://hackmd.io/@petermonky/pseudopa', '_self');">Pseudo Practical Assessment</a>
