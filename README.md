@@ -24,7 +24,6 @@
 
 <a href="https://petermonky.github.io/slides/cs1101s/s12/" onclick="window.open('https://petermonky.github.io/slides/cs1101s/s12/', '_self');">S12: Studio Week 12</a>
 
-
 ### Pseudo Assessments
 
 <a href="https://hackmd.io/@petermonky/mc1" onclick="window.open('https://hackmd.io/@petermonky/mc1', '_self');">Mastery Check #1</a>
@@ -35,7 +34,6 @@
 
 <a href="https://hackmd.io/@petermonky/pseudopa" onclick="window.open('https://hackmd.io/@petermonky/pseudopa', '_self');">Pseudo Practical Assessment</a>
 
-
 ### Supplementary Resources
 
 <a href="https://hackmd.io/@petermonky/slpf" onclick="window.open('https://hackmd.io/@petermonky/slpf', '_self');">Source List Processing Functions</a>
@@ -43,3 +41,9 @@
 <a href="https://petermonky.github.io/slides/cs1101s/kye/" onclick="window.open('https://petermonky.github.io/slides/cs1101s/kye/', '_self');">Know Your Environment</a>
 
 <a href="https://hackmd.io/@petermonky/mce" onclick="window.open('https://hackmd.io/@petermonky/mce', '_self');">The Metacircular Evaluator</a>
+
+## CS2030S
+
+### Lab Slides
+
+<a href="https://petermonky.github.io/slides/cs2030s/w3/" onclick="window.open('https://petermonky.github.io/slides/cs2030s/w3/', '_self');">W3: Lab Week 3</a>

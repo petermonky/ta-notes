@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>W3: Lab Week 3</title>
+
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/idea.css" />
+
+    <style>
+      li {
+        margin: 15px 0;
+      }
+
+      .slides section {
+        text-align: left;
+      }
+
+      .slides section h1,
+      .slides section h2,
+      .slides section h3 {
+        font-weight: bold;
+      }
+
+      .slides section h1 {
+        font-size: 2em;
+      }
+
+      .slides section h2 {
+        font-size: 1.5em;
+      }
+
+      .slides section .latex {
+        font-size: 0.8em;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section id="intro">
+          <h1>W3: Lab Week 3</h1>
+        </section>
+
+        <section id="attendance-start">
+          <h1>Attendance QR</h1>
+          <div style="text-align: center">
+            <img src="images/w3-qr.png" alt="w3-qr" style="width: 520px" />
+          </div>
+        </section>
+
+        <section id="welcome">
+          <h1>Welcome!</h1>
+          <p>Hyunseok <b>"Peter"</b> Jung</p>
+          <p><a href="mailto:h.jung@u.nus.edu">h.jung@u.nus.edu</a></p>
+          <p>@petermonky</p>
+        </section>
+
+        <section id="introduction">
+          <h1>Introduction</h1>
+          <ol>
+            <li>
+              <p>Full name and/or alias</p>
+            </li>
+            <li>
+              <p>Thoughts on computer science so far?</p>
+            </li>
+          </ol>
+        </section>
+
+        <section id="communication-channels">
+          <h1>Communication Channels</h1>
+          <ul>
+            <li>
+              <p>
+                <a href="https://nus-cs2030s.github.io/2122-s2/"
+                  >Module Website</a
+                >
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="https://piazza.com/class/kwx6svvqrhw3qm/">Piazza</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="https://t.me/+2Vq-Vn6n-e4yNmVl/">Lab Group Telegram</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                <a href="https://t.me/joinchat/VdAvmNKYGsm7D7wR/"
+                  >Unofficial Module Telegram</a
+                >
+              </p>
+            </li>
+            <li>
+              <p>Ask me!</p>
+            </li>
+          </ul>
+        </section>
+
+        <section id="setting-expectations-1">
+          <h1>Setting Expectations</h1>
+          <p><b>What I am professionally obliged to do:</b></p>
+          <ul>
+            <li>Provide help during lab sessions</li>
+            <li>Grade your work</li>
+          </ul>
+          <p><b>What I am not expected to do:</b></p>
+          <ul>
+            <li>Be your personal human debugger</li>
+            <li>Be a Java / coding / Vim / CS2030S encyclopedia</li>
+          </ul>
+        </section>
+
+        <section id="setting-expectations-2">
+          <h1>Setting Expectations</h1>
+          <p><b>What I will try my best to do:</b></p>
+          <ul>
+            <li>Help bridge the learning curve</li>
+            <li>
+              Give constructive and timely feedback on your work and progress in
+              CS2030S
+            </li>
+            <li>Provide additional learning resources</li>
+            <li>
+              Answer your CS2030S and non-CS2030S queries inside and outside of
+              lab sessions
+            </li>
+          </ul>
+        </section>
+
+        <section id="recap">
+          <h1>Recap</h1>
+          <ol>
+            <li>
+              <p><a href="#/encapsulation-1">Encapsulation</a></p>
+            </li>
+            <li>
+              <p><a href="#/information-hiding-1">Information Hiding</a></p>
+            </li>
+            <li>
+              <p><a href="#/tell-dont-ask-1">Tell, Don't Ask</a></p>
+            </li>
+            <li>
+              <p><a href="#/inheritance-1">Inheritance</a></p>
+            </li>
+            <li>
+              <p><a href="#/polymorphism-1">Polymorphism</a></p>
+            </li>
+          </ol>
+        </section>
+
+        <section id="encapsulation-1">
+          <h1>Encapsulation</h1>
+          <p>The bundling of data and operations into a single unit.</p>
+          <p>
+            A way to isolate lower-level implementations from the client —
+            creates an <em>abstraction barrier</em>.
+          </p>
+          <pre><code class="java" data-trim data-line-numbers>
+          class Circle {
+            double x;
+            double y;
+            double r;
+
+            double getArea() {
+              return 3.141592653589793 * r * r;
+            }
+          }
+        </code></pre>
+        </section>
+
+        <section id="information-hiding-1">
+          <h1>Information Hiding</h1>
+          <p>
+            The mechanism for restricting access to some or all of a unit's
+            components.
+          </p>
+          <p>
+            Prevents the client from making assumptions about the internal
+            representation of a class.
+          </p>
+          <pre><code class="java" data-trim data-line-numbers>
+          class Circle {
+            private double x;
+            private double y;
+            private double r;
+
+            public double getArea() {
+              return 3.141592653589793 * r * r;
+            }
+          }
+        </code></pre>
+        </section>
+
+        <section id="tell-dont-ask-1">
+          <h1>Tell Don't Ask</h1>
+          <p>The enforcement of encapsulation and information hiding.</p>
+          <p>
+            Perform operations without the knowledge of the internal
+            representation a class.
+          </p>
+          <pre><code class="java" data-trim data-line-numbers="1-6|8-9">
+          // don't ask...
+          double cX = c.getX();
+          double cY = c.getY();
+          double r = c.getR();
+          boolean isInCircle =
+            ((x - cX) * (x - cX) + (y - cY) * (y - cY)) <= r * r;
+
+          // ...tell!
+          boolean isInCircle = c.contains(x, y);
+        </code></pre>
+        </section>
+
+        <section id="inheritance-1">
+          <h1>Inheritance</h1>
+          <p>
+            The mechanism by which one class inherits the data and operations of
+            another class.
+          </p>
+          <p>Allows for the implementation of an <em>IS-A</em> relationship.</p>
+          <pre><code class="java" data-trim data-line-numbers>
+          class ColouredPoint extends Point {
+            private Colour colour;
+          
+            public ColouredPoint(double x, double y, Colour colour) {
+              super(x, y);
+              this.colour = colour;
+            }
+          }
+        </code></pre>
+        </section>
+
+        <section id="polymorphism-1">
+          <h1>Polymorphism</h1>
+          <p>
+            The apparent transformation of existing code in a run-time context.
+          </p>
+          <p>
+            Inspired by method overriding — method signature must be taken into
+            account.
+          </p>
+          <pre><code class="java" data-trim data-line-numbers>
+          class Circle {
+            :
+            @Override
+            public boolean equals(Object obj) {
+              if (obj instanceof Circle) {
+                Circle circle = (Circle) obj;
+                return (circle.c.equals(this.c) && circle.r == this.r);
+              }
+              return false;
+            }
+          }       
+        </code></pre>
+        </section>
+
+        <section id="lab_0-1">
+          <h1>Lab 0</h1>
+          <p>Solution review.</p>
+        </section>
+
+        <section id="lab_1-1">
+          <h1>Lab 1</h1>
+          <p>Skeleton overview.</p>
+        </section>
+
+        <section id="lab_1-2">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-1.svg" alt="d-1" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-3">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-2.svg" alt="d-2" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-4">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-3.svg" alt="d-3" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-5">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-4.svg" alt="d-4" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-6">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-5.svg" alt="d-5" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-7">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-6.svg" alt="d-6" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-8">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-7.svg" alt="d-7" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-9">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-8.svg" alt="d-8" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-10">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-9.svg" alt="d-9" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-11">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-10.svg" alt="d-10" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-12">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-11.svg" alt="d-11" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-13">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-12.svg" alt="d-12" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-14">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-13.svg" alt="d-13" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-15">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-14.svg" alt="d-14" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-16">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-15.svg" alt="d-15" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-17">
+          <h1>Lab 1</h1>
+          <code>Lab1.3.in</code>
+          <div style="text-align: center">
+            <img src="images/d-16.svg" alt="d-16" style="width: 450px" />
+          </div>
+        </section>
+
+        <section id="lab_1-18">
+          <h1>Lab 1</h1>
+          <p><b>What if we want to:</b></p>
+          <ul>
+            <li>hide the internal representation?</li>
+            <li>change the simulation logic?</li>
+            <li>add a new event type?</li>
+          </ul>
+        </section>
+
+        <section id="lab_1-19">
+          <h1>Lab 1</h1>
+          <p><b>What if we want to hide the internal representation?</b></p>
+          <p>
+            <code>ShopSimulation</code> has publicly declared fields, and so can
+            be changed by the client.
+          </p>
+          <p>How can this implementation be hidden away?</p>
+          <p><em>(Hint: Access modifiers!)</em></p>
+        </section>
+
+        <section id="lab_1-20">
+          <h1>Lab 1</h1>
+          <p><b>What if we want to add a new event type?</b></p>
+          <p>
+            <code>ShopEvent</code> is very inefficient; manually checks the
+            event type.
+          </p>
+          <p>
+            How can we make the simulation more scalable as new event types are
+            introduced?
+          </p>
+          <em
+            >(Hint: Replace <code>ShopEvent</code> with classes for each
+            individual event.)</em
+          >
+        </section>
+
+        <section id="lab_1-21">
+          <h1>Lab 1</h1>
+          <p><b>What if we want to change the simulation logic?</b></p>
+          <p>
+            It is challenging to extend the current code with new simulation
+            logic (e.g., new event types or new customer behaviour).
+          </p>
+          <p>How can each component of the simulation be compartmentalised?</p>
+          <p>
+            <em>
+              (Hint: A shop simulation involves a shop, customers, and
+              counters.)
+            </em>
+          </p>
+        </section>
+
+        <section id="attendance-end">
+          <h1>Attendance QR</h1>
+          <div style="text-align: center">
+            <img src="images/w3-qr.png" alt="w3-qr" style="width: 520px" />
+          </div>
+        </section>
+
+        <section id="end">
+          <h1>That's All!</h1>
+        </section>
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/math/math.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        math: {
+          mathjax:
+            "https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js",
+          config: "TeX-AMS_HTML-full",
+          // pass other options into `MathJax.Hub.Config()`
+          TeX: { Macros: { RR: "{\\bf R}" } },
+        },
+        hash: true,
+        center: false,
+        transition: "none",
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+      });
+    </script>
+  </body>
+</html>
