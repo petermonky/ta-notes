@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <title>W4: Lab Week 4</title>
+
+  <link rel="stylesheet" href="dist/reset.css" />
+  <link rel="stylesheet" href="dist/reveal.css" />
+  <link rel="stylesheet" href="dist/theme/simple.css" />
+
+  <!-- Theme used for syntax highlighted code -->
+  <link rel="stylesheet" href="plugin/highlight/idea.css" />
+
+  <style>
+    li {
+      margin: 15px 0;
+    }
+
+    .slides section {
+      text-align: left;
+    }
+
+    .slides section h1,
+    .slides section h2,
+    .slides section h3 {
+      font-weight: bold;
+    }
+
+    .slides section h1 {
+      font-size: 2em;
+    }
+
+    .slides section h2 {
+      font-size: 1.5em;
+    }
+
+    .slides section .latex {
+      font-size: 0.8em;
+    }
+
+    .comp-table {
+      font-size: 0.65em;
+    }
+
+    .hint {
+      font-size: 0.6em;
+      color: grey;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section id="intro">
+        <h1>W4: Lab Week 4</h1>
+      </section>
+
+      <section id="attendance-start">
+        <h1>Attendance QR</h1>
+        <div style="text-align: center">
+          <img src="images/w4-qr.png" alt="w4-qr" style="width: 520px" />
+        </div>
+      </section>
+
+      <section id="updates">
+        <h1>Updates</h1>
+        <ul>
+          <li>
+            Lab 2 released — extension of Lab 1.
+          </li>
+          <li>
+            Grading scripts used for lab grading — don't forget to submit on time!
+          </li>
+        </ul>
+      </section>
+
+      <section id="recap">
+        <h1>Recap</h1>
+        <ol>
+          <li>
+            <p><a href="#/abstract-class-1">Abstract Class</a></p>
+          </li>
+          <li>
+            <p><a href="#/interface-1">Interface</a></p>
+          </li>
+          <li>
+            <p><a href="#/wrapper-class-1">Wrapper Class</a></p>
+          </li>
+        </ol>
+      </section>
+
+      <section id="abstract-class-1">
+        <h1>Abstract Class</h1>
+        <p>A mechanism to generalise property and behaviour.</p>
+        <p><em>"What should the classes have in common?"</em></p>
+        <pre><code class="java" data-trim data-line-numbers>
+          abstract class Shape {
+            abstract public double getArea();
+          }
+
+          class Circle extends Shape {
+            ⋮
+            @Override
+            public double getArea() {
+              return Math.PI * this.r * this.r;
+            }
+            ⋮
+          }
+        </code></pre>
+      </section>
+
+      <section id="interface-1">
+        <h1>Interface</h1>
+        <p>A mechanism to generalise appearance.</p>
+        <p><em>"What should the classes look like?"</em></p>
+        <pre><code class="java" data-trim data-line-numbers>
+          interface GetAreable {
+            double getArea();
+          }
+
+          abstract class Shape implements GetAreable {
+            ⋮
+          }
+
+          class Circle extends Shape {
+            ⋮
+            @Override
+            public double getArea() {
+              return Math.PI * this.r * this.r;
+            }
+            ⋮
+          }
+        </code></pre>
+      </section>
+
+      <section id="abstract-class-vs-interface-1">
+        <h1>Abstract Class vs Interface</h1>
+        <p>
+          One is a foundation, the other is a template.
+        </p>
+        <table class="comp-table">
+          <tr>
+            <th>Abstract Class</th>
+            <th>Interface</th>
+          </tr>
+          <tr>
+            <td>Can have abstract and concrete methods</td>
+            <td>Can only have abstract methods</td>
+          </tr>
+          <tr>
+            <td>Can have final, non-final, static, and non-static variables</td>
+            <td>Can only have static and final variables</td>
+          </tr>
+          <tr>
+            <td>Doesn't support multiple inheritance</td>
+            <td>Supports multiple inheritance</td>
+          </tr>
+          <tr>
+            <td>Can have public, private, protected, default class members</td>
+            <td>Can only have public class members</td>
+          </tr>
+          <tr>
+            <td>Can provide the implementation of an interface</td>
+            <td>Can't provide the implementation of an abstract class</td>
+          </tr>
+          <tr>
+            <td>Can extend another class or implement an interface</td>
+            <td>Can only extend another interface</td>
+          </tr>
+        </table>
+      </section>
+
+      <section id="wrapper-class-1">
+        <h1>Wrapper Class</h1>
+        <p>A mechanism to treat primitive types as objects; i.e. <em>wrap</em> a primitive type.</p>
+        <p>Provides type-relevant methods.</p>
+        <pre><code class="java" data-trim data-line-numbers>
+          // can manually compute...
+          Integer i = new Integer(4);
+          int j = i.intValue();
+
+          // ...or let Java do its thing
+          Integer i = 4;
+          int j = i;
+        </code></pre>
+        <p>Incurs performance overhead; use with caution.</p>
+      </section>
+
+      <section id="oop-modelling-exercise-1">
+        <h1>OOP Modelling Exercise</h1>
+        <p><a href="https://hackmd.io/@petermonky/oop">https://hackmd.io/@petermonky/oop</a></p>
+      </section>
+
+      <section id="lab_2-1">
+        <h1>Lab 2</h1>
+        <p>Before Lab 1:</p>
+        <div style="text-align: center">
+          <img src="images/before.svg" alt="before" style="width: 580px" />
+        </div>
+      </section>
+
+      <section id="lab_2-2">
+        <h1>Lab 2</h1>
+        <p>After Lab 1 (more or less):</p>
+        <div style="text-align: center">
+          <img src="images/after.svg" alt="after" style="width: 660px" />
+        </div>
+      </section>
+
+      <section id="lab_2-3">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-1.svg" alt="d-1" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-4">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-2.svg" alt="d-2" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-5">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-3.svg" alt="d-3" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-6">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-4.svg" alt="d-4" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-7">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-5.svg" alt="d-5" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-8">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-6.svg" alt="d-6" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-9">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-7.svg" alt="d-7" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-10">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-8.svg" alt="d-8" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-11">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-9.svg" alt="d-9" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-12">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-10.svg" alt="d-10" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-13">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-11.svg" alt="d-11" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-14">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-12.svg" alt="d-12" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-15">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-13.svg" alt="d-13" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-16">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-14.svg" alt="d-14" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-17">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-15.svg" alt="d-15" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-18">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-16.svg" alt="d-16" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-19">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-17.svg" alt="d-17" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-20">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-18.svg" alt="d-18" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-21">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-19.svg" alt="d-19" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-22">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-20.svg" alt="d-20" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-23">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-21.svg" alt="d-21" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-24">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-22.svg" alt="d-22" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-25">
+        <h1>Lab 2</h1>
+        <code>Lab2.3.in</code>
+        <div style="text-align: center">
+          <img src="images/d-23.svg" alt="d-23" style="width: 360px" />
+        </div>
+      </section>
+
+      <section id="lab_2-26">
+        <h1>Lab 2</h1>
+        <p><b>Questions to ponder:</b></p>
+        <ul>
+          <li>How would the internal representation of a shop change?</li>
+          <li>What new event(s) would arise?</li>
+        </ul>
+      </section>
+
+      <section id="lab_2-27">
+        <h1>Lab 2</h1>
+        <p><b>How would the internal represenation of a shop change?</b></p>
+        <p>What new attribute should it encompass?</p>
+        <p>What new operations should it support?</p>
+        <p><em class="hint">(Hint: New members should be relevant to the queue.)</em></p>
+
+      </section>
+
+      <section id="lab_2-28">
+        <h1>Lab 2</h1>
+        <p><b>What new event(s) would arise?</b></p>
+        <p>How would the existing events change, if at all?</p>
+        <p>What members should the new event(s) contain?</p>
+        <p><em class="hint">(Hint: Refer to the output files.)</em></p>
+      </section>
+
+      <section id="lab_2-29">
+        <h1>Lab 2</h1>
+        <p>Worth 12 marks and contributes 3% to your final grade.</p>
+        <ul>
+          <li>Style: 2 marks</li>
+          <li>Correctness: 2 marks</li>
+          <li>OO Design: 8 marks</li>
+        </ul>
+      </section>
+
+      <section id="lab_2-30">
+        <h1>Lab 2</h1>
+        <p>Code styling is important (especially in SWE modules).</p>
+        <p>Refer to the <a href="https://nus-cs2030s.github.io/2021-s2/style.html">CS2030/S Java Style Guide</a>.</p>
+        <p>Automate code styling with <code>checkstyle</code>.</p>
+        <pre>
+          <code>echo 'alias checkstyle="java -jar ~cs2030s/bin/checkstyle.jar -c ~cs2030s/bin/cs2030_checks.xml *.java"' >> ~/.bash_profile</code>
+        </pre>
+      </section>
+
+      <section id="bonus-problem">
+        <h1>Bonus Problem</h1>
+        <p>Write a class <code>A</code> that behaves as follows:</p>
+        <pre><code data-trim>
+          jshell> new A(1)
+          $.. ==> [A:1]
+          jshell> new A(1).next(2)
+          $.. ==> [A:1][A:2]
+          jshell> new A(1).next(2).next(3)
+          $.. ==> [A:1][A:2][A:3]
+          jshell> A a1 = new A(1)
+          jshell> A a2 = a1.next(2)
+          jshell> A a3 = a1.next(2).next(3)
+          jshell> a2
+          a2 ==> [A:1][A:2]
+          jshell> a1
+          a1 ==> [A:1]
+        </code></pre>
+      </section>
+
+      <section id="attendance-end">
+        <h1>Attendance QR</h1>
+        <div style="text-align: center">
+          <img src="images/w4-qr.png" alt="w4-qr" style="width: 520px" />
+        </div>
+      </section>
+
+      <section id="end">
+        <h1>That's All!</h1>
+      </section>
+    </div>
+  </div>
+
+  <script src="dist/reveal.js"></script>
+  <script src="plugin/math/math.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+      math: {
+        mathjax:
+          "https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js",
+        config: "TeX-AMS_HTML-full",
+        // pass other options into `MathJax.Hub.Config()`
+        TeX: { Macros: { RR: "{\\bf R}" } },
+      },
+      hash: true,
+      center: false,
+      transition: "none",
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+    });
+  </script>
+</body>
+
+</html>

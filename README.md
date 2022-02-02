@@ -47,3 +47,5 @@
 ### Lab Slides
 
 <a href="https://petermonky.github.io/slides/cs2030s/w3/" onclick="window.open('https://petermonky.github.io/slides/cs2030s/w3/', '_self');">W3: Lab Week 3</a>
+
+<a href="https://petermonky.github.io/slides/cs2030s/w4/" onclick="window.open('https://petermonky.github.io/slides/cs2030s/w4/', '_self');">W4: Lab Week 4</a>
