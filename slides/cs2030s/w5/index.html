@@ -1,106 +1,110 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>W5: Lab Week 5</title>
 
-  <title>W5: Lab Week 5</title>
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" />
 
-  <link rel="stylesheet" href="dist/reset.css" />
-  <link rel="stylesheet" href="dist/reveal.css" />
-  <link rel="stylesheet" href="dist/theme/simple.css" />
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/idea.css" />
 
-  <!-- Theme used for syntax highlighted code -->
-  <link rel="stylesheet" href="plugin/highlight/idea.css" />
+    <style>
+      li {
+        margin: 15px 0;
+      }
 
-  <style>
-    li {
-      margin: 15px 0;
-    }
+      .slides section {
+        text-align: left;
+      }
 
-    .slides section {
-      text-align: left;
-    }
+      .slides section h1,
+      .slides section h2,
+      .slides section h3 {
+        font-weight: bold;
+      }
 
-    .slides section h1,
-    .slides section h2,
-    .slides section h3 {
-      font-weight: bold;
-    }
+      .slides section h1 {
+        font-size: 2em;
+      }
 
-    .slides section h1 {
-      font-size: 2em;
-    }
+      .slides section h2 {
+        font-size: 1.5em;
+      }
 
-    .slides section h2 {
-      font-size: 1.5em;
-    }
+      .slides section .latex {
+        font-size: 0.8em;
+      }
 
-    .slides section .latex {
-      font-size: 0.8em;
-    }
+      .slides section h1 .mini {
+        font-size: 0.4em;
+      }
 
-    .slides section h1 .mini {
-      font-size: 0.4em;
-    }
+      .comp-table {
+        font-size: 0.65em;
+      }
 
-    .comp-table {
-      font-size: 0.65em;
-    }
+      .hint {
+        font-size: 0.6em;
+        color: grey;
+      }
+    </style>
+  </head>
 
-    .hint {
-      font-size: 0.6em;
-      color: grey;
-    }
-  </style>
-</head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section id="intro">
+          <h1>W5: Lab Week 5</h1>
+        </section>
 
-<body>
-  <div class="reveal">
-    <div class="slides">
-      <section id="intro">
-        <h1>W5: Lab Week 5</h1>
-      </section>
+        <section id="attendance-start">
+          <h1>Attendance QR</h1>
+          <div style="text-align: center">
+            <img src="images/w5-qr.png" alt="w5-qr" style="width: 520px" />
+          </div>
+        </section>
 
-      <section id="attendance-start">
-        <h1>Attendance QR</h1>
-        <div style="text-align: center">
-          <img src="images/w5-qr.png" alt="w5-qr" style="width: 520px" />
-        </div>
-      </section>
+        <section id="updates">
+          <h1>Updates</h1>
+          <ul>
+            <li>Lab 3 released — extension of Lab 2.</li>
+            <li>Everyone did great for Lab 2! :]</li>
+          </ul>
+        </section>
 
-      <section id="updates">
-        <h1>Updates</h1>
-        <ul>
-          <li>Lab 3 released — extension of Lab 2.</li>
-          <li>Everyone did great for Lab 2! :]</li>
-        </ul>
-      </section>
+        <section id="recap">
+          <h1>Recap <span class="mini">(or lack thereof)</span></h1>
+        </section>
 
-      <section id="recap">
-        <h1>Recap <span class="mini">(or lack thereof)</span></h1>
-      </section>
+        <section id="exercise">
+          <h1>Exercise</h1>
+          <p>
+            <a href="https://hackmd.io/@petermonky/l3er"
+              >https://hackmd.io/@petermonky/l3er</a
+            >
+          </p>
+        </section>
 
-      <section id="exercise">
-        <h1>Exercise</h1>
-        <p>
-          <a href="https://hackmd.io/@petermonky/l3er">https://hackmd.io/@petermonky/l3er</a>
-        </p>
-      </section>
+        <section id="exercise-in-exception-1-1">
+          <h1>Exercise in Exception</h1>
+          <h2>1</h2>
+          <p>Does code 1 compile?</p>
+          <p>If not, fix it so that it compiles successfully.</p>
+        </section>
 
-      <section id="exercise-in-exception-1-1">
-        <h1>Exercise in Exception</h1>
-        <h2>1</h2>
-        <p>Does code 1 compile?</p>
-        <p>If not, fix it so that it compiles successfully.</p>
-      </section>
-
-      <section id="exercise-in-exception-1-2">
-        <h1>Exercise in Exception</h1>
-        <h2>1</h2>
-        <p>No, code 1 does not compile.</p>
-        <pre><code class="java" data-trim data-line-numbers>
+        <section id="exercise-in-exception-1-2">
+          <h1>Exercise in Exception</h1>
+          <h2>1</h2>
+          <p>No, code 1 does not compile.</p>
+          <pre><code class="java" data-trim data-line-numbers>
             import java.io.File;
             import java.util.Scanner;
             import java.io.FileNotFoundException;
@@ -116,25 +120,25 @@
               }
             }
           </code></pre>
-      </section>
+        </section>
 
-      <section id="exercise-in-exception-2-1">
-        <h1>Exercise in Exception</h1>
-        <h2>2</h2>
-        <p>Modify code 2 such that:</p>
-        <ol>
-          <li>throw/catch occurs inside <code>openFile</code>, or</li>
-          <li>
-            throw occurs inside <code>openFile</code> and
-            <code>catch</code> occurs inside <code>main</code>.
-          </li>
-        </ol>
-      </section>
+        <section id="exercise-in-exception-2-1">
+          <h1>Exercise in Exception</h1>
+          <h2>2</h2>
+          <p>Modify code 2 such that:</p>
+          <ol>
+            <li>throw/catch occurs inside <code>openFile</code>, or</li>
+            <li>
+              throw occurs inside <code>openFile</code> and
+              <code>catch</code> occurs inside <code>main</code>.
+            </li>
+          </ol>
+        </section>
 
-      <section id="exercise-in-exception-2-2">
-        <h1>Exercise in Exception</h1>
-        <h2>2a</h2>
-        <pre><code class="java" data-trim data-line-numbers>
+        <section id="exercise-in-exception-2-2">
+          <h1>Exercise in Exception</h1>
+          <h2>2a</h2>
+          <pre><code class="java" data-trim data-line-numbers>
             import java.io.File;
             import java.util.Scanner;
             import java.io.FileNotFoundException;
@@ -154,12 +158,12 @@
               }
             }
           </code></pre>
-      </section>
+        </section>
 
-      <section id="exercise-in-exception-2-3">
-        <h1>Exercise in Exception</h1>
-        <h2>2b</h2>
-        <pre><code class="java" data-trim data-line-numbers>
+        <section id="exercise-in-exception-2-3">
+          <h1>Exercise in Exception</h1>
+          <h2>2b</h2>
+          <pre><code class="java" data-trim data-line-numbers>
             import java.io.File;
             import java.util.Scanner;
             import java.io.FileNotFoundException;
@@ -179,23 +183,23 @@
               }
             }
           </code></pre>
-      </section>
+        </section>
 
-      <section id="exercise-in-exception-3-1">
-        <h1>Exercise in Exception</h1>
-        <h2>3</h2>
-        <p>Refer to code 3.</p>
-        <p>
-          Create a new checked exception <code>MyOwnException</code> — throw
-          it from the method <code>foo</code> and catch it in
-          <code>main</code>.
-        </p>
-      </section>
+        <section id="exercise-in-exception-3-1">
+          <h1>Exercise in Exception</h1>
+          <h2>3</h2>
+          <p>Refer to code 3.</p>
+          <p>
+            Create a new checked exception <code>MyOwnException</code> — throw
+            it from the method <code>foo</code> and catch it in
+            <code>main</code>.
+          </p>
+        </section>
 
-      <section id="exercise-in-exception-3-2">
-        <h1>Exercise in Exception</h1>
-        <h2>3</h2>
-        <pre><code class="java" data-trim data-line-numbers>
+        <section id="exercise-in-exception-3-2">
+          <h1>Exercise in Exception</h1>
+          <h2>3</h2>
+          <pre><code class="java" data-trim data-line-numbers>
             class MyOwnException extends Exception { }
 
             class ExceptionDemo {
@@ -212,106 +216,106 @@
               }
             }
           </code></pre>
-      </section>
+        </section>
 
-      <section id="exercise-in-generics-1-1">
-        <h1>Exercise in Generics</h1>
-        <h2>1</h2>
-        <p>
-          Write a generic class with type parameter <code>T</code> and a
-          single private field <code>x</code> of type <code>T</code>.
-        </p>
-      </section>
+        <section id="exercise-in-generics-1-1">
+          <h1>Exercise in Generics</h1>
+          <h2>1</h2>
+          <p>
+            Write a generic class with type parameter <code>T</code> and a
+            single private field <code>x</code> of type <code>T</code>.
+          </p>
+        </section>
 
-      <section id="exercise-in-generics-1-2">
-        <h1>Exercise in Generics</h1>
-        <h2>1</h2>
-        <pre><code class="java" data-trim data-line-numbers>
+        <section id="exercise-in-generics-1-2">
+          <h1>Exercise in Generics</h1>
+          <h2>1</h2>
+          <pre><code class="java" data-trim data-line-numbers>
             class A&lt;T&gt; { 
               private T x;
             }
           </code></pre>
-      </section>
+        </section>
 
-      <section id="exercise-in-generics-2-1">
-        <h1>Exercise in Generics</h1>
-        <h2>2</h2>
-        <p>
-          Instantiate an instance of <code>A&lt;T&gt;</code> with type
-          argument <code>Integer</code>.
-        </p>
-      </section>
+        <section id="exercise-in-generics-2-1">
+          <h1>Exercise in Generics</h1>
+          <h2>2</h2>
+          <p>
+            Instantiate an instance of <code>A&lt;T&gt;</code> with type
+            argument <code>Integer</code>.
+          </p>
+        </section>
 
-      <section id="exercise-in-generics-2-2">
-        <h1>Exercise in Generics</h1>
-        <h2>2</h2>
-        <pre><code class="java" data-trim>
+        <section id="exercise-in-generics-2-2">
+          <h1>Exercise in Generics</h1>
+          <h2>2</h2>
+          <pre><code class="java" data-trim>
             A&lt;Integer&gt; a = new A&lt;Integer&gt;();
           </code></pre>
-      </section>
+        </section>
 
-      <section id="exercise-in-generics-3-1">
-        <h1>Exercise in Generics</h1>
-        <h2>3</h2>
-        <p>
-          Write a generic class <code>B&lt;T&gt;</code> that extends from
-          <code>A&lt;T&gt;</code>, and a generic class
-          <code>C&lt;T&gt;</code> that contains a field of type
-          <code>A&lt;T&gt;</code>.
-        </p>
-        <p>
-          Do the occurrences of <code>T</code> refer to the same
-          <code>T</code>?
-        </p>
-      </section>
+        <section id="exercise-in-generics-3-1">
+          <h1>Exercise in Generics</h1>
+          <h2>3</h2>
+          <p>
+            Write a generic class <code>B&lt;T&gt;</code> that extends from
+            <code>A&lt;T&gt;</code>, and a generic class
+            <code>C&lt;T&gt;</code> that contains a field of type
+            <code>A&lt;T&gt;</code>.
+          </p>
+          <p>
+            Do the occurrences of <code>T</code> refer to the same
+            <code>T</code>?
+          </p>
+        </section>
 
-      <section id="exercise-in-generics-3-2">
-        <h1>Exercise in Generics</h1>
-        <h2>3</h2>
-        <pre><code class="java" data-trim data-line-numbers>
+        <section id="exercise-in-generics-3-2">
+          <h1>Exercise in Generics</h1>
+          <h2>3</h2>
+          <pre><code class="java" data-trim data-line-numbers>
             class B&lt;T&gt; extends A&lt;T&gt; { }
 
             class C&lt;T&gt; { 
               private A&lt;T&gt; a; 
             }
           </code></pre>
-        <p>
-          Yes, all occurrences of <code>T</code> refer to the same
-          <code>T</code>.
-        </p>
-      </section>
+          <p>
+            Yes, all occurrences of <code>T</code> refer to the same
+            <code>T</code>.
+          </p>
+        </section>
 
-      <section id="exercise-in-generics-4-1">
-        <h1>Exercise in Generics</h1>
-        <h2>4</h2>
-        <p>Does code 1 compile?</p>
-        <p>
-          Change the generic class <code>A&lt;T&gt;</code> to parameterised
-          type with type argument <code>String</code>. Does it compile?
-        </p>
-      </section>
+        <section id="exercise-in-generics-4-1">
+          <h1>Exercise in Generics</h1>
+          <h2>4</h2>
+          <p>Does code 1 compile?</p>
+          <p>
+            Change the generic class <code>A&lt;T&gt;</code> to parameterised
+            type with type argument <code>String</code>. Does it compile?
+          </p>
+        </section>
 
-      <section id="exercise-in-generics-4-2">
-        <h1>Exercise in Generics</h1>
-        <h2>4</h2>
-        <p>No, code 1 does not compile.</p>
-        <pre><code class="java" data-trim data-line-numbers>
+        <section id="exercise-in-generics-4-2">
+          <h1>Exercise in Generics</h1>
+          <h2>4</h2>
+          <p>No, code 1 does not compile.</p>
+          <pre><code class="java" data-trim data-line-numbers>
             class F extends A&lt;String&gt; { }
           </code></pre>
-        <p>Yes, code 1 compiles after modification.</p>
-      </section>
+          <p>Yes, code 1 compiles after modification.</p>
+        </section>
 
-      <section id="exercise-in-generics-5-1">
-        <h1>Exercise in Generics</h1>
-        <h2>5</h2>
-        <p>Refer to code 2.</p>
-        <p>Complete the generic method <code>copy</code>.</p>
-      </section>
+        <section id="exercise-in-generics-5-1">
+          <h1>Exercise in Generics</h1>
+          <h2>5</h2>
+          <p>Refer to code 2.</p>
+          <p>Complete the generic method <code>copy</code>.</p>
+        </section>
 
-      <section id="exercise-in-generics-5-2">
-        <h1>Exercise in Generics</h1>
-        <h2>5</h2>
-        <pre><code class="java" data-trim data-line-numbers>
+        <section id="exercise-in-generics-5-2">
+          <h1>Exercise in Generics</h1>
+          <h2>5</h2>
+          <pre><code class="java" data-trim data-line-numbers>
             class A { 
               public static &lt;T&gt; void copy(T[] from, T[] to) {
                 for (int i = 0; i < from.length; i++) {
@@ -320,22 +324,22 @@
               }
              }
           </code></pre>
-      </section>
+        </section>
 
-      <section id="exercise-in-generics-6-1">
-        <h1>Exercise in Generics</h1>
-        <h2>6</h2>
-        <p>
-          Write a generic class <code>D&lt;T&gt;</code> that contains a field
-          that is an array of type <code>T</code> with 10 elements.
-          Instantiate that array in the constructor.
-        </p>
-      </section>
+        <section id="exercise-in-generics-6-1">
+          <h1>Exercise in Generics</h1>
+          <h2>6</h2>
+          <p>
+            Write a generic class <code>D&lt;T&gt;</code> that contains a field
+            that is an array of type <code>T</code> with 10 elements.
+            Instantiate that array in the constructor.
+          </p>
+        </section>
 
-      <section id="exercise-in-generics-6-2">
-        <h1>Exercise in Generics</h1>
-        <h2>6</h2>
-        <pre><code class="java" data-trim data-line-numbers>
+        <section id="exercise-in-generics-6-2">
+          <h1>Exercise in Generics</h1>
+          <h2>6</h2>
+          <pre><code class="java" data-trim data-line-numbers>
             class D&lt;T&gt; {
               T[] a;
 
@@ -346,27 +350,27 @@
               }
             }
           </code></pre>
-      </section>
+        </section>
 
-      <section id="exercise-in-generics-7-1">
-        <h1>Exercise in Generics</h1>
-        <h2>7</h2>
-        <p>
-          Write a generic class
-          <code>E&lt;T extends Comparable&lt;T&gt;&gt;</code> that contains a
-          field that is an array of type <code>T</code> with 10 elements.
-          Instantiate that array in the constructor.
-        </p>
-        <p>
-          Note that the compile-time type of the instantiated array before
-          type conversion must be of type <code>Comparable</code>.
-        </p>
-      </section>
+        <section id="exercise-in-generics-7-1">
+          <h1>Exercise in Generics</h1>
+          <h2>7</h2>
+          <p>
+            Write a generic class
+            <code>E&lt;T extends Comparable&lt;T&gt;&gt;</code> that contains a
+            field that is an array of type <code>T</code> with 10 elements.
+            Instantiate that array in the constructor.
+          </p>
+          <p>
+            Note that the compile-time type of the instantiated array before
+            type conversion must be of type <code>Comparable</code>.
+          </p>
+        </section>
 
-      <section id="exercise-in-generics-7-2">
-        <h1>Exercise in Generics</h1>
-        <h2>7</h2>
-        <pre><code class="java" data-trim data-line-numbers>
+        <section id="exercise-in-generics-7-2">
+          <h1>Exercise in Generics</h1>
+          <h2>7</h2>
+          <pre><code class="java" data-trim data-line-numbers>
             class E&lt;T extends Comparable&lt;T&gt;&gt; {
               T[] a;
               
@@ -377,21 +381,21 @@
               }
             }
           </code></pre>
-      </section>
+        </section>
 
-      <section id="suppress-warnings-1">
-        <h1><code>SuppressWarnings</code></h1>
-        <p><code>SuppressWarnings</code> must be used carefully.</p>
-        <p>
-          Use it in contexts where you are certain of the code's run-time
-          behaviour.
-        </p>
-      </section>
+        <section id="suppress-warnings-1">
+          <h1><code>SuppressWarnings</code></h1>
+          <p><code>SuppressWarnings</code> must be used carefully.</p>
+          <p>
+            Use it in contexts where you are certain of the code's run-time
+            behaviour.
+          </p>
+        </section>
 
-      <section id="suppress-warnings-2">
-        <h1><code>SuppressWarnings</code></h1>
-        <p><b>When it's safe:</b></p>
-        <pre><code class="java" style="height: 320px" data-trim data-line-numbers>
+        <section id="suppress-warnings-2">
+          <h1><code>SuppressWarnings</code></h1>
+          <p><b>When it's safe:</b></p>
+          <pre><code class="java" style="height: 320px" data-trim data-line-numbers>
             class Array&lt;T&gt; {
               private T[] array;
             
@@ -410,16 +414,16 @@
               }
             }
         </code></pre>
-        <p>
-          <code>Array&lt;T&gt</code> only ever accepts and returns an object
-          of type <code>T</code>.
-        </p>
-      </section>
+          <p>
+            <code>Array&lt;T&gt</code> only ever accepts and returns an object
+            of type <code>T</code>.
+          </p>
+        </section>
 
-      <section id="suppress-warnings-3">
-        <h1><code>SuppressWarnings</code></h1>
-        <p><b>When it's not safe:</b></p>
-        <pre><code class="java" style="height: 320px" data-trim data-line-numbers>
+        <section id="suppress-warnings-3">
+          <h1><code>SuppressWarnings</code></h1>
+          <p><b>When it's not safe:</b></p>
+          <pre><code class="java" style="height: 320px" data-trim data-line-numbers>
             class Array&lt;T&gt; {
               private T[] array;
             
@@ -442,166 +446,175 @@
               }
             }
           </code></pre>
-        <p>
-          <code>getArray</code> gives direct access to the internal array;
-          risk of heap pollution.
-        </p>
-      </section>
+          <p>
+            <code>getArray</code> gives direct access to the internal array;
+            risk of heap pollution.
+          </p>
+        </section>
 
-      <section id="suppress-warnings-4">
-        <h1><code>SuppressWarnings</code></h1>
-        <p><b>When it's not safe:</b></p>
-        <pre><code class="java" data-trim>
+        <section id="suppress-warnings-4">
+          <h1><code>SuppressWarnings</code></h1>
+          <p><b>When it's not safe:</b></p>
+          <pre><code class="java" data-trim>
               Array&lt;String&gt; array = new Array&lt;String&gt;(4);
               Object[] objArray = array.getArray();
               objArray[0] = 4;
               array.get(0);
           </code></pre>
-        <p>
-          Causes <code>ClassCastException</code> run-time exception;
-          <code>get</code> expects to return object of run-time type
-          <code>String</code>, but object of run-time type <code>int</code> is
-          being retrieved from the internal array instead.
-        </p>
-      </section>
+          <p>
+            Causes <code>ClassCastException</code> run-time exception;
+            <code>get</code> expects to return object of run-time type
+            <code>String</code>, but object of run-time type <code>int</code> is
+            being retrieved from the internal array instead.
+          </p>
+        </section>
 
-      <section id="lab-review-1">
-        <h1>Lab 1 and 2</h1>
-        <p>In general, everyone did great! :D</p>
-        <p>
-          Some common mistakes here and there, but overall implementation is
-          solid for all.
-        </p>
-      </section>
+        <section id="lab-review-1">
+          <h1>Lab 1 and 2</h1>
+          <p>In general, everyone did great! :D</p>
+          <p>
+            Some common mistakes here and there, but overall implementation is
+            solid for all.
+          </p>
+        </section>
 
-      <section id="lab-review-2">
-        <h1>Lab 1 and 2</h1>
-        <div style="text-align: center">
-          <img src="images/lab-complete.svg" alt="lab-complete" style="width: 580px" />
-        </div>
-      </section>
+        <section id="lab-review-2">
+          <h1>Lab 1 and 2</h1>
+          <div style="text-align: center">
+            <img
+              src="images/lab-complete.svg"
+              alt="lab-complete"
+              style="width: 580px"
+            />
+          </div>
+        </section>
 
-      <section id="lab-review-3">
-        <h1>Lab 1 and 2</h1>
-        <p><b>Good aspects:</b></p>
-        <ul>
-          <li><code>ShopEvent</code> broken down appropriately.</li>
-          <li>Classes created for shop, counter, and customer.</li>
-          <li>Shop retrieves first available counter.</li>
-          <li>Customer and counter override <code>toString</code>.</li>
-          <li>Annotations consistently used.</li>
-          <li><code>this</code> keyword consistently used.</li>
-        </ul>
-      </section>
+        <section id="lab-review-3">
+          <h1>Lab 1 and 2</h1>
+          <p><b>Good aspects:</b></p>
+          <ul>
+            <li><code>ShopEvent</code> broken down appropriately.</li>
+            <li>Classes created for shop, counter, and customer.</li>
+            <li>Shop retrieves first available counter.</li>
+            <li>Customer and counter override <code>toString</code>.</li>
+            <li>Annotations consistently used.</li>
+            <li><code>this</code> keyword consistently used.</li>
+          </ul>
+        </section>
 
-      <section id="lab-review-4">
-        <h1>Lab 1 and 2</h1>
-        <p><b>Common mistakes:</b></p>
-        <ul>
-          <li>Some fields still <code>public</code>.</li>
-          <li>Shop returning counter ID and not the counter itself.</li>
-          <li>Redundant departure events.</li>
-          <li>Static fields; repeated or concurrent simulations?</li>
-          <li>Iffy logic here and there.</li>
-        </ul>
-      </section>
+        <section id="lab-review-4">
+          <h1>Lab 1 and 2</h1>
+          <p><b>Common mistakes:</b></p>
+          <ul>
+            <li>Some fields still <code>public</code>.</li>
+            <li>Shop returning counter ID and not the counter itself.</li>
+            <li>Redundant departure events.</li>
+            <li>Static fields; repeated or concurrent simulations?</li>
+            <li>Iffy logic here and there.</li>
+          </ul>
+        </section>
 
-      <section id="lab_3-1">
-        <h1>Lab 3</h1>
-        <p>Four major changes:</p>
-        <ul>
-          <li>Make <code>Queue</code> a generic class</li>
-          <li>Create a generic <code>Array&lt;T&gt;</code> class</li>
-          <li>Make <code>Counter</code> comparable to itself</li>
-          <li>Update the simulation</li>
-        </ul>
-      </section>
+        <section id="lab_3-1">
+          <h1>Lab 3</h1>
+          <p>Four major changes:</p>
+          <ul>
+            <li>Make <code>Queue</code> a generic class</li>
+            <li>Create a generic <code>Array&lt;T&gt;</code> class</li>
+            <li>Make <code>Counter</code> comparable to itself</li>
+            <li>Update the simulation</li>
+          </ul>
+        </section>
 
-      <section id="lab_3-2">
-        <h1>Lab 3</h1>
-        <p>
-          <b>Make <code>Queue</code> a generic class</b>
-        </p>
-        <p>How can <code>Queue</code> be generalised?</p>
-        <p>
-          <em class="hint">(Hint: <code>Queue</code> → <code>Queue&lt;T&gt;</code>;
-            <code>Object</code> → <code>T</code>)</em>
-        </p>
-      </section>
+        <section id="lab_3-2">
+          <h1>Lab 3</h1>
+          <p>
+            <b>Make <code>Queue</code> a generic class</b>
+          </p>
+          <p>How can <code>Queue</code> be generalised?</p>
+          <p>
+            <em class="hint"
+              >(Hint: <code>Queue</code> → <code>Queue&lt;T&gt;</code>;
+              <code>Object</code> → <code>T</code>)</em
+            >
+          </p>
+        </section>
 
-      <section id="lab_3-3">
-        <h1>Lab 3</h1>
-        <p>
-          <b>Create a generic <code>Array&lt;T&gt;</code> class</b>
-        </p>
-        <p>
-          When will <code>@SuppressWarnings("rawtypes")</code> be necessary?
-        </p>
-        <p>
-          <em class="hint">(Hint:
-            <code>Array&lt;T extends Comparable&lt;T&gt&gt;</code>)</em>
-        </p>
-      </section>
+        <section id="lab_3-3">
+          <h1>Lab 3</h1>
+          <p>
+            <b>Create a generic <code>Array&lt;T&gt;</code> class</b>
+          </p>
+          <p>
+            When will <code>@SuppressWarnings("rawtypes")</code> be necessary?
+          </p>
+          <p>
+            <em class="hint"
+              >(Hint:
+              <code>Array&lt;T extends Comparable&lt;T&gt&gt;</code>)</em
+            >
+          </p>
+        </section>
 
-      <section id="lab_3-4">
-        <h1>Lab 3</h1>
-        <p>
-          <b>Make <code>Counter</code> comparable to itself</b>
-        </p>
-        <p>How does <code>compareTo</code> work?</p>
-        <p>
-          <em class="hint">(Hint: <code>Counter</code> →
-            <code>Counter implements Comparable&lt;Counter&gt;</code>)</em>
-        </p>
-      </section>
+        <section id="lab_3-4">
+          <h1>Lab 3</h1>
+          <p>
+            <b>Make <code>Counter</code> comparable to itself</b>
+          </p>
+          <p>How does <code>compareTo</code> work?</p>
+          <p>
+            <em class="hint"
+              >(Hint: <code>Counter</code> →
+              <code>Counter implements Comparable&lt;Counter&gt;</code>)</em
+            >
+          </p>
+        </section>
 
-      <section id="lab_3-5">
-        <h1>Lab 3</h1>
-        <p><b>Update the simulation</b></p>
-        <p>How can the new implementations be used?</p>
-        <p>What new event(s) would arise?</p>
-        <p>What new operations should be supported?</p>
-        <p>
-          <em class="hint">(Hint: Everything's in the README)</em>
-        </p>
-      </section>
+        <section id="lab_3-5">
+          <h1>Lab 3</h1>
+          <p><b>Update the simulation</b></p>
+          <p>How can the new implementations be used?</p>
+          <p>What new event(s) would arise?</p>
+          <p>What new operations should be supported?</p>
+          <p>
+            <em class="hint">(Hint: Everything's in the README)</em>
+          </p>
+        </section>
 
-      <section id="attendance-end">
-        <h1>Attendance QR</h1>
-        <div style="text-align: center">
-          <img src="images/w5-qr.png" alt="w5-qr" style="width: 520px" />
-        </div>
-      </section>
+        <section id="attendance-end">
+          <h1>Attendance QR</h1>
+          <div style="text-align: center">
+            <img src="images/w5-qr.png" alt="w5-qr" style="width: 520px" />
+          </div>
+        </section>
 
-      <section id="end">
-        <h1>That's All!</h1>
-      </section>
+        <section id="end">
+          <h1>That's All!</h1>
+        </section>
+      </div>
     </div>
-  </div>
 
-  <script src="dist/reveal.js"></script>
-  <script src="plugin/math/math.js"></script>
-  <script src="plugin/notes/notes.js"></script>
-  <script src="plugin/markdown/markdown.js"></script>
-  <script src="plugin/highlight/highlight.js"></script>
-  <script>
-    // More info about initialization & config:
-    // - https://revealjs.com/initialization/
-    // - https://revealjs.com/config/
-    Reveal.initialize({
-      math: {
-        mathjax:
-          "https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js",
-        config: "TeX-AMS_HTML-full",
-        // pass other options into `MathJax.Hub.Config()`
-        TeX: { Macros: { RR: "{\\bf R}" } },
-      },
-      hash: true,
-      center: false,
-      transition: "none",
-      plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
-    });
-  </script>
-</body>
-
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/math/math.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        math: {
+          mathjax:
+            "https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js",
+          config: "TeX-AMS_HTML-full",
+          // pass other options into `MathJax.Hub.Config()`
+          TeX: { Macros: { RR: "{\\bf R}" } },
+        },
+        hash: true,
+        center: false,
+        transition: "none",
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+      });
+    </script>
+  </body>
 </html>

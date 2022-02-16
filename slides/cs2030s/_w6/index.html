@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>W6: Lab Week 6</title>
+
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/idea.css" />
+
+    <style>
+      li {
+        margin: 5px 0;
+      }
+
+      .slides section {
+        text-align: left;
+      }
+
+      .slides section h1,
+      .slides section h2,
+      .slides section h3 {
+        font-weight: bold;
+      }
+
+      .slides section h1 {
+        font-size: 2em;
+      }
+
+      .slides section h2 {
+        font-size: 1.5em;
+      }
+
+      .slides section .latex {
+        font-size: 0.8em;
+      }
+
+      .slides section h1 .mini {
+        font-size: 0.4em;
+      }
+
+      .comp-table {
+        font-size: 0.65em;
+      }
+
+      .hint {
+        font-size: 0.6em;
+        color: grey;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section id="intro">
+          <h1>W6: Lab Week 6</h1>
+        </section>
+
+        <section id="attendance-start">
+          <h1>Attendance QR</h1>
+          <div style="text-align: center">
+            <img src="images/w6-qr.png" alt="w6-qr" style="width: 520px" />
+          </div>
+        </section>
+
+        <section id="updates">
+          <h1>Updates</h1>
+          <ul>
+            <li>Lab 4 released — a new series.</li>
+            <li>Great work on Lab 3! :]</li>
+          </ul>
+        </section>
+
+        <section id="recap">
+          <h1>Recap <span class="mini">(or lack thereof)</span></h1>
+        </section>
+
+        <section id="exercise">
+          <h1>Exercise</h1>
+          <p>
+            <a href="https://hackmd.io/@petermonky/l4er"
+              >https://hackmd.io/@petermonky/l4er</a
+            >
+          </p>
+        </section>
+
+        <section id="factory-method-1">
+          <h1>Exercise in Exception</h1>
+          <h2>1</h2>
+          <p>Write a class <code>A</code> that behaves as follows:</p>
+          <pre><code class="java" data-trim>
+            jshell> new A()
+            |  Error:
+            |  A() has private access in A
+            |  new A()
+            |  ^-----^
+            jshell> A.construct()
+            $4 ==> A@26be92ad
+            jshell> A.construct()
+            $5 ==> A@224edc67
+          </code></pre>
+        </section>
+
+        <section id="factory-method-2">
+          <h1>Factory Method</h1>
+          <h2>What is a factory method?</h2>
+          <p>A mechanism to abstract away the instantiation of an object.</p>
+          <p>Allows for:</p>
+          <ul>
+            <li>Reusing of a common instance.</li>
+            <li>Custom instantiation behaviour with polymorphism.</li>
+          </ul>
+        </section>
+
+        <section id="factory-method-3">
+          <h1>Factory Method</h1>
+          <h2>2</h2>
+          <p>
+            Change the <code>construct</code> method of <code>A</code> so that
+            it always returns the same instance.
+          </p>
+          <pre><code class="java" data-trim>
+            jshell> A.construct()
+            $4 ==> A@26be92ad
+            jshell> A.construct()
+            $4 ==> A@26be92ad
+          </code></pre>
+        </section>
+
+        <section id="factory-method-4">
+          <h1>Factory Method</h1>
+          <h2>What is a singleton class?</h2>
+          <p>A class that can have only one instance at a time.</p>
+          <p>
+            All instantiations of a singleton class binds the same instance to
+            the new variables.
+          </p>
+        </section>
+
+        <section id="factory-method-5">
+          <h1>Factory Method</h1>
+          <h2>3</h2>
+          <p>
+            Change <code>A</code> so that the factory method takes in an
+            <code>int</code> as parameter. When the argument is zero, the same
+            instance is always returned. When the argument is non-zero, a new
+            instance is always created.
+          </p>
+          <pre><code class="java" data-trim>
+            jshell> A.construct(0)
+            $4 ==> A@26be92ad
+            jshell> A.construct(0)
+            $4 ==> A@26be92ad
+            jshell> A.construct(1)
+            $5 ==> A@224edc67
+            jshell> A.construct(1)
+            $4 ==> A@4b9e13df
+          </code></pre>
+        </section>
+
+        <section id="factory-method-6">
+          <h1>Factory Method</h1>
+          <h2>What is caching?</h2>
+          <p>The sharing of commonly used instances.</p>
+          <p>Saves heap space as new objects are not created unnecessarily.</p>
+          <pre><code class="java" style="height: 220px" data-trim data-line-numbers>
+            class Point {
+              private static Point origin = new Point(0, 0);
+              private double x;
+              private double y;
+
+              private Point(double x, double y) {
+                this.x = x;
+                this.y = y;
+              }
+
+              public static Point of(double x, double y) {
+                if (x == 0 && y == 0) {
+                  return origin;
+                } else {
+                  return new Point(x, y);
+                }
+              }
+            }
+          </code></pre>
+        </section>
+
+        <section id="comparing-two-generics-1">
+          <h1>Comparing Two Generics</h1>
+          <p>
+            Write a generic class with type parameter <code>T</code> and a
+            single private field <code>x</code> of type <code>T</code>.
+            Implement a unary constructor that initialises <code>x</code>.
+          </p>
+          <p>
+            Override the <code>equals</code> method of <code>Object</code> to
+            compare if two instances of <code>B</code> are equal.
+          </p>
+          <p>Avoid raw types.</p>
+        </section>
+
+        <section id="lab-review-1">
+          <h1>Lab 3</h1>
+          <p>The simulation is now over! :D</p>
+          <p>
+            Like before, some common mistakes here and there, but everyone did
+            great overall.
+          </p>
+        </section>
+
+        <section id="lab-review-2">
+          <h1>Lab 3</h1>
+          <h2>Good Aspects</h2>
+          <ul>
+            <li><code>Queue</code> generalised correctly</li>
+            <li><code>@SuppressWarnings</code> used responsibly</li>
+            <li><code>Counter</code> comparable to itself</li>
+            <li>Usage of <code>min</code> well identified</li>
+            <li>New class created for shop queue join event</li>
+            <li>Annotations consistently used</li>
+            <li><code>this</code> keyword consistently used</li>
+          </ul>
+        </section>
+
+        <section id="lab-review-3">
+          <h1>Lab 3</h1>
+          <h2>Common Mistakes</h2>
+          <ul>
+            <li><code>min</code> implemented incorrectly</li>
+            <li><code>compareTo</code> implemented incorrectly</li>
+            <li>Getter methods that violate OO design principles</li>
+          </ul>
+        </section>
+
+        <section id="lab-review-4">
+          <h1>Lab 3</h1>
+          <p>
+            <b><code>min</code> implemented incorrectly</b>
+          </p>
+          <pre><code class="java" data-trim data-line-numbers>
+            class Array&lt;T extends Comparable&lt;T&gt;&gt; {
+              ⋮
+              public T min() {
+                T min = null;
+                for (T t : array) {
+                   if (min == null || t.compareTo(min) < 0) {
+                     min = t;
+                   }
+                }
+                return min;
+              }
+              ⋮
+            }
+          </code></pre>
+        </section>
+
+        <section id="lab-review-5">
+          <h1>Lab 3</h1>
+          <p>
+            <b><code>compareTo</code> implemented incorrectly</b>
+          </p>
+          <pre><code class="java" data-trim data-line-numbers>
+            class Counter implements Comparable&lt;Counter&gt; {
+              ⋮
+              @Override
+              public int compareTo(Counter c) {
+                if (this.queue.length() == 0 && c.queue.length() == 0) {
+                  if (this.isAvailable() && c.isAvailable()) {
+                    return this.id - c.id;
+                  } else if (this.isAvailable()) {
+                    return -1;
+                  } else {
+                    return 1;
+                  }
+                }
+                return this.queue.length() - c.queue.length();
+              }
+              ⋮
+            }
+          </code></pre>
+        </section>
+
+        <section id="lab-review-6">
+          <h1>Lab 3</h1>
+          <p>
+            <b>Getter methods that violate OO design principles</b>
+          </p>
+          <pre><code class="java" data-trim data-line-numbers>
+            class Shop {
+              ⋮
+              public CheckoutCounter getBestCounter() {
+                CheckoutCounter c = counters.min();
+                if (!c.isAvailable() && c.queueIsFull()) {
+                  return null;
+                }
+                return c;
+              }
+              ⋮
+              @Override
+              public String toString() {
+                return this.queue.toString();
+              }
+              ⋮
+            }
+          </code></pre>
+        </section>
+
+        <section id="lab-1">
+          <h1>Lab 4</h1>
+          <p>
+            Implement a wrapper class that encases an item of any specified
+            reference type.
+          </p>
+          <p>Today's exercises will come in very handy.</p>
+          <p>Please compile with <code>javac -Xlint:rawtypes</code>!</p>
+        </section>
+
+        <section id="lab-2">
+          <h1>Lab 4</h1>
+          <h2>The Basics</h2>
+          <p>How can a rudimentary factory method be implemented?</p>
+          <p>How should <code>equals</code> behave?</p>
+          <p>
+            <em class="hint"
+              >(Hint: Factory Method Q1 and Comparing Two Generics)</em
+            >
+          </p>
+        </section>
+
+        <section id="lab-3">
+          <h1>Lab 4</h1>
+          <h2>An Empty Box</h2>
+          <p>How do we share the same copy of an empty box?</p>
+          <p>How do we make the empty box as <em>general</em> as possible?</p>
+          <p>
+            <em class="hint">(Hint: Factory Method Q2 and Q3)</em>
+          </p>
+        </section>
+
+        <section id="lab-4">
+          <h1>Lab 4</h1>
+          <h2>Checking the Content of the Box</h2>
+          <p>
+            What should the generic type parameter of
+            <code>BooleanCondition</code> be?
+          </p>
+          <p>
+            <em class="hint"
+              >(Hint: It's not <code>BooleanCondition&lt;T&gt;</code> –
+              <code>T</code> may simply be one of many compatible reference
+              types)</em
+            >
+          </p>
+        </section>
+
+        <section id="lab-5">
+          <h1>Lab 4</h1>
+          <h2>Implement Your Own Conditions</h2>
+          <p>
+            What should the internal representation of a boolean condition look
+            like?
+          </p>
+          <p>
+            <em class="hint">(Hint: Interfaces are blueprints)</em>
+          </p>
+        </section>
+
+        <section id="lab-6">
+          <h1>Lab 4</h1>
+          <h2>Transforming a Box</h2>
+          <p>
+            What should the generic type parameters of
+            <code>Transformer</code> be?
+          </p>
+          <p>
+            <em class="hint"
+              >(Hint: It's not <code>Transformer&lt;T, U&gt;</code> –
+              <code>T</code> and <code>U</code> may simply be one of many
+              compatible input and output reference types, respectively)</em
+            >
+          </p>
+        </section>
+
+        <section id="lab-7">
+          <h1>Lab 4</h1>
+          <h2>Box in a Box</h2>
+          <p>
+            Do the <code>T</code>s in <code>BoxIt</code> refer to the same
+            reference type?
+          </p>
+          <p>
+            <em class="hint"
+              >(Hint: Consider what the input and output reference types for the
+              <code>BoxIt</code> transformer should be)</em
+            >
+          </p>
+        </section>
+
+        <section id="attendance-end">
+          <h1>Attendance QR</h1>
+          <div style="text-align: center">
+            <img src="images/w6-qr.png" alt="w6-qr" style="width: 520px" />
+          </div>
+        </section>
+
+        <section id="end">
+          <h1>That's All!</h1>
+        </section>
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/math/math.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        math: {
+          mathjax:
+            "https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js",
+          config: "TeX-AMS_HTML-full",
+          // pass other options into `MathJax.Hub.Config()`
+          TeX: { Macros: { RR: "{\\bf R}" } },
+        },
+        hash: true,
+        center: false,
+        transition: "none",
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+      });
+    </script>
+  </body>
+</html>
