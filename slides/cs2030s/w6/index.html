@@ -94,7 +94,7 @@
         </section>
 
         <section id="factory-method-1">
-          <h1>Exercise in Exception</h1>
+          <h1>Factory Method</h1>
           <h2>1</h2>
           <p>Write a class <code>A</code> that behaves as follows:</p>
           <pre><code class="java" data-trim>
@@ -107,6 +107,20 @@
             $4 ==> A@26be92ad
             jshell> A.construct()
             $5 ==> A@224edc67
+          </code></pre>
+        </section>
+
+        <section id="factory-method-1-a">
+          <h1>Factory Method</h1>
+          <h2>1</h2>
+          <pre><code class="java" data-trim data-line-numbers>
+            class A {
+              private A() { }
+              
+              public static A construct() {
+                return new A();
+              }
+            }
           </code></pre>
         </section>
 
@@ -133,6 +147,22 @@
             $4 ==> A@26be92ad
             jshell> A.construct()
             $4 ==> A@26be92ad
+          </code></pre>
+        </section>
+
+        <section id="factory-method-3-a">
+          <h1>Factory Method</h1>
+          <h2>2</h2>
+          <pre><code class="java" data-trim data-line-numbers>
+            class A {
+              private static A a = new A();
+
+              private A() { }
+              
+              public static A construct() {
+                return a;
+              }
+            }
           </code></pre>
         </section>
 
@@ -165,6 +195,26 @@
             jshell> A.construct(1)
             $4 ==> A@4b9e13df
           </code></pre>
+        </section>
+
+        <section id="factory-method-5-a">
+          <h1>Factory Method</h1>
+          <h2>3</h2>
+          <pre><code class="java" data-trim data-line-numbers>
+            class A {
+              private static A zero = new A();
+
+              private A() { }
+              
+              public static A construct(int x) {
+                if (x == 0) {
+                  return zero;
+                }
+                return new A();
+              }
+            }
+          </code></pre>
+          <p class="hint"><em>Credit to Clement</em></p>
         </section>
 
         <section id="factory-method-6">
