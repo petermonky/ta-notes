@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>W8: Lab Week 8</title>
+
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/idea.css" />
+
+    <style>
+      li {
+        margin: 5px 0;
+      }
+
+      .slides section {
+        text-align: left;
+      }
+
+      .slides section h1,
+      .slides section h2,
+      .slides section h3 {
+        font-weight: bold;
+      }
+
+      .slides section h1 {
+        font-size: 2em;
+      }
+
+      .slides section h2 {
+        font-size: 1.5em;
+      }
+
+      .slides section .latex {
+        font-size: 0.8em;
+      }
+
+      .slides section h1 .mini {
+        font-size: 0.4em;
+      }
+
+      .comp-table {
+        font-size: 0.65em;
+      }
+
+      .hint {
+        font-size: 0.6em;
+        color: grey;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section id="intro">
+          <h1>W8: Lab Week 8</h1>
+        </section>
+
+        <section id="attendance-start">
+          <h1>Attendance QR</h1>
+          <div style="text-align: center">
+            <img src="images/w8-qr.png" alt="w8-qr" style="width: 520px" />
+          </div>
+        </section>
+
+        <section id="updates">
+          <h1>Updates</h1>
+          <ul>
+            <li>Lab 5 released – wildcards and packages!</li>
+            <li>Midterm and PE finally over :]</li>
+          </ul>
+        </section>
+
+        <section id="requirements">
+          <h1>Requirements for Lab 5</h1>
+          <ul>
+            <li>Nested wildcards</li>
+            <li>Anonymous classes</li>
+            <li>Nested classes</li>
+            <li>Java packages</li>
+          </ul>
+        </section>
+
+        <section id="nested-wildcards-1">
+          <h1>Nested Wildcards</h1>
+          <p>Launch JShell and follow along:</p>
+          <pre><code class="java" data-trim>
+            class Animal { }
+            class Dog extends Animal { }
+            class Box&lt;T&gt; { }
+          </code></pre>
+        </section>
+
+        <section id="nested-wildcards-2">
+          <h1>Nested Wildcards</h1>
+          <p>Which one compiles?</p>
+          <pre><code class="java" data-trim>
+            class A {
+              static &lt;T&gt; void foo(Box&lt;List&lt;T&gt;&gt; box) {  }
+            }
+
+            A.&lt;Animal&gt;foo(new Box&lt;List&lt;Animal&gt;&gt;());
+            A.&lt;Animal&gt;foo(new Box&lt;List&lt;Dog&gt;&gt;());
+            A.&lt;Animal&gt;foo(new Box&lt;ArrayList&lt;Animal&gt;&gt;());
+            A.&lt;Animal&gt;foo(new Box&lt;ArrayList&lt;Dog&gt;&gt;());
+          </code></pre>
+        </section>
+
+        <section id="nested-wildcards-3">
+          <h1>Nested Wildcards</h1>
+          <p>Which does this mean?</p>
+          <pre><code class="java" data-trim>
+            class A {
+              static &lt;T&gt; void foo(Box&lt;List&lt;T&gt;&gt; box) {  }
+            }
+          </code></pre>
+          <p>
+            <code>foo</code> accepts a <code>Box</code> that contains a
+            <code>List</code> of <code>T</code>.
+          </p>
+        </section>
+
+        <section id="nested-wildcards-4">
+          <h1>Nested Wildcards</h1>
+          <p>Which one compiles?</p>
+          <pre><code class="java" data-trim>
+            class A {
+              static &lt;T&gt; void foo(Box&lt;? extends List&lt;T&gt;&gt; box) {  }
+            }
+
+            A.&lt;Animal&gt;foo(new Box&lt;List&lt;Animal&gt;&gt;());
+            A.&lt;Animal&gt;foo(new Box&lt;List&lt;Dog&gt;&gt;());
+            A.&lt;Animal&gt;foo(new Box&lt;ArrayList&lt;Animal&gt;&gt;());
+            A.&lt;Animal&gt;foo(new Box&lt;ArrayList&lt;Dog&gt;&gt;());
+          </code></pre>
+        </section>
+
+        <section id="nested-wildcards-5">
+          <h1>Nested Wildcards</h1>
+          <p>Which does this mean?</p>
+          <pre><code class="java" data-trim>
+            class A {
+              static &lt;T&gt; void foo(Box&lt;? extends List&lt;T&gt;&gt; box) {  }
+            }
+          </code></pre>
+          <p>
+            <code>foo</code> accepts a <code>Box</code> that contains a subtype
+            of a <code>List</code> of <code>T</code>.
+          </p>
+        </section>
+
+        <section id="nested-wildcards-6">
+          <h1>Nested Wildcards</h1>
+          <p>Which one compiles?</p>
+          <pre><code class="java" data-trim>
+            class A {
+              static &lt;T&gt; void foo(Box&lt;? extends List&lt;? extends T&gt;&gt; box) {  }
+            }
+
+            A.&lt;Animal&gt;foo(new Box&lt;List&lt;Animal&gt;&gt;());
+            A.&lt;Animal&gt;foo(new Box&lt;List&lt;Dog&gt;&gt;());
+            A.&lt;Animal&gt;foo(new Box&lt;ArrayList&lt;Animal&gt;&gt;());
+            A.&lt;Animal&gt;foo(new Box&lt;ArrayList&lt;Dog&gt;&gt;());
+          </code></pre>
+        </section>
+
+        <section id="nested-wildcards-7">
+          <h1>Nested Wildcards</h1>
+          <p>Which does this mean?</p>
+          <pre><code class="java" data-trim>
+            class A {
+              static &lt;T&gt; void foo(Box&lt;? extends List&lt;? extends T&gt;&gt; box) {  }
+            }
+          </code></pre>
+          <p>
+            <code>foo</code> accepts a <code>Box</code> that contains a subtype
+            of a <code>List</code> of a subtype of <code>T</code>.
+          </p>
+        </section>
+
+        <section id="nested-wildcards-8">
+          <h1>Nested Wildcards</h1>
+          <p>
+            When you have nested generic, remember to apply PECS at all levels.
+          </p>
+          <pre><code class="java" data-trim>
+            class A {
+              static &lt;T&gt; void foo(Box&lt;? extends List&lt;? extends T&gt;&gt; box) {  }
+            }
+          </code></pre>
+        </section>
+
+        <section id="anonymous-class-1">
+          <h1>Anonymous Class</h1>
+          <p>
+            Suppose we use <code>AddK</code> only once and never again. Rewrite
+            <code>AddK</code> as an anonymous class.
+          </p>
+          <pre><code class="java" data-trim>
+            class AddK implements Transformer&lt;Integer, Integer&gt; {
+              int k;
+              AddK(int k) {
+                this.k = k;
+              }
+              @Override
+              public Integer transform(Integer t) {
+                return t + k;
+              }
+            }
+
+            Box.of(4).map(new AddK(3));
+          </code></pre>
+        </section>
+
+        <section id="anonymous-class-2">
+          <h1>Anonymous Class</h1>
+          <p>
+            Anonymous classes effectively allow us to "instantiate" an
+            interface.
+          </p>
+          <pre><code class="java" data-trim>
+            Box.of(4).map(new Transformer&lt;Integer, Integer&gt;() {
+              @Override
+              public Integer transform(Integer t) {
+                return t + 3;
+              }
+            });
+          </code></pre>
+        </section>
+
+        <section id="nested-class-1">
+          <h1>Nested Class</h1>
+          <p>Copy files from <code>~cs2030s/lab-week8</code> with</p>
+          <pre><code class="bash" data-trim>
+            cp -r ~cs2030s/lab-week8 .
+          </code></pre>
+          <p>
+            This is a simplified version of <code>Box&lt;T&gt;</code> from Lab
+            4.
+          </p>
+          <p>Look at <code>Box.java</code>. Test Box with</p>
+          <pre><code class="bash" data-trim>
+            jshell &lt; test.jsh
+          </code></pre>
+        </section>
+
+        <section id="factory-method-1-a">
+          <h1>Factory Method</h1>
+          <h2>1</h2>
+          <pre><code class="java" data-trim data-line-numbers>
+            class A {
+              private A() { }
+              
+              public static A construct() {
+                return new A();
+              }
+            }
+          </code></pre>
+        </section>
+
+        <section id="factory-method-2">
+          <h1>Factory Method</h1>
+          <h2>What is a factory method?</h2>
+          <p>A mechanism to abstract away the instantiation of an object.</p>
+          <p>Allows for:</p>
+          <ul>
+            <li>Reusing of a common instance.</li>
+            <li>Custom instantiation behaviour with polymorphism.</li>
+          </ul>
+        </section>
+
+        <section id="factory-method-3">
+          <h1>Factory Method</h1>
+          <h2>2</h2>
+          <p>
+            Change the <code>construct</code> method of <code>A</code> so that
+            it always returns the same instance.
+          </p>
+          <pre><code class="java" data-trim>
+            jshell> A.construct()
+            $4 ==> A@26be92ad
+            jshell> A.construct()
+            $4 ==> A@26be92ad
+          </code></pre>
+        </section>
+
+        <section id="factory-method-3-a">
+          <h1>Factory Method</h1>
+          <h2>2</h2>
+          <pre><code class="java" data-trim data-line-numbers>
+            class A {
+              private static A a = new A();
+
+              private A() { }
+              
+              public static A construct() {
+                return a;
+              }
+            }
+          </code></pre>
+        </section>
+
+        <section id="factory-method-4">
+          <h1>Factory Method</h1>
+          <h2>What is a singleton class?</h2>
+          <p>A class that can have only one instance at a time.</p>
+          <p>
+            All instantiations of a singleton class binds the same instance to
+            the new variables.
+          </p>
+        </section>
+
+        <section id="factory-method-5">
+          <h1>Factory Method</h1>
+          <h2>3</h2>
+          <p>
+            Change <code>A</code> so that the factory method takes in an
+            <code>int</code> as parameter. When the argument is zero, the same
+            instance is always returned. When the argument is non-zero, a new
+            instance is always created.
+          </p>
+          <pre><code class="java" data-trim>
+            jshell> A.construct(0)
+            $4 ==> A@26be92ad
+            jshell> A.construct(0)
+            $4 ==> A@26be92ad
+            jshell> A.construct(1)
+            $5 ==> A@224edc67
+            jshell> A.construct(1)
+            $4 ==> A@4b9e13df
+          </code></pre>
+        </section>
+
+        <section id="factory-method-5-a">
+          <h1>Factory Method</h1>
+          <h2>3</h2>
+          <pre><code class="java" data-trim data-line-numbers>
+            class A {
+              private static A zero = new A();
+
+              private A() { }
+              
+              public static A construct(int x) {
+                if (x == 0) {
+                  return zero;
+                }
+                return new A();
+              }
+            }
+          </code></pre>
+          <p class="hint"><em>Credit to Clement</em></p>
+        </section>
+
+        <section id="factory-method-6">
+          <h1>Factory Method</h1>
+          <h2>What is caching?</h2>
+          <p>The sharing of commonly used instances.</p>
+          <p>Saves heap space as new objects are not created unnecessarily.</p>
+          <pre><code class="java" style="height: 220px" data-trim data-line-numbers>
+            class Point {
+              private static Point origin = new Point(0, 0);
+              private double x;
+              private double y;
+
+              private Point(double x, double y) {
+                this.x = x;
+                this.y = y;
+              }
+
+              public static Point of(double x, double y) {
+                if (x == 0 && y == 0) {
+                  return origin;
+                } else {
+                  return new Point(x, y);
+                }
+              }
+            }
+          </code></pre>
+        </section>
+
+        <section id="comparing-two-generics-1">
+          <h1>Comparing Two Generics</h1>
+          <p>
+            Write a generic class with type parameter <code>T</code> and a
+            single private field <code>x</code> of type <code>T</code>.
+            Implement a unary constructor that initialises <code>x</code>.
+          </p>
+          <p>
+            Override the <code>equals</code> method of <code>Object</code> to
+            compare if two instances of <code>B</code> are equal.
+          </p>
+          <p>Avoid raw types.</p>
+        </section>
+
+        <section id="comparing-two-generics-a">
+          <h1>Comparing Two Generics</h1>
+          <p>A wildcard can be used to prevent raw types.</p>
+          <pre><code class="java" data-trim data-line-numbers>
+            class B&lt;T&gt; { 
+              private T x;
+
+              public B(T x) {
+                this.x = x;
+              }
+
+              @Override
+              public boolean equals(Object obj) {
+                // optional but good to have: speed check for equality of references
+                if (obj == this) {
+                  return true;
+                }
+            
+                // how to check if obj is an instance of B?
+                if (obj instanceof B&lt;?&gt;) { // NOT obj instanceof B &lt;- raw type
+                  B&lt;?&gt; b = (B&lt;?&gt;) obj; // casting to B&lt;T&gt; generates unchecked warnings
+
+                  // remember to handle null
+                  if (this.x == null || b.x == null) {
+                    return this.x == b.x;
+                  }
+                  
+                  return this.x.equals(b.x);
+                }
+
+                return false;
+              }
+            }
+          </code></pre>
+        </section>
+
+        <section id="lab-review-1">
+          <h1>Lab 3</h1>
+          <p>The simulation is now over! :D</p>
+          <p>
+            Like before, some common mistakes here and there, but everyone did
+            great overall.
+          </p>
+        </section>
+
+        <section id="lab-review-2">
+          <h1>Lab 3</h1>
+          <h2>Good Aspects</h2>
+          <ul>
+            <li><code>Queue</code> generalised correctly</li>
+            <li><code>@SuppressWarnings</code> used responsibly</li>
+            <li><code>Counter</code> comparable to itself</li>
+            <li>Usage of <code>min</code> well identified</li>
+            <li>New class created for shop queue join event</li>
+            <li>Annotations consistently used</li>
+            <li><code>this</code> keyword consistently used</li>
+          </ul>
+        </section>
+
+        <section id="lab-review-3">
+          <h1>Lab 3</h1>
+          <h2>Common Mistakes</h2>
+          <ul>
+            <li><code>min</code> implemented incorrectly</li>
+            <li><code>compareTo</code> implemented incorrectly</li>
+            <li>Getter methods that violate OO design principles</li>
+          </ul>
+        </section>
+
+        <section id="lab-review-4">
+          <h1>Lab 3</h1>
+          <p>
+            <b><code>min</code> implemented incorrectly</b>
+          </p>
+          <pre><code class="java" data-trim data-line-numbers>
+            class Array&lt;T extends Comparable&lt;T&gt;&gt; {
+              ⋮
+              public T min() {
+                T min = null;
+                for (T t : array) {
+                   if (min == null || t.compareTo(min) < 0) {
+                     min = t;
+                   }
+                }
+                return min;
+              }
+              ⋮
+            }
+          </code></pre>
+        </section>
+
+        <section id="lab-review-5">
+          <h1>Lab 3</h1>
+          <p>
+            <b><code>compareTo</code> implemented incorrectly</b>
+          </p>
+          <pre><code class="java" data-trim data-line-numbers>
+            class Counter implements Comparable&lt;Counter&gt; {
+              ⋮
+              @Override
+              public int compareTo(Counter c) {
+                if (this.queue.length() == 0 && c.queue.length() == 0) {
+                  if (this.isAvailable() && c.isAvailable()) {
+                    return this.id - c.id;
+                  } else if (this.isAvailable()) {
+                    return -1;
+                  } else {
+                    return 1;
+                  }
+                }
+                return this.queue.length() - c.queue.length();
+              }
+              ⋮
+            }
+          </code></pre>
+        </section>
+
+        <section id="lab-review-6">
+          <h1>Lab 3</h1>
+          <p>
+            <b>Getter methods that violate OO design principles</b>
+          </p>
+          <pre><code class="java" data-trim data-line-numbers>
+            class Shop {
+              ⋮
+              public CheckoutCounter getBestCounter() {
+                CheckoutCounter c = counters.min();
+                if (!c.isAvailable() && c.queueIsFull()) {
+                  return null;
+                }
+                return c;
+              }
+              ⋮
+              @Override
+              public String toString() {
+                return this.queue.toString();
+              }
+              ⋮
+            }
+          </code></pre>
+        </section>
+
+        <section id="lab-1">
+          <h1>Lab 4</h1>
+          <p>
+            Implement a wrapper class that encases an item of any specified
+            reference type.
+          </p>
+          <p>Today's exercises will come in very handy.</p>
+          <p>Please compile with <code>javac -Xlint:rawtypes</code>!</p>
+        </section>
+
+        <section id="lab-2">
+          <h1>Lab 4</h1>
+          <h2>The Basics</h2>
+          <p>How can a rudimentary factory method be implemented?</p>
+          <p>How should <code>equals</code> behave?</p>
+          <p>
+            <em class="hint"
+              >(Hint: Factory Method Q1 and Comparing Two Generics)</em
+            >
+          </p>
+        </section>
+
+        <section id="lab-3">
+          <h1>Lab 4</h1>
+          <h2>An Empty Box</h2>
+          <p>How do we share the same copy of an empty box?</p>
+          <p>How do we make the empty box as <em>general</em> as possible?</p>
+          <p>
+            <em class="hint">(Hint: Factory Method Q2 and Q3)</em>
+          </p>
+        </section>
+
+        <section id="lab-4">
+          <h1>Lab 4</h1>
+          <h2>Checking the Content of the Box</h2>
+          <p>
+            What should the generic type parameter of
+            <code>BooleanCondition</code> be?
+          </p>
+          <p>
+            <em class="hint"
+              >(Hint: It's not <code>BooleanCondition&lt;T&gt;</code> –
+              <code>T</code> may simply be one of many compatible reference
+              types)</em
+            >
+          </p>
+        </section>
+
+        <section id="lab-5">
+          <h1>Lab 4</h1>
+          <h2>Implement Your Own Conditions</h2>
+          <p>
+            What should the internal representation of a boolean condition look
+            like?
+          </p>
+          <p>
+            <em class="hint">(Hint: Interfaces are blueprints)</em>
+          </p>
+        </section>
+
+        <section id="lab-6">
+          <h1>Lab 4</h1>
+          <h2>Transforming a Box</h2>
+          <p>
+            What should the generic type parameters of
+            <code>Transformer</code> be?
+          </p>
+          <p>
+            <em class="hint"
+              >(Hint: It's not <code>Transformer&lt;T, U&gt;</code> –
+              <code>T</code> and <code>U</code> may simply be one of many
+              compatible input and output reference types, respectively)</em
+            >
+          </p>
+        </section>
+
+        <section id="lab-7">
+          <h1>Lab 4</h1>
+          <h2>Box in a Box</h2>
+          <p>
+            Do the <code>T</code>s in <code>BoxIt</code> refer to the same
+            reference type?
+          </p>
+          <p>
+            <em class="hint"
+              >(Hint: Consider what the input and output reference types for the
+              <code>BoxIt</code> transformer should be)</em
+            >
+          </p>
+        </section>
+
+        <section id="attendance-end">
+          <h1>Attendance QR</h1>
+          <div style="text-align: center">
+            <img src="images/w6-qr.png" alt="w6-qr" style="width: 520px" />
+          </div>
+        </section>
+
+        <section id="end">
+          <h1>That's All!</h1>
+        </section>
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/math/math.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        math: {
+          mathjax:
+            "https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js",
+          config: "TeX-AMS_HTML-full",
+          // pass other options into `MathJax.Hub.Config()`
+          TeX: { Macros: { RR: "{\\bf R}" } },
+        },
+        hash: true,
+        center: false,
+        transition: "none",
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+      });
+    </script>
+  </body>
+</html>
