@@ -55,3 +55,9 @@
 <a href="slides/cs2030s/w6/" onclick="window.open('slides/cs2030s/w6/', '_self');">W6: Lab Week 6</a>
 
 <a href="slides/cs2030s/w8/" onclick="window.open('slides/cs2030s/w8/', '_self');">W8: Lab Week 8</a>
+
+## CS2102
+
+### Tutorial Slides
+
+<a href="slides/cs2102/t06/" onclick="window.open('slides/cs2102/t06/', '_self');">Tutorial 06</a>
