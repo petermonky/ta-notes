@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <title>Tutorial 06</title>
+
+  <link rel="stylesheet" href="dist/reset.css" />
+  <link rel="stylesheet" href="dist/reveal.css" />
+  <link rel="stylesheet" href="dist/theme/simple.css" />
+
+  <!-- Theme used for syntax highlighted code -->
+  <link rel="stylesheet" href="plugin/highlight/idea.css" />
+
+  <style>
+    li {
+      margin: 5px 0;
+    }
+
+    .slides section {
+      text-align: left;
+    }
+
+    .slides section p, li {
+      font-size: 0.6em;
+    }
+
+    .slides section h1,
+    .slides section h2,
+    .slides section h3 {
+      font-weight: bold;
+    }
+
+    .slides section h1 {
+      font-size: 2em;
+    }
+
+    .slides section h2 {
+      font-size: 1.5em;
+    }
+
+    .slides section .latex {
+      font-size: 0.8em;
+    }
+
+    .slides section h1 .mini {
+      font-size: 0.4em;
+    }
+
+    .comp-table {
+      font-size: 0.65em;
+    }
+
+    .hint {
+      font-size: 0.6em;
+      color: grey;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section id="intro">
+        <h1>Tutorial 06</h1>
+      </section>
+
+      <section id="question-1">
+        <h1>Question 1</h1>
+        <p><b><code>max_min</code></b></p>
+        <pre><code class="sql" data-trim data-line-numbers="|3-5|7-10|12-15|17-19">
+          CREATE OR REPLACE FUNCTION max_min( IN stu_id integer, OUT max_cid integer, OUT min_cid integer )
+          RETURNS RECORD AS $$
+          DECLARE 
+              max_score integer;
+              min_score integer;
+          BEGIN
+              SELECT cid, score INTO max_cid, max_score
+              FROM exams
+              WHERE sid = stu_id AND score = 
+                  (SELECT MAX(score) FROM exams WHERE sid = stu_id);
+          
+              SELECT cid, score INTO min_cid, min_score
+              FROM exams
+              WHERE sid = stu_id AND score = 
+                  (SELECT MIN(score) FROM exams WHERE sid = stu_id);
+            
+              IF max_score = min_score THEN
+                  min_cid := NULL;
+              END IF;
+          END;
+          $$ LANGUAGE plpgsql;          
+          </code></pre>
+      </section>
+
+      <section id="question-2">
+        <h1>Question 2</h1>
+        <p><b><code>revised_avg</code></b></p>
+        <pre><code class="sql" data-trim data-line-numbers="|3-7|9-12|14-18">
+          CREATE OR REPLACE FUNCTION revised_avg( IN stu_id integer, OUT r_avg float )
+          RETURNS float AS $$
+          DECLARE 
+              max_score integer;
+              min_score integer;
+              sum_score float;
+              count_score float;
+          BEGIN
+              SELECT MAX(score), MIN(score), SUM(score), COUNT(score) INTO 
+                  max_score, min_score, sum_score, count_score
+              FROM exams
+              WHERE sid = stu_id;
+
+              IF count_score < 3 THEN
+                  r_avg := NULL;
+              ELSE
+                  r_avg := (sum_score - max_score - min_score) / (count_score - 2);
+              END IF;
+          END;
+          $$ LANGUAGE plpgsql;         
+          </code></pre>
+      </section>
+
+      <section id="question-3">
+        <h1>Question 3</h1>
+        <p><b><code>list_r_avg</code></b></p>
+        <pre><code class="sql" data-trim data-line-numbers="|4-5|6-9|11-12|14|25-29|16-23|24|31-36|39-40">
+          CREATE OR REPLACE FUNCTION list_r_avg()
+          RETURNS TABLE ( stu_id integer, ravg float ) AS $$
+          DECLARE
+              curs CURSOR FOR (SELECT sid, score from exams order by sid);
+              r record;
+              max_score integer;
+              min_score integer;
+              sum_score float;
+              count_score integer;
+          BEGIN
+              stu_id = -1;
+              OPEN curs;
+              LOOP
+                  FETCH curs INTO r;
+                  IF r.sid <> stu_id OR NOT FOUND THEN
+                      IF stu_id <> -1 THEN
+                          IF (count_score < 3) THEN
+                              ravg := NULL;
+                          ELSE
+                              ravg := (sum_score - max_score - min_score) / (count_score - 2);	
+                          END IF;
+                          RETURN NEXT;
+                      END IF;
+                      EXIT WHEN NOT FOUND;
+                      stu_id := r.sid;
+                      max_score := r.score;
+                      min_score := r.score;
+                      sum_score := r.score;
+                      count_score := 1;			
+                  ELSE
+                      sum_score := sum_score + r.score;
+                      count_score := count_score + 1;
+                      IF r.score > max_score THEN max_score := r.score;
+                      END IF;
+                      IF r.score < min_score THEN min_score := r.score;
+                      END IF;
+                  END IF;
+              END LOOP;
+              CLOSE curs;
+              RETURN;
+          END;
+          $$ LANGUAGE plpgsql;        
+          </code></pre>
+      </section>
+
+      <section id="question-4">
+        <h1>Question 4</h1>
+        <p><b><code>list_scnd_highest</code></b></p>
+        <pre><code class="sql" data-trim data-line-numbers="|4-5|6-7|9-10|12|21-24|14-19|20|26-32|34-35">
+          CREATE OR REPLACE FUNCTION list_scnd_highest()
+          RETURNS TABLE ( stu_id integer, scnd_highest integer ) AS $$
+          DECLARE
+              curs CURSOR FOR (SELECT sid, score from exams order by sid);
+              r record;
+              max_score integer;
+              count_score integer;
+          BEGIN
+              stu_id = -1;
+              OPEN curs;
+              LOOP
+                  FETCH curs INTO r;
+                  IF r.sid <> stu_id OR NOT FOUND THEN
+                      IF stu_id <> -1 THEN
+                          IF (count_score < 2) THEN
+                              scnd_highest := NULL;
+                          END IF;
+                          RETURN NEXT;
+                      END IF;
+                      EXIT WHEN NOT FOUND;
+                      stu_id := r.sid;
+                      max_score := r.score;
+                      scnd_highest := -1;
+                      count_score := 1;		
+                  ELSE
+                      count_score := count_score + 1;
+                      IF r.score > max_score THEN 
+                          scnd_highest := max_score;
+                          max_score := r.score;
+                      ELSEIF  r.score > scnd_highest THEN
+                          scnd_highest := r.score;
+                      END IF;
+                  END IF;
+              END LOOP;
+              CLOSE curs;
+              RETURN;
+          END;
+          $$ LANGUAGE plpgsql;    
+          </code></pre>
+      </section>
+
+      <section id="end">
+        <h1>That's All!</h1>
+      </section>
+    </div>
+  </div>
+
+  <script src="dist/reveal.js"></script>
+  <script src="plugin/math/math.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+      math: {
+        mathjax:
+          "https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js",
+        config: "TeX-AMS_HTML-full",
+        // pass other options into `MathJax.Hub.Config()`
+        TeX: { Macros: { RR: "{\\bf R}" } },
+      },
+      hash: true,
+      center: false,
+      transition: "none",
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+    });
+  </script>
+</body>
+
+</html>
