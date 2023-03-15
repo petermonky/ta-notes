@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <title>Tutorial 07</title>
+
+  <link rel="stylesheet" href="dist/reset.css" />
+  <link rel="stylesheet" href="dist/reveal.css" />
+  <link rel="stylesheet" href="dist/theme/simple.css" />
+
+  <!-- Theme used for syntax highlighted code -->
+  <link rel="stylesheet" href="plugin/highlight/idea.css" />
+
+  <style>
+    li {
+      margin: 5px 0;
+    }
+
+    .slides section {
+      text-align: left;
+    }
+
+    .slides section p, li {
+      font-size: 0.6em;
+    }
+
+    .slides section h1,
+    .slides section h2,
+    .slides section h3 {
+      font-weight: bold;
+    }
+
+    .slides section h1 {
+      font-size: 2em;
+    }
+
+    .slides section h2 {
+      font-size: 1.5em;
+    }
+
+    .slides section .latex {
+      font-size: 0.8em;
+    }
+
+    .slides section h1 .mini {
+      font-size: 0.4em;
+    }
+
+    .comp-table {
+      font-size: 0.65em;
+    }
+
+    .hint {
+      font-size: 0.6em;
+      color: grey;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section id="intro">
+        <h1>Tutorial 07</h1>
+      </section>
+
+      <section id="question-1">
+        <h1>Question 1</h1>
+        <p><b><code>not_mngr</code></b></p>
+        <pre><code class="sql" data-trim data-line-numbers="|6|8-10|11-15|20-24">
+            -- Solution for the trigger on Manager: (the solution for Engineer is similar)
+            
+            CREATE OR REPLACE FUNCTION not_mngr()
+            RETURNS TRIGGER AS
+            $$
+            DECLARE count NUMERIC;
+            BEGIN
+                SELECT COUNT(*) INTO count
+                FROM Managers
+                WHERE NEW.eid = Managers.eid; -- Engineers.eid
+                IF count > 0 THEN
+                    RETURN NULL;
+                ELSE
+                    RETURN NEW;
+                END IF;
+            END;
+            $$
+            LANGUAGE plpgsql;
+
+            CREATE TRIGGER non_mngr
+            BEFORE INSERT OR UPDATE
+            ON Engineers
+            FOR EACH ROW
+            EXECUTE FUNCTION not_mngr();    
+        </code></pre>
+      </section>
+
+      <section id="question-2">
+        <h1>Question 2</h1>
+        <p><b><code>check_budget</code></b></p>
+        <pre><code class="sql" data-trim data-line-numbers="|5-6|8-12|13-15|16-21|26-30">
+            CREATE OR REPLACE FUNCTION check_budget()
+            RETURNS TRIGGER AS
+            $$
+            DECLARE hrs INTEGER;
+                bdgt INTEGER;
+                rest INTEGER;
+            BEGIN
+                SELECT COALESCE(SUM(hours), 0) INTO hrs
+                    -- COALESCE is used to handle NULL values
+                FROM Works
+                WHERE pid = NEW.pid AND
+                    eid <> NEW.eid; -- for update
+                SELECT pbudget INTO bdgt
+                FROM Projects
+                WHERE pid = NEW.pid;
+                rest := (bdgt - hrs * 100) / 100;
+                IF NEW.hours > rest THEN
+                    RETURN (NEW.pid, NEW.eid, NEW.wid, rest);
+                ELSE
+                    RETURN NEW;
+                END IF;
+            END;
+            $$
+            LANGUAGE plpgsql;
+            
+            CREATE TRIGGER budget_check
+            BEFORE INSERT OR UPDATE
+            ON Works
+            FOR EACH ROW
+            EXECUTE FUNCTION check_budget();                
+        </code></pre>
+      </section>
+
+      <section id="question-3">
+        <h1>Question 3</h1>
+        <p><b><code>max_hour_work</code></b></p>
+        <pre><code class="sql" data-trim data-line-numbers="|4|6-8|9-13|18-22">
+            CREATE OR REPLACE FUNCTION max_hour_work()
+            RETURNS TRIGGER AS
+            $$
+            DECLARE maximal INTEGER; -- cannot be NUMERIC
+            BEGIN
+                SELECT max_hours INTO maximal
+                FROM WorkType
+                WHERE WorkType.wid = NEW.wid;
+                IF NEW.hours > maximal THEN
+                    RETURN (NEW.pid, NEW.eid, NEW.wid, maximal);
+                ELSE
+                    RETURN NEW;
+                END IF;
+            END;
+            $$
+            LANGUAGE plpgsql;
+            
+            CREATE TRIGGER hours_max
+            BEFORE INSERT OR UPDATE
+            ON Works
+            FOR EACH ROW
+            EXECUTE FUNCTION max_hour_work();                   
+        </code></pre>
+      </section>
+
+      <section id="question-4">
+        <h1>Question 4</h1>
+        <p><b><code>def_work</code></b></p>
+        <pre><code class="sql" data-trim data-line-numbers="|5-8|13-18">
+            CREATE OR REPLACE FUNCTION def_work()
+            RETURNS TRIGGER AS
+            $$
+            BEGIN
+                RAISE NOTICE 'some user tried to';
+                RAISE NOTICE 'modify/delete default';
+                RAISE NOTICE 'work type';
+                RETURN NULL;
+            END;
+            $$
+            LANGUAGE plpgsql;
+            
+            CREATE TRIGGER work_def
+            BEFORE UPDATE OR DELETE
+            ON WorkType
+            FOR EACH ROW
+            WHEN (OLD.wid = 0)
+            EXECUTE FUNCTION def_work();            
+        </code></pre>
+      </section>
+
+      <section id="end">
+        <h1>That's All!</h1>
+      </section>
+    </div>
+  </div>
+
+  <script src="dist/reveal.js"></script>
+  <script src="plugin/math/math.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+      math: {
+        mathjax:
+          "https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js",
+        config: "TeX-AMS_HTML-full",
+        // pass other options into `MathJax.Hub.Config()`
+        TeX: { Macros: { RR: "{\\bf R}" } },
+      },
+      hash: true,
+      center: false,
+      transition: "none",
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath],
+    });
+  </script>
+</body>
+
+</html>

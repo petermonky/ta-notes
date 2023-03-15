@@ -61,3 +61,5 @@
 ### Tutorial Slides
 
 <a href="slides/cs2102/t06/" onclick="window.open('slides/cs2102/t06/', '_self');">Tutorial 06</a>
+
+<a href="slides/cs2102/t07/" onclick="window.open('slides/cs2102/t07/', '_self');">Tutorial 07</a>
